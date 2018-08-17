@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="TfRoleMenu">
+
+	<!-- 缓存条数 -->
+	<cache size="2000" />
+
+	<!-- 条件语句 -->
+	<sql id="WhereSQL">
+		<where>
+			<if test="roleGuid != null and roleGuid != ''">
+				AND T.ROLE_GUID = #{roleGuid}
+			</if>
+			<if test="menuGuid != null and menuGuid != ''">
+				AND T.MENU_GUID = #{menuGuid}
+			</if>
+		</where>
+	</sql>
+
+	<!-- 查找语句 -->
+	<select id="find" resultType="TfRoleMenu" parameterType="TfRoleMenu"
+		flushCache="false" useCache="true">
+		SELECT
+		T.ROLE_GUID AS roleGuid,
+		T.MENU_GUID AS menuGuid
+		FROM TF_ROLE_MENU T
+		<include refid="WhereSQL" />
+	</select>
+
+	<!-- 获取总记录数语句 -->
+	<select id="findCount" resultType="java.lang.Integer"
+		parameterType="TfRoleMenu" flushCache="false" useCache="true">
+		SELECT COUNT(*) FROM TF_ROLE_MENU T
+		<include refid="WhereSQL" />
+	</select>
+
+	<!-- 插入语句 -->
+	<insert id="insert" parameterType="TfRoleMenu" flushCache="true">
+		INSERT INTO TF_ROLE_MENU
+		(
+		ROLE_GUID,
+		MENU_GUID
+		)
+		VALUES
+		(
+		#{roleGuid,jdbcType=VARCHAR},
+		#{menuGuid,jdbcType=VARCHAR}
+		)
+	</insert>
+
+	<!-- 更新语句 -->
+	<update id="update" parameterType="TfRoleMenu" flushCache="true">
+		update TF_ROLE_MENU
+		<set>
+			<if test="roleGuid != null">ROLE_GUID=#{roleGuid},</if>
+			<if test="menuGuid != null">MENU_GUID=#{menuGuid},</if>
+		</set>
+		WHERE ROLE_GUID = #{roleGuid}
+	</update>
+
+	<!-- 单选删除语句 -->
+	<delete id="delete" parameterType="TfRoleMenu" flushCache="true">
+		DELETE FROM TF_ROLE_MENU
+		<where>
+			<if test="roleGuid != null and roleGuid != ''">
+				AND ROLE_GUID = #{roleGuid}
+			</if>
+			<if test="menuGuid != null and menuGuid != ''">
+				AND MENU_GUID = #{menuGuid}
+			</if>
+		</where>
+	</delete>
+</mapper>

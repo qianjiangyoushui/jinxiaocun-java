@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="Margin">
+	
+	<!-- 缓存条数 -->
+	<cache size="2000" />
+	
+	<!-- 条件语句 -->
+	<sql id="WhereSQL">
+		<where>
+			<if test="guid != null and guid != ''"> 
+			AND T.GUID = #{guid} 
+			</if>
+			<if test="stockcompanyid != null and stockcompanyid != ''"> 
+			AND T.STOCKCOMPANYID = #{stockcompanyid} 
+			</if>
+			<if test="payamount != null and payamount != ''"> 
+			AND T.PAYAMOUNT = #{payamount} 
+			</if>
+			<if test="paydate != null and paydate != ''"> 
+			AND T.PAYDATE = #{paydate} 
+			</if>
+			<if test="backamount != null and backamount != ''"> 
+			AND T.BACKAMOUNT = #{backamount} 
+			</if>
+			<if test="backdate != null and backdate != ''"> 
+			AND T.BACKDATE = #{backdate} 
+			</if>
+			<if test="supplycompanyid != null and supplycompanyid != ''"> 
+			AND T.SUPPLYCOMPANYID = #{supplycompanyid} 
+			</if>
+			<if test="paydescription != null and paydescription != ''"> 
+			AND T.PAYDESCRIPTION = #{paydescription} 
+			</if>
+			<if test="backdescription != null and backdescription != ''"> 
+			AND T.BACKDESCRIPTION = #{backdescription} 
+			</if>
+			<if test="status != null and status != ''"> 
+			AND T.STATUS = #{status} 
+			</if>
+			<if test="operatorid != null and operatorid != ''"> 
+			AND T.OPERATORID = #{operatorid} 
+			</if>
+			<if test="createtime != null and createtime != ''"> 
+			AND T.CREATETIME = #{createtime} 
+			</if>
+			<if test="lastupdatetime != null and lastupdatetime != ''"> 
+			AND T.LASTUPDATETIME = #{lastupdatetime} 
+			</if>
+			<if test="companyid != null and companyid != ''"> 
+			AND T.COMPANYID = #{companyid} 
+			</if>
+		</where>
+	</sql>
+	
+	<!-- 查找语句 -->
+	<select id="find" resultType="Margin" parameterType="Margin" flushCache="false" useCache="true">
+    	SELECT 
+	    	T.GUID AS guid, 
+	    	T.STOCKCOMPANYID AS stockcompanyid, 
+	    	T.PAYAMOUNT AS payamount, 
+	    	T.PAYDATE AS paydate, 
+	    	T.BACKAMOUNT AS backamount, 
+	    	T.BACKDATE AS backdate, 
+	    	T.SUPPLYCOMPANYID AS supplycompanyid, 
+	    	T.PAYDESCRIPTION AS paydescription, 
+	    	T.BACKDESCRIPTION AS backdescription, 
+	    	T.STATUS AS status, 
+	    	T.OPERATORID AS operatorid, 
+	    	T.CREATETIME AS createtime, 
+	    	T.LASTUPDATETIME AS lastupdatetime, 
+	    	T.COMPANYID AS companyid 
+    	FROM margin T
+		<include refid="WhereSQL" />
+		ORDER BY T.STATUS ,T.CREATETIME 
+	</select>
+	
+	<!-- 获取总记录数语句 -->
+	<select id="findCount" resultType="java.lang.Integer" parameterType="Margin" flushCache="false" useCache="true">
+    	SELECT COUNT(*)  FROM margin T
+		<include refid="WhereSQL" />
+	</select>
+	
+	<!-- 插入语句 -->
+	<insert id="insert" parameterType="Margin" flushCache="true"> 
+		INSERT INTO margin
+		(
+			GUID, 
+			STOCKCOMPANYID, 
+			PAYAMOUNT, 
+			PAYDATE, 
+			BACKAMOUNT, 
+			BACKDATE, 
+			SUPPLYCOMPANYID, 
+			PAYDESCRIPTION, 
+			BACKDESCRIPTION, 
+			STATUS, 
+			OPERATORID, 
+			CREATETIME, 
+			LASTUPDATETIME, 
+			COMPANYID 
+		 ) 
+		VALUES
+		(
+			#{guid,jdbcType=VARCHAR}, 
+			#{stockcompanyid,jdbcType=VARCHAR}, 
+			#{payamount,jdbcType=DECIMAL}, 
+			#{paydate,jdbcType=DATE}, 
+			#{backamount,jdbcType=DECIMAL}, 
+			#{backdate,jdbcType=DATE}, 
+			#{supplycompanyid,jdbcType=VARCHAR}, 
+			#{paydescription,jdbcType=VARCHAR}, 
+			#{backdescription,jdbcType=VARCHAR}, 
+			#{status,jdbcType=VARCHAR}, 
+			#{operatorid,jdbcType=VARCHAR}, 
+			#{createtime,jdbcType=DATE}, 
+			#{lastupdatetime,jdbcType=DATE}, 
+			#{companyid,jdbcType=VARCHAR} 
+		) 
+	</insert>
+	
+	<!-- 更新语句 -->
+	<update id="update"  parameterType="Margin" flushCache="true"> 
+		update margin 
+		<set> 
+			<if test="guid != null">GUID=#{guid},</if>
+			<if test="stockcompanyid != null">STOCKCOMPANYID=#{stockcompanyid},</if>
+			<if test="payamount != null">PAYAMOUNT=#{payamount},</if>
+			<if test="paydate != null">PAYDATE=#{paydate},</if>
+			<if test="backamount != null">BACKAMOUNT=#{backamount},</if>
+			<if test="backdate != null">BACKDATE=#{backdate},</if>
+			<if test="supplycompanyid != null">SUPPLYCOMPANYID=#{supplycompanyid},</if>
+			<if test="paydescription != null">PAYDESCRIPTION=#{paydescription},</if>
+			<if test="backdescription != null">BACKDESCRIPTION=#{backdescription},</if>
+			<if test="status != null">STATUS=#{status},</if>
+			<if test="operatorid != null">OPERATORID=#{operatorid},</if>
+			<if test="createtime != null">CREATETIME=#{createtime},</if>
+			<if test="lastupdatetime != null">LASTUPDATETIME=#{lastupdatetime},</if>
+			<if test="companyid != null">COMPANYID=#{companyid},</if>
+		</set>
+		WHERE GUID = #{guid}
+	</update> 
+	
+	<!-- 单选删除语句 -->
+	<delete id="delete" parameterType="Margin" flushCache="true"> 
+		DELETE FROM margin WHERE GUID = #{guid}
+	</delete>
+	
+	<!-- 多选删除 -->
+	<delete id="mulDel" parameterType="java.lang.String" flushCache="true">
+		DELETE FROM margin WHERE GUID IN
+		<foreach item="id" collection="array" open="(" separator="," close=")"> 
+			#{id}
+		</foreach> 
+	</delete>
+	
+	<!-- 查找语句 -->
+	<select id="findDetail" resultType="Margin" parameterType="Margin" flushCache="false" useCache="true">
+    	SELECT 
+	    	T.GUID AS guid, 
+	    	T.STOCKCOMPANYID AS stockcompanyid, 
+	    	T.PAYAMOUNT AS payamount, 
+	    	T.PAYDATE AS paydate, 
+	    	T.BACKAMOUNT AS backamount, 
+	    	T.BACKDATE AS backdate, 
+	    	T.SUPPLYCOMPANYID AS supplycompanyid, 
+	    	T.PAYDESCRIPTION AS paydescription, 
+	    	T.BACKDESCRIPTION AS backdescription, 
+	    	T.STATUS AS status, 
+	    	T.OPERATORID AS operatorid, 
+	    	T.CREATETIME AS createtime, 
+	    	T.LASTUPDATETIME AS lastupdatetime, 
+	    	T.COMPANYID AS companyid ,
+	    	c.shortname as stockcompany ,
+	    	c2.shortname as supplycompany,
+	    	c3.shortname as company 
+    	FROM margin T 
+    	left join company c on T.stockcompanyid = c.guid 
+    	left join company c2 on T.supplycompanyid= c2.guid 
+    	left join company c3 on T.companyid = c3.guid 
+		<include refid="WhereSQL" />
+		ORDER BY T.STATUS ,T.CREATETIME 
+	</select>
+</mapper>

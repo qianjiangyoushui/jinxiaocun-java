@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="Incomes">
+	
+	<!-- 缓存条数 -->
+	<cache size="2000" />
+	
+	<!-- 条件语句 -->
+	<sql id="WhereSQL">
+		<where>
+			<if test="guid != null and guid != ''"> 
+			AND T.GUID = #{guid} 
+			</if>
+			<if test="projectid != null and projectid != ''"> 
+			AND T.PROJECTID = #{projectid} 
+			</if>
+			<if test="interest != null and interest != ''"> 
+			AND T.INTEREST = #{interest} 
+			</if>
+			<if test="overdue != null and overdue != ''"> 
+			AND T.OVERDUE = #{overdue} 
+			</if>
+			<if test="otherincome != null and otherincome != ''"> 
+			AND T.OTHERINCOME = #{otherincome} 
+			</if>
+			<if test="operatorid != null and operatorid != ''"> 
+			AND T.OPERATORID = #{operatorid} 
+			</if>
+			<if test="createdate != null and createdate != ''"> 
+			AND T.CREATEDATE = #{createdate} 
+			</if>
+			<if test="lastupdatetime != null and lastupdatetime != ''"> 
+			AND T.LASTUPDATETIME = #{lastupdatetime} 
+			</if>
+		</where>
+	</sql>
+	
+	<!-- 查找语句 -->
+	<select id="find" resultType="Incomes" parameterType="Incomes" flushCache="false" useCache="true">
+    	SELECT 
+	    	T.GUID AS guid, 
+	    	T.PROJECTID AS projectid, 
+	    	T.INTEREST AS interest, 
+	    	T.OVERDUE AS overdue, 
+	    	T.OTHERINCOME AS otherincome, 
+	    	T.OPERATORID AS operatorid, 
+	    	T.CREATEDATE AS createdate, 
+	    	T.LASTUPDATETIME AS lastupdatetime 
+    	FROM incomes T
+		<include refid="WhereSQL" />
+		ORDER BY T.CREATEDATE 
+	</select>
+	
+	<!-- 获取总记录数语句 -->
+	<select id="findCount" resultType="java.lang.Integer" parameterType="Incomes" flushCache="false" useCache="true">
+    	SELECT COUNT(*)  FROM incomes T
+		<include refid="WhereSQL" />
+	</select>
+	
+	<!-- 插入语句 -->
+	<insert id="insert" parameterType="Incomes" flushCache="true"> 
+		INSERT INTO incomes
+		(
+			GUID, 
+			PROJECTID, 
+			INTEREST, 
+			OVERDUE, 
+			OTHERINCOME, 
+			OPERATORID, 
+			CREATEDATE, 
+			LASTUPDATETIME 
+		 ) 
+		VALUES
+		(
+			#{guid,jdbcType=VARCHAR}, 
+			#{projectid,jdbcType=VARCHAR}, 
+			#{interest,jdbcType=DECIMAL}, 
+			#{overdue,jdbcType=DECIMAL}, 
+			#{otherincome,jdbcType=DECIMAL}, 
+			#{operatorid,jdbcType=VARCHAR}, 
+			#{createdate,jdbcType=DATE}, 
+			#{lastupdatetime,jdbcType=DATE} 
+		) 
+	</insert>
+	
+	<!-- 更新语句 -->
+	<update id="update"  parameterType="Incomes" flushCache="true"> 
+		update incomes 
+		<set> 
+			<if test="guid != null">GUID=#{guid},</if>
+			<if test="projectid != null">PROJECTID=#{projectid},</if>
+			<if test="interest != null">INTEREST=#{interest},</if>
+			<if test="overdue != null">OVERDUE=#{overdue},</if>
+			<if test="otherincome != null">OTHERINCOME=#{otherincome},</if>
+			<if test="operatorid != null">OPERATORID=#{operatorid},</if>
+			<if test="createdate != null">CREATEDATE=#{createdate},</if>
+			<if test="lastupdatetime != null">LASTUPDATETIME=#{lastupdatetime},</if>
+		</set>
+		WHERE GUID = #{guid}
+	</update> 
+	
+	<!-- 单选删除语句 -->
+	<delete id="delete" parameterType="Incomes" flushCache="true"> 
+		DELETE FROM incomes WHERE GUID = #{guid}
+	</delete>
+	
+	<!-- 多选删除 -->
+	<delete id="mulDel" parameterType="java.lang.String" flushCache="true">
+		DELETE FROM incomes WHERE GUID IN
+		<foreach item="id" collection="array" open="(" separator="," close=")"> 
+			#{id}
+		</foreach> 
+	</delete>
+</mapper>

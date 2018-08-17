@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="Saledservice">
+	
+	<!-- 缓存条数 -->
+	<cache size="2000" />
+	
+	<!-- 条件语句 -->
+	<sql id="WhereSQL">
+		<where>
+			<if test="guid != null and guid != ''"> 
+			AND T.GUID = #{guid} 
+			</if>
+			<if test="clientid != null and clientid != ''"> 
+			AND T.CLIENTID = #{clientid} 
+			</if>
+			<if test="salesid != null and salesid != ''"> 
+			AND T.SALESID = #{salesid} 
+			</if>
+			<if test="traintype != null and traintype != ''"> 
+			AND T.TRAINTYPE = #{traintype} 
+			</if>
+			<if test="tlantdensity != null and tlantdensity != ''"> 
+			AND T.TLANTDENSITY = #{tlantdensity} 
+			</if>
+			<if test="isdisinfecte != null and isdisinfecte != ''"> 
+			AND T.ISDISINFECTE = #{isdisinfecte} 
+			</if>
+			<if test="isremoved != null and isremoved != ''"> 
+			AND T.ISREMOVED = #{isremoved} 
+			</if>
+			<if test="rottenrate != null and rottenrate != ''"> 
+			AND T.ROTTENRATE = #{rottenrate} 
+			</if>
+			<if test="ismedicine != null and ismedicine != ''"> 
+			AND T.ISMEDICINE = #{ismedicine} 
+			</if>
+			<if test="medicinetype != null and medicinetype != ''"> 
+			AND T.MEDICINETYPE = #{medicinetype} 
+			</if>
+			<if test="isdisinfect != null and isdisinfect != ''"> 
+			AND T.ISDISINFECT = #{isdisinfect} 
+			</if>
+			<if test="disinfecttype != null and disinfecttype != ''"> 
+			AND T.DISINFECTTYPE = #{disinfecttype} 
+			</if>
+			<if test="watering != null and watering != ''"> 
+			AND T.WATERING = #{watering} 
+			</if>
+			<if test="manure != null and manure != ''"> 
+			AND T.MANURE = #{manure} 
+			</if>
+			<if test="pests != null and pests != ''"> 
+			AND T.PESTS = #{pests} 
+			</if>
+			<if test="recordby != null and recordby != ''"> 
+			AND T.RECORDBY = #{recordby} 
+			</if>
+			<if test="lastupdate != null and lastupdate != ''"> 
+			AND T.LASTUPDATE = #{lastupdate} 
+			</if>
+			<if test="createdate != null and createdate != ''"> 
+			AND T.CREATEDATE = #{createdate} 
+			</if>
+			<if test="operatorid != null and operatorid != ''"> 
+			AND T.OPERATORID = #{operatorid} 
+			</if>
+		</where>
+	</sql>
+	
+	<!-- 查找语句 -->
+	<select id="find" resultType="Saledservice" parameterType="Saledservice" flushCache="false" useCache="true">
+    	SELECT 
+	    	T.GUID AS guid, 
+	    	T.CLIENTID AS clientid, 
+	    	T.SALESID AS salesid, 
+	    	T.TRAINTYPE AS traintype, 
+	    	T.TLANTDENSITY AS tlantdensity, 
+	    	T.ISDISINFECTE AS isdisinfecte, 
+	    	T.ISREMOVED AS isremoved, 
+	    	T.ROTTENRATE AS rottenrate, 
+	    	T.ISMEDICINE AS ismedicine, 
+	    	T.MEDICINETYPE AS medicinetype, 
+	    	T.ISDISINFECT AS isdisinfect, 
+	    	T.DISINFECTTYPE AS disinfecttype, 
+	    	T.WATERING AS watering, 
+	    	T.MANURE AS manure, 
+	    	T.PESTS AS pests, 
+	    	T.RECORDBY AS recordby, 
+	    	T.LASTUPDATE AS lastupdate, 
+	    	T.CREATEDATE AS createdate, 
+	    	T.OPERATORID AS operatorid,
+	    	s.batch as batch 
+    	FROM saledservice T left join salesrecord s
+    	on T.salesid=s.guid
+		<include refid="WhereSQL" />
+	</select>
+	
+	<!-- 获取总记录数语句 -->
+	<select id="findCount" resultType="java.lang.Integer" parameterType="Saledservice" flushCache="false" useCache="true">
+    	SELECT COUNT(*)  FROM saledservice T
+		<include refid="WhereSQL" />
+	</select>
+	
+	<!-- 插入语句 -->
+	<insert id="insert" parameterType="Saledservice" flushCache="true"> 
+		INSERT INTO saledservice
+		(
+			GUID, 
+			CLIENTID, 
+			SALESID, 
+			TRAINTYPE, 
+			TLANTDENSITY, 
+			ISDISINFECTE, 
+			ISREMOVED, 
+			ROTTENRATE, 
+			ISMEDICINE, 
+			MEDICINETYPE, 
+			ISDISINFECT, 
+			DISINFECTTYPE, 
+			WATERING, 
+			MANURE, 
+			PESTS, 
+			RECORDBY, 
+			LASTUPDATE, 
+			CREATEDATE, 
+			OPERATORID 
+		 ) 
+		VALUES
+		(
+			#{guid,jdbcType=VARCHAR}, 
+			#{clientid,jdbcType=VARCHAR}, 
+			#{salesid,jdbcType=VARCHAR}, 
+			#{traintype,jdbcType=VARCHAR}, 
+			#{tlantdensity,jdbcType=VARCHAR}, 
+			#{isdisinfecte,jdbcType=VARCHAR}, 
+			#{isremoved,jdbcType=VARCHAR}, 
+			#{rottenrate,jdbcType=VARCHAR}, 
+			#{ismedicine,jdbcType=VARCHAR}, 
+			#{medicinetype,jdbcType=VARCHAR}, 
+			#{isdisinfect,jdbcType=VARCHAR}, 
+			#{disinfecttype,jdbcType=VARCHAR}, 
+			#{watering,jdbcType=VARCHAR}, 
+			#{manure,jdbcType=VARCHAR}, 
+			#{pests,jdbcType=VARCHAR}, 
+			#{recordby,jdbcType=VARCHAR}, 
+			#{lastupdate,jdbcType=DATE}, 
+			#{createdate,jdbcType=DATE}, 
+			#{operatorid,jdbcType=VARCHAR} 
+		) 
+	</insert>
+	
+	<!-- 更新语句 -->
+	<update id="update"  parameterType="Saledservice" flushCache="true"> 
+		update saledservice 
+		<set> 
+			<if test="guid != null">GUID=#{guid},</if>
+			<if test="clientid != null">CLIENTID=#{clientid},</if>
+			<if test="salesid != null">SALESID=#{salesid},</if>
+			<if test="traintype != null">TRAINTYPE=#{traintype},</if>
+			<if test="tlantdensity != null">TLANTDENSITY=#{tlantdensity},</if>
+			<if test="isdisinfecte != null">ISDISINFECTE=#{isdisinfecte},</if>
+			<if test="isremoved != null">ISREMOVED=#{isremoved},</if>
+			<if test="rottenrate != null">ROTTENRATE=#{rottenrate},</if>
+			<if test="ismedicine != null">ISMEDICINE=#{ismedicine},</if>
+			<if test="medicinetype != null">MEDICINETYPE=#{medicinetype},</if>
+			<if test="isdisinfect != null">ISDISINFECT=#{isdisinfect},</if>
+			<if test="disinfecttype != null">DISINFECTTYPE=#{disinfecttype},</if>
+			<if test="watering != null">WATERING=#{watering},</if>
+			<if test="manure != null">MANURE=#{manure},</if>
+			<if test="pests != null">PESTS=#{pests},</if>
+			<if test="recordby != null">RECORDBY=#{recordby},</if>
+			<if test="lastupdate != null">LASTUPDATE=#{lastupdate},</if>
+			<if test="createdate != null">CREATEDATE=#{createdate},</if>
+			<if test="operatorid != null">OPERATORID=#{operatorid},</if>
+		</set>
+		WHERE GUID = #{guid}
+	</update> 
+	
+	<!-- 单选删除语句 -->
+	<delete id="delete" parameterType="Saledservice" flushCache="true"> 
+		DELETE FROM saledservice WHERE GUID = #{guid}
+	</delete>
+	
+	<!-- 多选删除 -->
+	<delete id="mulDel" parameterType="java.lang.String" flushCache="true">
+		DELETE FROM saledservice WHERE GUID IN
+		<foreach item="id" collection="array" open="(" separator="," close=")"> 
+			#{id}
+		</foreach> 
+	</delete>
+</mapper>

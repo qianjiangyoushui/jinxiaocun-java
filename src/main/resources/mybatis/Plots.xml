@@ -1,0 +1,282 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="Plots">
+	
+	<!-- 缓存条数 -->
+	<cache size="2000" />
+	
+	<!-- 条件语句 -->
+	<sql id="WhereSQL">
+		<where>
+			<if test="guid != null and guid != ''"> 
+			AND T.GUID = #{guid} 
+			</if>
+			<if test="farmid != null and farmid != ''"> 
+			AND T.FARMID = #{farmid} 
+			</if>
+			<if test="plotname != null and plotname != ''"> 
+			AND T.PLOTNAME = #{plotname} 
+			</if>
+			<if test="plotcode != null and plotcode != ''">
+			AND T.PLOTNAME = #{plotname}
+			</if>
+			<if test="irrigatetype != null and irrigatetype != ''">
+			AND T.IRRIGATETYPE = #{irrigatetype} 
+			</if>
+			<if test="irrigbrand != null and irrigbrand != ''"> 
+			AND T.IRRIGBRAND = #{irrigbrand} 
+			</if>
+			<if test="wellsamount != null and wellsamount != ''"> 
+			AND T.WELLSAMOUNT = #{wellsamount} 
+			</if>
+			<if test="wellsdisc != null and wellsdisc != ''"> 
+			AND T.WELLSDISC = #{wellsdisc} 
+			</if>
+			<if test="distvillage != null and distvillage != ''"> 
+			AND T.DISTVILLAGE = #{distvillage} 
+			</if>
+			<if test="distroad != null and distroad != ''"> 
+			AND T.DISTROAD = #{distroad} 
+			</if>
+			<if test="distother != null and distother != ''"> 
+			AND T.DISTOTHER = #{distother} 
+			</if>
+			<if test="createdate != null and createdate != ''"> 
+			AND T.CREATEDATE = #{createdate} 
+			</if>
+			<if test="operatorid != null and operatorid != ''"> 
+			AND T.OPERATORID = #{operatorid} 
+			</if>
+			<if test="url != null and url != ''"> 
+			AND T.url = #{url} 
+			</if>
+			<if test="companyid != null and companyid != ''"> 
+			AND T.companyid = #{companyid} 
+			</if>
+		</where>
+	</sql>
+	
+	<!-- 查找语句 -->
+	<select id="find" resultMap="plotsDetail" parameterType="Plots" flushCache="false" useCache="true">
+    	SELECT 
+	    	T.GUID AS guid, 
+	    	T.FARMID AS farmid, 
+	    	T.PLOTNAME AS plotname, 
+	    	T.PLOTCODE AS plotcode,
+	    	T.IRRIGATETYPE AS irrigatetype,
+	    	T.IRRIGBRAND AS irrigbrand, 
+	    	T.WELLSAMOUNT AS wellsamount, 
+	    	T.WELLSDISC AS wellsdisc, 
+	    	T.DISTVILLAGE AS distvillage, 
+	    	T.DISTROAD AS distroad, 
+	    	T.DISTOTHER AS distother, 
+	    	T.CREATEDATE AS createdate, 
+	    	T.OPERATORID AS operatorid ,
+	    	T.url as url,
+	    	T.companyid as companyid,
+	    	s.GUID AS s_guid,
+			s.COMPANYID AS s_companyid,
+			s.BATCH AS batch,
+			s.VARIETY AS variety,
+			s.LEVEL AS level,
+			s.SEEDID AS seedid,
+			s.PLACEID AS placeid,
+			s.YEARS AS years,
+			s.STARTDATE AS startdate,
+			s.ENDDATE AS enddate,
+			s.BOTTLEAMOUNT AS bottleamount,
+			s.STRAINAMOUNT AS strainamount,
+			s.STUBBLE AS stubble,
+			s.STOPWATERDATE AS stopwaterdate,
+			s.KILLDATE AS killdate,
+			s.REWARDDATE AS rewarddate,
+			s.STOPMUCK AS stopmuck,
+			s.BUDDINGDATE AS buddingdate,
+			s.MUAMOUNT AS muamount,
+			s.TYPE AS type,
+			s.CODE AS code,
+			s.DESCRIPTION AS s_description,
+			s.VISIBLE AS visible,
+			s.CREATEDATE AS s_createdate,
+			s.OPERATORID AS s_operatorid ,
+			d.guid as d_guid,
+			d.belongsname as d_belongsname,
+			d.keyvalue as d_keyvalue,
+			p.guid as p_guid,
+			p.years as p_years,
+			p.plantcrops as plantcrops,
+			p.medicate as medicate 
+    	FROM plots T 
+    	left join seedfile s 
+    	on T.guid = s.placeid 
+    	and s.rewarddate is null 
+    	left join dictionary d
+		on s.variety =d.keyvalue and d.belongsid='2' 
+		left join thecrop p 
+		on T.guid = p.plotid 
+		<include refid="WhereSQL" />
+		ORDER BY T.CREATEDATE 
+	</select>
+	
+	<!-- 查找语句 -->
+	<select id="findPlots" resultType="Plots" parameterType="Plots" flushCache="false" useCache="true">
+    	SELECT 
+	    	T.GUID AS guid, 
+	    	T.FARMID AS farmid, 
+	    	T.PLOTNAME AS plotname, 
+	    	T.PLOTCODE AS plotcode,
+	    	T.IRRIGATETYPE AS irrigatetype,
+	    	T.IRRIGBRAND AS irrigbrand, 
+	    	T.WELLSAMOUNT AS wellsamount, 
+	    	T.WELLSDISC AS wellsdisc, 
+	    	T.DISTVILLAGE AS distvillage, 
+	    	T.DISTROAD AS distroad, 
+	    	T.DISTOTHER AS distother, 
+	    	T.CREATEDATE AS createdate, 
+	    	T.OPERATORID AS operatorid ,
+	    	T.url as url ,
+	    	T.companyid as companyid 
+    	FROM plots T 
+		<include refid="WhereSQL" />
+		ORDER BY T.CREATEDATE 
+	</select>
+	
+	<!-- 获取总记录数语句 -->
+	<select id="findCount" resultType="java.lang.Integer" parameterType="Plots" flushCache="false" useCache="true">
+    	SELECT COUNT(*)  FROM plots T
+		<include refid="WhereSQL" />
+	</select>
+	
+	<!-- 插入语句 -->
+	<insert id="insert" parameterType="Plots" flushCache="true"> 
+		INSERT INTO plots
+		(
+			GUID, 
+			FARMID, 
+			PLOTNAME, 
+			PLOTCODE,
+			IRRIGATETYPE,
+			IRRIGBRAND, 
+			WELLSAMOUNT, 
+			WELLSDISC, 
+			DISTVILLAGE, 
+			DISTROAD, 
+			DISTOTHER, 
+			CREATEDATE, 
+			OPERATORID ,
+			url ,
+			companyid 
+		 ) 
+		VALUES
+		(
+			#{guid,jdbcType=VARCHAR}, 
+			#{farmid,jdbcType=VARCHAR}, 
+			#{plotname,jdbcType=VARCHAR}, 
+			#{plotcode,jdbcType=VARCHAR},
+			#{irrigatetype,jdbcType=VARCHAR},
+			#{irrigbrand,jdbcType=VARCHAR}, 
+			#{wellsamount,jdbcType=INTEGER}, 
+			#{wellsdisc,jdbcType=VARCHAR}, 
+			#{distvillage,jdbcType=DECIMAL}, 
+			#{distroad,jdbcType=DECIMAL}, 
+			#{distother,jdbcType=DECIMAL}, 
+			#{createdate,jdbcType=DATE}, 
+			#{operatorid,jdbcType=VARCHAR} ,
+			#{url,jdbcType=VARCHAR} ,
+			#{companyid,jdbcType=VARCHAR} 
+		) 
+	</insert>
+	
+	<!-- 更新语句 -->
+	<update id="update"  parameterType="Plots" flushCache="true"> 
+		update plots 
+		<set> 
+			<if test="guid != null">GUID=#{guid},</if>
+			<if test="farmid != null">FARMID=#{farmid},</if>
+			<if test="plotname != null">PLOTNAME=#{plotname},</if>
+			<if test="plotcode != null">PLOTCODE=#{plotcode},</if>
+			<if test="irrigatetype != null">IRRIGATETYPE=#{irrigatetype},</if>
+			<if test="irrigbrand != null">IRRIGBRAND=#{irrigbrand},</if>
+			<if test="wellsamount != null">WELLSAMOUNT=#{wellsamount},</if>
+			<if test="wellsdisc != null">WELLSDISC=#{wellsdisc},</if>
+			<if test="distvillage != null">DISTVILLAGE=#{distvillage},</if>
+			<if test="distroad != null">DISTROAD=#{distroad},</if>
+			<if test="distother != null">DISTOTHER=#{distother},</if>
+			<if test="createdate != null">CREATEDATE=#{createdate},</if>
+			<if test="operatorid != null">OPERATORID=#{operatorid},</if>
+			<if test="url != null">url=#{url},</if>
+			<if test="companyid != null">companyid=#{companyid},</if>
+		</set>
+		WHERE GUID = #{guid}
+	</update> 
+	
+	<!-- 单选删除语句 -->
+	<delete id="delete" parameterType="Plots" flushCache="true"> 
+		DELETE FROM plots WHERE GUID = #{guid}
+	</delete>
+	
+	<!-- 多选删除 -->
+	<delete id="mulDel" parameterType="java.lang.String" flushCache="true">
+		DELETE FROM plots WHERE GUID IN
+		<foreach item="id" collection="array" open="(" separator="," close=")"> 
+			#{id}
+		</foreach> 
+	</delete>
+	
+	<resultMap type="Plots" id="plotsDetail">
+		<id property="guid" column="guid" />
+		<result property="farmid" column="farmid" />
+		<result property="plotname" column="plotname" />
+		<result property="plotcode" column="plotcode" />
+		<result property="irrigatetype" column="irrigatetype" />
+		<result property="irrigbrand" column="irrigbrand" />
+		<result property="wellsamount" column="wellsamount" />
+		<result property="wellsdisc" column="wellsdisc" />
+		<result property="distvillage" column="distvillage" />
+		<result property="distroad" column="distroad" />
+		<result property="distother" column="distother" />
+		<result property="createdate" column="createdate" />
+		<result property="operatorid" column="operatorid" />
+		<result property="url" column="url" />
+		<result property="companyid" column="companyid" />
+		<collection property="seedfiles" ofType="Seedfile">
+			<id property="guid" column="s_guid" />
+			<result property="companyid" column="s_companyid" />
+			<result property="batch" column="batch" />
+			<result property="variety" column="variety" />
+			<result property="level" column="level" />
+			<result property="seedid" column="seedid" />
+			<result property="placeid" column="placeid" />
+			<result property="years" column="years" />
+			<result property="startdate" column="startdate" />
+			<result property="enddate" column="enddate" />
+			<result property="bottleamount" column="bottleamount" />
+			<result property="strainamount" column="strainamount" />
+			<result property="stubble" column="stubble" />
+			<result property="stopwaterdate" column="stopwaterdate" />
+			<result property="killdate" column="killdate" />
+			<result property="rewarddate" column="rewarddate" />
+			<result property="stopmuck" column="stopmuck" />
+			<result property="buddingdate" column="buddingdate" />
+			<result property="muamount" column="muamount" />
+			<result property="type" column="type" />
+			<result property="code" column="code" />
+			<result property="description" column="description" />
+			<result property="visible" column="visible" />
+			<result property="createdate" column="s_createdate" />
+			<result property="operatorid" column="s_operatorid" />
+			
+			<association property="varietys" javaType="Dictionary">
+				<id property="guid" column="d_guid" />
+				<result property="belongsname" column="d_belongsname" />
+				<result property="keyvalue" column="d_keyvalue" />
+			</association>
+		</collection>
+		<collection property="thecrops" ofType="Thecrop">
+			<id property="guid" column="p_guid" />
+			<result property="years" column="p_years" />
+			<result property="plantcrops" column="plantcrops" />
+			<result property="medicate" column="medicate" />
+		</collection>
+	</resultMap>
+</mapper>

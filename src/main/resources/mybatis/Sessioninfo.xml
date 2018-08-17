@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="Sessioninfo">
+
+    <!-- 缓存条数 -->
+    <cache size="2000" />
+
+    <!-- 条件语句 -->
+    <sql id="WhereSQL">
+        <where>
+            <if test="guid != null and guid != ''">
+                AND T.GUID = #{guid}
+            </if>
+            <if test="createTime != null and createTime != ''">
+                AND T.CREATE_TIME = #{createTime}
+            </if>
+            <if test="lastVisitTime != null and lastVisitTime != ''">
+                AND T.LAST_VISIT_TIME = #{lastVisitTime}
+            </if>
+            <if test="openId != null and openId != ''">
+                AND T.OPEN_ID = #{openId}
+            </if>
+            <if test="sessionKey != null and sessionKey != ''">
+                AND T.SESSION_KEY = #{sessionKey}
+            </if>
+            <if test="skey != null and skey != ''">
+                AND T.SKEY = #{skey}
+            </if>
+            <if test="userInfo != null and userInfo != ''">
+                AND T.USER_INFO = #{userInfo}
+            </if>
+            <if test="uuid != null and uuid != ''">
+                AND T.UUID = #{uuid}
+            </if>
+        </where>
+    </sql>
+
+    <!-- 查找语句 -->
+    <select id="find" resultType="Sessioninfo" parameterType="Sessioninfo" flushCache="false" useCache="true">
+        SELECT
+        T.GUID AS guid,
+        T.CREATE_TIME AS createTime,
+        T.LAST_VISIT_TIME AS lastVisitTime,
+        T.OPEN_ID AS openId,
+        T.SESSION_KEY AS sessionKey,
+        T.SKEY AS skey,
+        T.USER_INFO AS userInfo,
+        T.UUID AS uuid
+        FROM sessioninfo T
+        <include refid="WhereSQL" />
+    </select>
+
+    <!-- 获取总记录数语句 -->
+    <select id="findCount" resultType="java.lang.Integer" parameterType="Sessioninfo" flushCache="false" useCache="true">
+        SELECT COUNT(*)  FROM sessioninfo T
+        <include refid="WhereSQL" />
+    </select>
+
+    <!-- 插入语句 -->
+    <insert id="insert" parameterType="Sessioninfo" flushCache="true">
+        INSERT INTO sessioninfo
+        (
+        GUID,
+        CREATE_TIME,
+        LAST_VISIT_TIME,
+        OPEN_ID,
+        SESSION_KEY,
+        SKEY,
+        USER_INFO,
+        UUID
+        )
+        VALUES
+        (
+        #{guid,jdbcType=VARCHAR},
+        #{createTime,jdbcType=DATE},
+        #{lastVisitTime,jdbcType=DATE},
+        #{openId,jdbcType=VARCHAR},
+        #{sessionKey,jdbcType=VARCHAR},
+        #{skey,jdbcType=VARCHAR},
+        #{userInfo,jdbcType=VARCHAR},
+        #{uuid,jdbcType=VARCHAR}
+        )
+    </insert>
+
+    <!-- 更新语句 -->
+    <update id="update"  parameterType="Sessioninfo" flushCache="true">
+        update sessioninfo
+        <set>
+            <if test="guid != null">GUID=#{guid},</if>
+            <if test="createTime != null">CREATE_TIME=#{createTime},</if>
+            <if test="lastVisitTime != null">LAST_VISIT_TIME=#{lastVisitTime},</if>
+            <if test="openId != null">OPEN_ID=#{openId},</if>
+            <if test="sessionKey != null">SESSION_KEY=#{sessionKey},</if>
+            <if test="skey != null">SKEY=#{skey},</if>
+            <if test="userInfo != null">USER_INFO=#{userInfo},</if>
+            <if test="uuid != null">UUID=#{uuid},</if>
+        </set>
+        WHERE GUID = #{guid}
+    </update>
+
+    <!-- 单选删除语句 -->
+    <delete id="delete" parameterType="Sessioninfo" flushCache="true">
+        DELETE FROM sessioninfo WHERE GUID = #{guid}
+    </delete>
+
+    <!-- 多选删除 -->
+    <delete id="mulDel" parameterType="java.lang.String" flushCache="true">
+        DELETE FROM sessioninfo WHERE GUID IN
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

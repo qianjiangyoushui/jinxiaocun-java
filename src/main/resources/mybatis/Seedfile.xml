@@ -1,0 +1,638 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="Seedfile">
+
+	<!-- 缓存条数 -->
+	<cache size="2000" />
+
+	<!-- 条件语句 -->
+	<sql id="WhereSQL">
+		<where>
+			<if test="guid != null and guid != ''">
+				AND T.GUID = #{guid}
+			</if>
+			<if test="companyid != null and companyid != ''">
+				AND T.COMPANYID = #{companyid}
+			</if>
+			<if test="batch != null and batch != ''">
+				AND T.BATCH = #{batch}
+			</if>
+			<if test="variety != null and variety != ''">
+				AND T.VARIETY = #{variety}
+			</if>
+			<if test="level != null and level != ''">
+				AND T.LEVEL = #{level}
+			</if>
+			<if test="seedid != null and seedid != ''">
+				AND T.SEEDID = #{seedid}
+			</if>
+			<if test="placeid != null and placeid != ''">
+				AND T.PLACEID = #{placeid}
+			</if>
+			<if test="years != null and years != ''">
+				AND T.YEARS = #{years}
+			</if>
+			<if test="startdate != null and startdate != ''">
+				AND T.STARTDATE = #{startdate}
+			</if>
+			<if test="enddate != null and enddate != ''">
+				AND T.ENDDATE = #{enddate}
+			</if>
+			<if test="bottleamount != null and bottleamount != ''">
+				AND T.BOTTLEAMOUNT = #{bottleamount}
+			</if>
+			<if test="strainamount != null and strainamount != ''">
+				AND T.STRAINAMOUNT = #{strainamount}
+			</if>
+			<if test="stubble != null and stubble != ''">
+				AND T.STUBBLE = #{stubble}
+			</if>
+			<if test="stopwaterdate != null and stopwaterdate != ''">
+				AND T.STOPWATERDATE = #{stopwaterdate}
+			</if>
+			<if test="killdate != null and killdate != ''">
+				AND T.KILLDATE = #{killdate}
+			</if>
+			<if test="rewarddate != null and rewarddate != ''">
+				AND T.REWARDDATE = #{rewarddate}
+			</if>
+			<if test="stopmuck != null and stopmuck != ''">
+				AND T.STOPMUCK = #{stopmuck}
+			</if>
+			<if test="buddingdate != null and buddingdate != ''">
+				AND T.BUDDINGDATE = #{buddingdate}
+			</if>
+			<if test="muamount != null and muamount != ''">
+				AND T.MUAMOUNT = #{muamount}
+			</if>
+			<if test="type != null and type != ''">
+				AND T.TYPE = #{type}
+			</if>
+			<if test="code != null and code != ''">
+				AND T.CODE = #{code}
+			</if>
+			<if test="description != null and description != ''">
+				AND T.DESCRIPTION = #{description}
+			</if>
+			<if test="visible != null and visible != ''">
+				AND T.VISIBLE = #{visible}
+			</if>
+			<if test="createdate != null and createdate != ''">
+				AND T.CREATEDATE = #{createdate}
+			</if>
+			<if test="operatorid != null and operatorid != ''">
+				AND T.OPERATORID = #{operatorid}
+			</if>
+		</where>
+	</sql>
+
+	<!-- 查找语句 -->
+	<select id="find" resultType="Seedfile" parameterType="Seedfile"
+		flushCache="false" useCache="true">
+		SELECT
+		T.GUID AS guid,
+		T.COMPANYID AS companyid,
+		T.BATCH AS batch,
+		T.VARIETY AS variety,
+		T.LEVEL AS level,
+		T.SEEDID AS seedid,
+		T.PLACEID AS placeid,
+		T.YEARS AS years,
+		T.STARTDATE AS startdate,
+		T.ENDDATE AS enddate,
+		T.BOTTLEAMOUNT AS bottleamount,
+		T.STRAINAMOUNT AS strainamount,
+		T.STUBBLE AS stubble,
+		T.STOPWATERDATE AS stopwaterdate,
+		T.KILLDATE AS killdate,
+		T.REWARDDATE AS rewarddate,
+		T.STOPMUCK AS stopmuck,
+		T.BUDDINGDATE AS buddingdate,
+		T.MUAMOUNT AS muamount,
+		T.TYPE AS type,
+		T.CODE AS code,
+		T.DESCRIPTION AS description,
+		T.VISIBLE AS visible,
+		T.CREATEDATE AS createdate,
+		T.OPERATORID AS operatorid,
+		T.ISPRODUCTION AS isproduction,
+		T.SOURCE AS source
+		FROM seedfile T
+		<include refid="WhereSQL" />
+		ORDER BY T.CREATEDATE desc
+	</select>
+	
+	
+	<!-- 查找语句 -->
+	<select id="findsales" resultType="Seedfile" parameterType="Seedfile"
+		flushCache="false" useCache="true">
+		SELECT
+		T.GUID AS guid,
+		T.COMPANYID AS companyid,
+		T.BATCH AS batch 
+		FROM seedfile T  
+		where T.type in ('3','4','5')  
+		and T.companyid =#{companyid}  
+		ORDER BY T.CREATEDATE 
+	</select>
+
+	<!-- 获取总记录数语句 -->
+	<select id="findCount" resultType="java.lang.Integer"
+		parameterType="Seedfile" flushCache="false" useCache="true">
+		SELECT COUNT(*) FROM seedfile T
+		<include refid="WhereSQL" />
+	</select>
+
+	<!-- 插入语句 -->
+	<insert id="insert" parameterType="Seedfile" flushCache="true">
+		INSERT INTO seedfile
+		(
+		GUID,
+		COMPANYID,
+		BATCH,
+		VARIETY,
+		LEVEL,
+		SEEDID,
+		PLACEID,
+		YEARS,
+		STARTDATE,
+		ENDDATE,
+		BOTTLEAMOUNT,
+		STRAINAMOUNT,
+		STUBBLE,
+		STOPWATERDATE,
+		KILLDATE,
+		REWARDDATE,
+		STOPMUCK,
+		BUDDINGDATE,
+		MUAMOUNT,
+		TYPE,
+		CODE,
+		DESCRIPTION,
+		VISIBLE,
+		CREATEDATE,
+		OPERATORID,
+		ISPRODUCTION,
+		SOURCE
+		)
+		VALUES
+		(
+		#{guid,jdbcType=VARCHAR},
+		#{companyid,jdbcType=VARCHAR},
+		#{batch,jdbcType=VARCHAR},
+		#{variety,jdbcType=VARCHAR},
+		#{level,jdbcType=VARCHAR},
+		#{seedid,jdbcType=VARCHAR},
+		#{placeid,jdbcType=VARCHAR},
+		#{years,jdbcType=INTEGER},
+		#{startdate,jdbcType=DATE},
+		#{enddate,jdbcType=DATE},
+		#{bottleamount,jdbcType=INTEGER},
+		#{strainamount,jdbcType=INTEGER},
+		#{stubble,jdbcType=INTEGER},
+		#{stopwaterdate,jdbcType=DATE},
+		#{killdate,jdbcType=DATE},
+		#{rewarddate,jdbcType=DATE},
+		#{stopmuck,jdbcType=DATE},
+		#{buddingdate,jdbcType=DATE},
+		#{muamount,jdbcType=DECIMAL},
+		#{type,jdbcType=VARCHAR},
+		#{code,jdbcType=VARCHAR},
+		#{description,jdbcType=VARCHAR},
+		#{visible,jdbcType=VARCHAR},
+		#{createdate,jdbcType=TIMESTAMP},
+		#{operatorid,jdbcType=VARCHAR},
+		#{isproduction,jdbcType=VARCHAR},
+		#{source,jdbcType=VARCHAR}
+		)
+	</insert>
+
+	<!-- 更新语句 -->
+	<update id="update" parameterType="Seedfile" flushCache="true">
+		update seedfile
+		<set>
+			<if test="guid != null">GUID=#{guid},</if>
+			<if test="companyid != null">COMPANYID=#{companyid},</if>
+			<if test="batch != null">BATCH=#{batch},</if>
+			<if test="variety != null">VARIETY=#{variety},</if>
+			<if test="level != null">LEVEL=#{level},</if>
+			<if test="seedid != null">SEEDID=#{seedid},</if>
+			<if test="placeid != null">PLACEID=#{placeid},</if>
+			<if test="years != null">YEARS=#{years},</if>
+			<if test="startdate != null">STARTDATE=#{startdate},</if>
+			<if test="enddate != null">ENDDATE=#{enddate},</if>
+			<if test="bottleamount != null">BOTTLEAMOUNT=#{bottleamount},</if>
+			<if test="strainamount != null">STRAINAMOUNT=#{strainamount},</if>
+			<if test="stubble != null">STUBBLE=#{stubble},</if>
+			<if test="stopwaterdate != null">STOPWATERDATE=#{stopwaterdate},</if>
+			<if test="killdate != null">KILLDATE=#{killdate},</if>
+			<if test="rewarddate != null">REWARDDATE=#{rewarddate},</if>
+			<if test="stopmuck != null">STOPMUCK=#{stopmuck},</if>
+			<if test="buddingdate != null">BUDDINGDATE=#{buddingdate},</if>
+			<if test="muamount != null">MUAMOUNT=#{muamount},</if>
+			<if test="type != null">TYPE=#{type},</if>
+			<if test="code != null">CODE=#{code},</if>
+			<if test="description != null">DESCRIPTION=#{description},</if>
+			<if test="visible != null">VISIBLE=#{visible},</if>
+			<if test="createdate != null">CREATEDATE=#{createdate},</if>
+			<if test="operatorid != null">OPERATORID=#{operatorid},</if>
+			<if test="isproduction != null">ISPRODUCTION=#{isproduction},</if>
+			<if test="source != null">SOURCE=#{source},</if>
+		</set>
+		WHERE GUID = #{guid}
+	</update>
+
+	<!-- 单选删除语句 -->
+	<delete id="delete" parameterType="Seedfile" flushCache="true">
+		DELETE FROM seedfile WHERE GUID = #{guid}
+	</delete>
+
+	<!-- 多选删除 -->
+	<delete id="mulDel" parameterType="java.lang.String" flushCache="true">
+		DELETE FROM seedfile WHERE GUID IN
+		<foreach item="id" collection="array" open="(" separator=","
+			close=")">
+			#{id}
+		</foreach>
+	</delete>
+<select id="findhxm" resultMap="g0result" parameterType="Seedfile"
+		flushCache="false" useCache="true">
+		SELECT
+		T.GUID AS guid,
+		T.COMPANYID AS companyid,
+		T.BATCH AS batch,
+		T.VARIETY AS variety,
+		T.LEVEL AS level,
+		T.SEEDID AS seedid,
+		T.PLACEID AS placeid,
+		T.YEARS AS years,
+		T.STARTDATE AS startdate,
+		T.ENDDATE AS enddate,
+		T.BOTTLEAMOUNT AS bottleamount,
+		T.STRAINAMOUNT AS strainamount,
+		T.STUBBLE AS stubble,
+		T.STOPWATERDATE AS stopwaterdate,
+		T.KILLDATE AS killdate,
+		T.REWARDDATE AS rewarddate,
+		T.STOPMUCK AS stopmuck,
+		T.BUDDINGDATE AS buddingdate,
+		T.MUAMOUNT AS muamount,
+		T.TYPE AS type,
+		T.CODE AS code,
+		T.DESCRIPTION AS description,
+		T.VISIBLE AS visible,
+		T.CREATEDATE AS createdate,
+		T.OPERATORID AS operatorid ,
+		s.guid as s_guid,
+		s.seedbedname as seedbedname,
+		s.amount as s_amount ,
+		s.description as s_description,
+		d.guid as d_guid,
+		d.belongsname as d_belongsname,
+		d.keyvalue as d_keyvalue,
+		d2.guid as d2_guid,
+		d2.belongsname as d2_belongsname,
+		d2.keyvalue as d2_keyvalue
+		FROM seedfile T
+		left join seedbed s
+		on T.placeid = s.guid
+		left join dictionary d
+		on T.variety =d.keyvalue and d.belongsid='2'
+		left join dictionary d2
+		on T.level =d2.keyvalue and d2.belongsid='3'
+		<include refid="WhereSQL" />
+		ORDER BY T.CREATEDATE
+	</select>
+
+	<select id="findg0" resultMap="g0result" parameterType="Seedfile"
+		flushCache="false" useCache="true">
+		SELECT
+		T.GUID AS guid,
+		T.COMPANYID AS companyid,
+		T.BATCH AS batch,
+		T.VARIETY AS variety,
+		T.LEVEL AS level,
+		T.SEEDID AS seedid,
+		T.PLACEID AS placeid,
+		T.YEARS AS years,
+		T.STARTDATE AS startdate,
+		T.ENDDATE AS enddate,
+		T.BOTTLEAMOUNT AS bottleamount,
+		T.STRAINAMOUNT AS strainamount,
+		T.STUBBLE AS stubble,
+		T.STOPWATERDATE AS stopwaterdate,
+		T.KILLDATE AS killdate,
+		T.REWARDDATE AS rewarddate,
+		T.STOPMUCK AS stopmuck,
+		T.BUDDINGDATE AS buddingdate,
+		T.MUAMOUNT AS muamount,
+		T.TYPE AS type,
+		T.CODE AS code,
+		T.DESCRIPTION AS description,
+		T.VISIBLE AS visible,
+		T.CREATEDATE AS createdate,
+		T.OPERATORID AS operatorid ,
+		s.guid as s_guid,
+		s.seedbedname as seedbedname,
+		s.amount as s_amount ,
+		s.description as s_description,
+		d.guid as d_guid,
+		d.belongsname as d_belongsname,
+		d.keyvalue as d_keyvalue,
+		d2.guid as d2_guid,
+		d2.belongsname as d2_belongsname,
+		d2.keyvalue as d2_keyvalue
+		FROM seedfile T
+		left join seedbed s
+		on T.placeid = s.guid
+		left join dictionary d
+		on T.variety =d.keyvalue and d.belongsid='2'
+		left join dictionary d2
+		on T.level =d2.keyvalue and d2.belongsid='3'
+		<include refid="WhereSQL" />
+		ORDER BY T.CREATEDATE
+	</select>
+	
+	
+	<select id="findg2g3" resultMap="g2g3result" parameterType="Seedfile"
+		flushCache="false" useCache="true">
+		SELECT
+		T.GUID AS guid,
+		T.COMPANYID AS companyid,
+		T.BATCH AS batch,
+		T.VARIETY AS variety,
+		T.LEVEL AS level,
+		T.SEEDID AS seedid,
+		T.PLACEID AS placeid,
+		T.YEARS AS years,
+		T.STARTDATE AS startdate,
+		T.ENDDATE AS enddate,
+		T.BOTTLEAMOUNT AS bottleamount,
+		T.STRAINAMOUNT AS strainamount,
+		T.STUBBLE AS stubble,
+		T.STOPWATERDATE AS stopwaterdate,
+		T.KILLDATE AS killdate,
+		T.REWARDDATE AS rewarddate,
+		T.STOPMUCK AS stopmuck,
+		T.BUDDINGDATE AS buddingdate,
+		T.MUAMOUNT AS muamount,
+		T.TYPE AS type,
+		T.CODE AS code,
+		T.DESCRIPTION AS description,
+		T.VISIBLE AS visible,
+		T.CREATEDATE AS createdate,
+		T.OPERATORID AS operatorid ,
+		T.ISPRODUCTION AS isproduction,
+		T.SOURCE AS source,
+		s.guid as s_guid,
+		s.seedbedname as seedbedname,
+		s.amount as s_amount ,
+		s.description as s_description,
+		d.guid as d_guid,
+		d.belongsname as d_belongsname,
+		d.keyvalue as d_keyvalue,
+		d2.guid as d2_guid,
+		d2.belongsname as d2_belongsname,
+		d2.keyvalue as d2_keyvalue,
+		p.GUID AS p_guid, 
+	    	p.FARMID AS p_farmid, 
+	    	p.PLOTNAME AS p_plotname, 
+	    	p.IRRIGATETYPE AS p_irrigatetype, 
+	    	p.IRRIGBRAND AS p_irrigbrand, 
+	    	p.WELLSAMOUNT AS p_wellsamount, 
+	    	p.WELLSDISC AS p_wellsdisc, 
+	    	p.DISTVILLAGE AS p_distvillage, 
+	    	p.DISTROAD AS p_distroad, 
+	    	p.DISTOTHER AS p_distother, 
+	    	p.CREATEDATE AS p_createdate, 
+	    	p.OPERATORID AS p_operatorid 
+		FROM seedfile T
+		left join seedbed s
+		on T.placeid = s.guid
+		left join dictionary d
+		on T.variety =d.keyvalue and d.belongsid='2'
+		left join dictionary d2
+		on T.level =d2.keyvalue and d2.belongsid='3'
+		left join plots p on p.guid=T.placeid
+		<include refid="WhereSQL" />
+		ORDER BY T.CREATEDATE
+	</select>
+	
+	
+	<select id="findg1" resultMap="g1result" parameterType="Seedfile"
+		flushCache="false" useCache="true">
+		SELECT
+		T.GUID AS guid,
+		T.COMPANYID AS companyid,
+		T.BATCH AS batch,
+		T.VARIETY AS variety,
+		T.LEVEL AS level,
+		T.SEEDID AS seedid,
+		T.PLACEID AS placeid,
+		T.YEARS AS years,
+		T.STARTDATE AS startdate,
+		T.ENDDATE AS enddate,
+		T.BOTTLEAMOUNT AS bottleamount,
+		T.STRAINAMOUNT AS strainamount,
+		T.STUBBLE AS stubble,
+		T.STOPWATERDATE AS stopwaterdate,
+		T.KILLDATE AS killdate,
+		T.REWARDDATE AS rewarddate,
+		T.STOPMUCK AS stopmuck,
+		T.BUDDINGDATE AS buddingdate,
+		T.MUAMOUNT AS muamount,
+		T.TYPE AS type,
+		T.CODE AS code,
+		T.DESCRIPTION AS description,
+		T.VISIBLE AS visible,
+		T.CREATEDATE AS createdate,
+		T.OPERATORID AS operatorid ,
+		s.guid as s_guid,
+		s.seedbedname as seedbedname,
+		s.amount as s_amount ,
+		s.description as s_description,
+		d.guid as d_guid,
+		d.belongsname as d_belongsname,
+		d.keyvalue as d_keyvalue,
+		d2.guid as d2_guid,
+		d2.belongsname as d2_belongsname,
+		d2.keyvalue as d2_keyvalue,
+		g.guid as g_guid,
+		g.housename as housename
+		FROM seedfile T
+		left join seedbed s
+		on T.placeid = s.guid
+		left join dictionary d
+		on T.variety =d.keyvalue and d.belongsid='2'
+		left join dictionary d2
+		on T.level =d2.keyvalue and d2.belongsid='3'
+		LEFT JOIN greenhouses g ON T.placeid = g.guid
+		<include refid="WhereSQL" />
+		ORDER BY T.CREATEDATE
+	</select>
+	
+	
+
+	<resultMap type="Seedfile" id="g0result">
+		<id property="guid" column="guid" />
+		<result property="companyid" column="companyid" />
+		<result property="batch" column="batch" />
+		<result property="variety" column="variety" />
+		<result property="level" column="level" />
+		<result property="seedid" column="seedid" />
+		<result property="placeid" column="placeid" />
+		<result property="years" column="years" />
+		<result property="startdate" column="startdate" />
+		<result property="enddate" column="enddate" />
+		<result property="bottleamount" column="bottleamount" />
+		<result property="strainamount" column="strainamount" />
+		<result property="stubble" column="stubble" />
+		<result property="stopwaterdate" column="stopwaterdate" />
+		<result property="killdate" column="killdate" />
+		<result property="rewarddate" column="rewarddate" />
+		<result property="stopmuck" column="stopmuck" />
+		<result property="buddingdate" column="buddingdate" />
+		<result property="muamount" column="muamount" />
+		<result property="type" column="type" />
+		<result property="code" column="code" />
+		<result property="description" column="description" />
+		<result property="visible" column="visible" />
+		<result property="createdate" column="createdate" />
+		<result property="operatorid" column="operatorid" />
+		
+		
+		<association property="seedbed" javaType="Seedbed">
+			<id property="guid" column="s_guid" />
+			<result property="seedbedname" column="seedbedname" />
+			<result property="amount" column="s_amount" />
+			<result property="description" column="s_description" />
+		</association>
+		
+		<association property="varietys" javaType="Dictionary">
+			<id property="guid" column="d_guid" />
+			<result property="belongsname" column="d_belongsname" />
+			<result property="keyvalue" column="d_keyvalue" />
+		</association>
+		<association property="levels" javaType="Dictionary">
+			<id property="guid" column="d2_guid" />
+			<result property="belongsname" column="d2_belongsname" />
+			<result property="keyvalue" column="d2_keyvalue" />
+		</association>
+	</resultMap>
+	
+	<resultMap type="Seedfile" id="g2g3result">
+		<id property="guid" column="guid" />
+		<result property="companyid" column="companyid" />
+		<result property="batch" column="batch" />
+		<result property="variety" column="variety" />
+		<result property="level" column="level" />
+		<result property="seedid" column="seedid" />
+		<result property="placeid" column="placeid" />
+		<result property="years" column="years" />
+		<result property="startdate" column="startdate" />
+		<result property="enddate" column="enddate" />
+		<result property="bottleamount" column="bottleamount" />
+		<result property="strainamount" column="strainamount" />
+		<result property="stubble" column="stubble" />
+		<result property="stopwaterdate" column="stopwaterdate" />
+		<result property="killdate" column="killdate" />
+		<result property="rewarddate" column="rewarddate" />
+		<result property="stopmuck" column="stopmuck" />
+		<result property="buddingdate" column="buddingdate" />
+		<result property="muamount" column="muamount" />
+		<result property="type" column="type" />
+		<result property="code" column="code" />
+		<result property="description" column="description" />
+		<result property="visible" column="visible" />
+		<result property="createdate" column="createdate" />
+		<result property="operatorid" column="operatorid" />
+		<result property="isproduction" column="isproduction" />
+		<result property="source" column="source" />
+		
+		<association property="seedbed" javaType="Seedbed">
+			<id property="guid" column="s_guid" />
+			<result property="seedbedname" column="seedbedname" />
+			<result property="amount" column="s_amount" />
+			<result property="description" column="s_description" />
+		</association>
+		
+		<association property="varietys" javaType="Dictionary">
+			<id property="guid" column="d_guid" />
+			<result property="belongsname" column="d_belongsname" />
+			<result property="keyvalue" column="d_keyvalue" />
+		</association>
+		<association property="levels" javaType="Dictionary">
+			<id property="guid" column="d2_guid" />
+			<result property="belongsname" column="d2_belongsname" />
+			<result property="keyvalue" column="d2_keyvalue" />
+		</association>
+		<association property="plots" javaType="Plots">
+			<id property="guid" column="p_guid" />
+	    	<id property="farmid" column="p_farmid" /> 
+	    	<id property="plotname" column="p_plotname" /> 
+	    	<id property="irrigatetype" column="p_irrigatetype" /> 
+	    	<id property="irrigbrand" column="p_irrigbrand" /> 
+	    	<id property="wellsamount" column="p_wellsamount" />
+	    	<id property="wellsdisc" column="p_wellsdisc" />
+	    	<id property="distvillage" column="p_distvillage" /> 
+	    	<id property="distroad" column="p_distroad" />
+	    	<id property="distother" column="p_distother" />
+	    	<id property="createdate" column="p_createdate" /> 
+	    	<id property="operatorid" column="p_operatorid" />
+		</association>
+	</resultMap>
+	
+	
+	
+	<resultMap type="Seedfile" id="g1result">
+		<id property="guid" column="guid" />
+		<result property="companyid" column="companyid" />
+		<result property="batch" column="batch" />
+		<result property="variety" column="variety" />
+		<result property="level" column="level" />
+		<result property="seedid" column="seedid" />
+		<result property="placeid" column="placeid" />
+		<result property="years" column="years" />
+		<result property="startdate" column="startdate" />
+		<result property="enddate" column="enddate" />
+		<result property="bottleamount" column="bottleamount" />
+		<result property="strainamount" column="strainamount" />
+		<result property="stubble" column="stubble" />
+		<result property="stopwaterdate" column="stopwaterdate" />
+		<result property="killdate" column="killdate" />
+		<result property="rewarddate" column="rewarddate" />
+		<result property="stopmuck" column="stopmuck" />
+		<result property="buddingdate" column="buddingdate" />
+		<result property="muamount" column="muamount" />
+		<result property="type" column="type" />
+		<result property="code" column="code" />
+		<result property="description" column="description" />
+		<result property="visible" column="visible" />
+		<result property="createdate" column="createdate" />
+		<result property="operatorid" column="operatorid" />
+		
+		<association property="seedbed" javaType="Seedbed">
+			<id property="guid" column="s_guid" />
+			<result property="seedbedname" column="seedbedname" />
+			<result property="amount" column="s_amount" />
+			<result property="description" column="s_description" />
+		</association>
+		
+		<association property="varietys" javaType="Dictionary">
+			<id property="guid" column="d_guid" />
+			<result property="belongsname" column="d_belongsname" />
+			<result property="keyvalue" column="d_keyvalue" />
+		</association>
+		<association property="levels" javaType="Dictionary">
+			<id property="guid" column="d2_guid" />
+			<result property="belongsname" column="d2_belongsname" />
+			<result property="keyvalue" column="d2_keyvalue" />
+		</association>
+		<association property="greenhouses" javaType="greenhouses">
+			<id property="guid" column="g_guid" />
+			<result property="housename" column="housename" />
+		</association>
+	</resultMap>
+	
+	
+</mapper>

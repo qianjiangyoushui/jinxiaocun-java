@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="Logs">
+	
+	<!-- 缓存条数 -->
+	<cache size="2000" />
+	
+	<!-- 条件语句 -->
+	<sql id="WhereSQL">
+		<where>
+			<if test="guid != null and guid != ''"> 
+			AND T.GUID = #{guid} 
+			</if>
+			<if test="operatedate != null and operatedate != ''"> 
+			AND T.OPERATEDATE = #{operatedate} 
+			</if>
+			<if test="operatorid != null and operatorid != ''"> 
+			AND T.OPERATORID = #{operatorid} 
+			</if>
+			<if test="description != null and description != ''"> 
+			AND T.DESCRIPTION = #{description} 
+			</if>
+			<if test="relatedid != null and relatedid != ''"> 
+			AND T.RELATEDID = #{relatedid} 
+			</if>
+		</where>
+	</sql>
+	
+	<!-- 查找语句 -->
+	<select id="find" resultType="Logs" parameterType="Logs" flushCache="false" useCache="true">
+    	SELECT 
+	    	T.GUID AS guid, 
+	    	T.OPERATEDATE AS operatedate, 
+	    	T.OPERATORID AS operatorid, 
+	    	T.DESCRIPTION AS description, 
+	    	T.RELATEDID AS relatedid ,
+	    	u.username as username 
+    	FROM logs T 
+    	left join users u 
+    	on T.operatorid = u.guid 
+		<include refid="WhereSQL" />
+		ORDER BY T.OPERATEDATE 
+	</select>
+	
+	<!-- 获取总记录数语句 -->
+	<select id="findCount" resultType="java.lang.Integer" parameterType="Logs" flushCache="false" useCache="true">
+    	SELECT COUNT(*)  FROM logs T
+		<include refid="WhereSQL" />
+	</select>
+	
+	<!-- 插入语句 -->
+	<insert id="insert" parameterType="Logs" flushCache="true"> 
+		INSERT INTO logs
+		(
+			GUID, 
+			OPERATEDATE, 
+			OPERATORID, 
+			DESCRIPTION, 
+			RELATEDID 
+		 ) 
+		VALUES
+		(
+			#{guid,jdbcType=VARCHAR}, 
+			#{operatedate,jdbcType=TIMESTAMP}, 
+			#{operatorid,jdbcType=VARCHAR}, 
+			#{description,jdbcType=VARCHAR}, 
+			#{relatedid,jdbcType=VARCHAR} 
+		) 
+	</insert>
+	
+	<!-- 更新语句 -->
+	<update id="update"  parameterType="Logs" flushCache="true"> 
+		update logs 
+		<set> 
+			<if test="guid != null">GUID=#{guid},</if>
+			<if test="operatedate != null">OPERATEDATE=#{operatedate},</if>
+			<if test="operatorid != null">OPERATORID=#{operatorid},</if>
+			<if test="description != null">DESCRIPTION=#{description},</if>
+			<if test="relatedid != null">RELATEDID=#{relatedid},</if>
+		</set>
+		WHERE GUID = #{guid}
+	</update> 
+	
+	<!-- 单选删除语句 -->
+	<delete id="delete" parameterType="Logs" flushCache="true"> 
+		DELETE FROM logs WHERE GUID = #{guid}
+	</delete>
+	
+	<!-- 多选删除 -->
+	<delete id="mulDel" parameterType="java.lang.String" flushCache="true">
+		DELETE FROM logs WHERE GUID IN
+		<foreach item="id" collection="array" open="(" separator="," close=")"> 
+			#{id}
+		</foreach> 
+	</delete>
+</mapper>

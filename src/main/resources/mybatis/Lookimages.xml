@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="Lookimages">
+<!-- 缓存条数 -->
+	<cache size="2000" />
+	
+	<!-- 条件语句 -->
+	<sql id="WhereSQL">
+		<where>
+			<if test="guid != null and guid != ''"> 
+			AND T.GUID = #{guid} 
+			</if>
+			<if test="seedfileid != null and seedfileid != ''"> 
+			AND T.SEEDFILEID = #{seedfileid} 
+			</if>
+			<if test="description != null and description != ''"> 
+			AND T.DESCRIPTION = #{description} 
+			</if>
+			<if test="createdate != null and createdate != ''"> 
+			AND T.CREATEDATE = #{createdate} 
+			</if>
+			<if test="operatorid != null and operatorid != ''"> 
+			AND T.OPERATORID = #{operatorid} 
+			</if>
+		</where>
+	</sql>
+	
+	<!-- 查找语句 -->
+	<select id="find" resultType="Lookimages" parameterType="Lookimages" flushCache="false" useCache="true">
+    	SELECT 
+	    	T.GUID AS guid, 
+	    	T.SEEDFILEID AS seedfileid, 
+	    	T.DESCRIPTION AS description, 
+	    	T.CREATEDATE AS createdate, 
+	    	T.OPERATORID AS operatorid 
+    	FROM lookimages T
+		<include refid="WhereSQL" />
+		ORDER BY SORT
+	</select>
+	
+	<!-- 获取总记录数语句 -->
+	<select id="findCount" resultType="java.lang.Integer" parameterType="Lookimages" flushCache="false" useCache="true">
+    	SELECT COUNT(*)  FROM lookimages T
+		<include refid="WhereSQL" />
+	</select>
+	
+	<!-- 插入语句 -->
+	<insert id="insert" parameterType="Lookimages" flushCache="true"> 
+		INSERT INTO lookimages
+		(
+			GUID, 
+			SEEDFILEID, 
+			DESCRIPTION, 
+			CREATEDATE, 
+			OPERATORID 
+		 ) 
+		VALUES
+		(
+			#{guid,jdbcType=VARCHAR}, 
+			#{seedfileid,jdbcType=VARCHAR}, 
+			#{description,jdbcType=VARCHAR}, 
+			#{createdate,jdbcType=DATE}, 
+			#{operatorid,jdbcType=VARCHAR} 
+		) 
+	</insert>
+	
+	<!-- 更新语句 -->
+	<update id="update"  parameterType="Lookimages" flushCache="true"> 
+		update lookimages 
+		<set> 
+			<if test="guid != null">GUID=#{guid},</if>
+			<if test="seedfileid != null">SEEDFILEID=#{seedfileid},</if>
+			<if test="description != null">DESCRIPTION=#{description},</if>
+			<if test="createdate != null">CREATEDATE=#{createdate},</if>
+			<if test="operatorid != null">OPERATORID=#{operatorid},</if>
+		</set>
+		WHERE GUID = #{guid}
+	</update> 
+	
+	<!-- 单选删除语句 -->
+	<delete id="delete" parameterType="Lookimages" flushCache="true"> 
+		DELETE FROM lookimages WHERE GUID = #{guid}
+	</delete>
+	
+	<!-- 多选删除 -->
+	<delete id="mulDel" parameterType="java.lang.String" flushCache="true">
+		DELETE FROM lookimages WHERE GUID IN
+		<foreach item="id" collection="array" open="(" separator="," close=")"> 
+			#{id}
+		</foreach> 
+	</delete>
+	
+	
+	<select id="findList" resultMap="resultList" parameterType="Lookimages" flushCache="false" useCache="true">
+		SELECT 
+	    	T.GUID AS guid, 
+	    	T.DESCRIPTION AS description, 
+	    	T.CREATEDATE AS createdate, 
+	    	T.OPERATORID AS operatorid ,
+	    	T.SEEDFILEID AS seedfileid, 
+	    	
+	    	u.guid as u_guid,
+	    	u.uploaddate,
+	    	u.url
+    	FROM lookimages T 
+    	left join upimage u on u.relatedid = T.guid
+		<include refid="WhereSQL" />
+		ORDER BY CREATEDATE desc
+	</select>
+	
+	
+	<resultMap type="Lookimages" id="resultList">
+		<id property="guid" column="guid" />
+		<result property="description" column="description" />
+		<result property="createdate" column="createdate" />
+		<result property="operatorid" column="operatorid" />
+		<result property="seedfileid" column="seedfileid" />
+		
+		<collection property="upimage" ofType="upimage">
+			<id property="guid" column="u_guid" />
+			<id property="uploaddate" column="uploaddate" />
+			<result property="url" column="url" />
+		</collection>
+	</resultMap>
+	
+	
+</mapper>

@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="TfRoleUser">
+
+	<!-- 缓存条数 -->
+	<cache size="2000" />
+
+	<!-- 条件语句 -->
+	<sql id="WhereSQL">
+		<where>
+			<if test="roleGuid != null and roleGuid != ''">
+				AND T.ROLE_GUID = #{roleGuid}
+			</if>
+			<if test="userGuid != null and userGuid != ''">
+				AND T.USER_GUID = #{userGuid}
+			</if>
+		</where>
+	</sql>
+
+	<!-- 查找语句 -->
+	<select id="find" resultType="TfRoleUser" parameterType="TfRoleUser"
+		flushCache="false" useCache="true">
+		SELECT
+		T.ROLE_GUID AS roleGuid,
+		T.USER_GUID AS userGuid
+		FROM TF_ROLE_USER T
+		<include refid="WhereSQL" />
+
+	</select>
+
+	<!-- 获取总记录数语句 -->
+	<select id="findCount" resultType="java.lang.Integer"
+		parameterType="TfRoleUser" flushCache="false" useCache="true">
+		SELECT COUNT(*) FROM TF_ROLE_USER T
+		<include refid="WhereSQL" />
+	</select>
+	<!-- 插入语句 -->
+	<insert id="insert" parameterType="TfRoleUser" flushCache="true">
+		INSERT INTO TF_ROLE_USER
+		(
+		ROLE_GUID,
+		USER_GUID
+		)
+		VALUES
+		(
+		#{roleGuid,jdbcType=VARCHAR},
+		#{userGuid}
+		)
+	</insert>
+
+	<!-- 更新语句 -->
+	<update id="update" parameterType="TfRoleUser" flushCache="true">
+		update TF_ROLE_USER
+		<set>
+			<if test="roleGuid != null">ROLE_GUID=#{roleGuid},</if>
+			<if test="userGuid != null">USER_GUID=#{userGuid},</if>
+		</set>
+		where USER_GUID=#{userGuid}
+	</update>
+
+	<!-- 单选删除语句 -->
+	<delete id="delete" parameterType="TfRoleUser" flushCache="true">
+		delete from tf_role_user
+		<where>
+			<if test="roleGuid != null and roleGuid != ''">
+				AND ROLE_GUID = #{roleGuid}
+			</if>
+			<if test="userGuid != null and userGuid != ''">
+				AND USER_GUID = #{userGuid}
+			</if>
+		</where>
+	</delete>
+
+	<!-- 多选删除 -->
+	<delete id="mulDel" parameterType="java.lang.String" flushCache="true">
+		DELETE FROM TF_ROLE_USER WHERE GUID IN
+		<foreach item="id" collection="array" open="(" separator=","
+			close=")">
+			#{id}
+		</foreach>
+	</delete>
+</mapper>
