@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="Icondict">
+
+    <!-- 缓存条数 -->
+    <cache size="2000" />
+
+    <!-- 条件语句 -->
+    <sql id="WhereSQL">
+        <where>
+            <if test="guid != null and guid != ''">
+                AND T.GUID = #{guid}
+            </if>
+            <if test="dictname != null and dictname != ''">
+                AND T.DICTNAME = #{dictname}
+            </if>
+            <if test="dictid != null and dictid != ''">
+                AND T.DICTID = #{dictid}
+            </if>
+            <if test="belongsid != null and belongsid != ''">
+                AND T.BELONGSID = #{belongsid}
+            </if>
+            <if test="belongsname != null and belongsname != ''">
+                AND T.BELONGSNAME = #{belongsname}
+            </if>
+            <if test="keyvalue != null and keyvalue != ''">
+                AND T.KEYVALUE = #{keyvalue}
+            </if>
+            <if test="url != null and url != ''">
+                AND T.URL = #{url}
+            </if>
+            <if test="sort != null and sort != ''">
+                AND T.SORT = #{sort}
+            </if>
+        </where>
+    </sql>
+
+    <!-- 查找语句 -->
+    <select id="find" resultType="Icondict" parameterType="Icondict" flushCache="false" useCache="true">
+        SELECT
+        T.GUID AS guid,
+        T.DICTNAME AS dictname,
+        T.DICTID AS dictid,
+        T.BELONGSID AS belongsid,
+        T.BELONGSNAME AS belongsname,
+        T.KEYVALUE AS keyvalue,
+        T.URL AS url,
+        T.SORT AS sort
+        FROM icondict T
+        <include refid="WhereSQL" />
+        ORDER BY SORT
+    </select>
+
+    <!-- 获取总记录数语句 -->
+    <select id="findCount" resultType="java.lang.Integer" parameterType="Icondict" flushCache="false" useCache="true">
+        SELECT COUNT(*)  FROM icondict T
+        <include refid="WhereSQL" />
+    </select>
+
+    <!-- 插入语句 -->
+    <insert id="insert" parameterType="Icondict" flushCache="true">
+        INSERT INTO icondict
+        (
+        GUID,
+        DICTNAME,
+        DICTID,
+        BELONGSID,
+        BELONGSNAME,
+        KEYVALUE,
+        URL,
+        SORT
+        )
+        VALUES
+        (
+        #{guid,jdbcType=VARCHAR},
+        #{dictname,jdbcType=VARCHAR},
+        #{dictid,jdbcType=VARCHAR},
+        #{belongsid,jdbcType=VARCHAR},
+        #{belongsname,jdbcType=VARCHAR},
+        #{keyvalue,jdbcType=VARCHAR},
+        #{url,jdbcType=VARCHAR},
+        #{sort,jdbcType=VARCHAR}
+        )
+    </insert>
+
+    <!-- 更新语句 -->
+    <update id="update"  parameterType="Icondict" flushCache="true">
+        update icondict
+        <set>
+            <if test="guid != null">GUID=#{guid},</if>
+            <if test="dictname != null">DICTNAME=#{dictname},</if>
+            <if test="dictid != null">DICTID=#{dictid},</if>
+            <if test="belongsid != null">BELONGSID=#{belongsid},</if>
+            <if test="belongsname != null">BELONGSNAME=#{belongsname},</if>
+            <if test="keyvalue != null">KEYVALUE=#{keyvalue},</if>
+            <if test="url != null">URL=#{url},</if>
+            <if test="sort != null">SORT=#{sort},</if>
+        </set>
+        WHERE GUID = #{guid}
+    </update>
+
+    <!-- 单选删除语句 -->
+    <delete id="delete" parameterType="Icondict" flushCache="true">
+        DELETE FROM icondict WHERE GUID = #{guid}
+    </delete>
+
+    <!-- 多选删除 -->
+    <delete id="mulDel" parameterType="java.lang.String" flushCache="true">
+        DELETE FROM icondict WHERE GUID IN
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

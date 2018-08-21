@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="Workorder">
+	
+	<!-- 缓存条数 -->
+	<cache size="2000" />
+	
+	<!-- 条件语句 -->
+	<sql id="WhereSQL">
+		<where>
+			<if test="guid != null and guid != ''"> 
+			AND T.GUID = #{guid} 
+			</if>
+			<if test="ordername != null and ordername != ''"> 
+			AND T.ORDERNAME = #{ordername} 
+			</if>
+			<if test="date != null and date != ''"> 
+			AND T.STARTDATE = #{date} 
+			</if>
+			<if test="enddate != null and enddate != ''"> 
+			AND T.ENDDATE = #{enddate} 
+			</if>
+			<if test="principal != null and principal != ''"> 
+			AND T.PRINCIPAL = #{principal} 
+			</if>
+			<if test="taskrequest != null and taskrequest != ''"> 
+			AND T.TASKREQUEST = #{taskrequest} 
+			</if>
+			<if test="createdate != null and createdate != ''"> 
+			AND T.CREATEDATE = #{createdate} 
+			</if>
+			<if test="userid != null and userid != ''"> 
+			AND T.USERID = #{userid} 
+			</if>
+			<if test="status != null and status != ''"> 
+			AND T.STATUS = #{status} 
+			</if>
+		</where>
+	</sql>
+	
+	<!-- 查找语句 -->
+	<select id="find" resultType="Workorder" parameterType="Workorder" flushCache="false" useCache="true">
+    	SELECT 
+	    	T.GUID AS guid, 
+	    	T.ORDERNAME AS ordername, 
+	    	T.STARTDATE AS startdate, 
+	    	T.ENDDATE AS enddate, 
+	    	T.PRINCIPAL AS principal, 
+	    	T.TASKREQUEST AS taskrequest, 
+	    	T.CREATEDATE AS createdate, 
+	    	T.USERID AS userid, 
+	    	T.STATUS AS status 
+    	FROM workorder T
+		<include refid="WhereSQL" />
+		ORDER BY T.CREATEDATE desc
+	</select>
+	
+	<!-- 获取总记录数语句 -->
+	<select id="findCount" resultType="java.lang.Integer" parameterType="Workorder" flushCache="false" useCache="true">
+    	SELECT COUNT(*)  FROM workorder T
+		<include refid="WhereSQL" />
+	</select>
+	
+	<!-- 插入语句 -->
+	<insert id="insert" parameterType="Workorder" flushCache="true"> 
+		INSERT INTO workorder
+		(
+			GUID, 
+			ORDERNAME, 
+			STARTDATE, 
+			ENDDATE, 
+			PRINCIPAL, 
+			TASKREQUEST, 
+			CREATEDATE, 
+			USERID, 
+			PARTIC,
+			STATUS 
+		 ) 
+		VALUES
+		(
+			#{guid,jdbcType=VARCHAR}, 
+			#{ordername,jdbcType=VARCHAR}, 
+			#{startdate,jdbcType=DATE}, 
+			#{enddate,jdbcType=DATE}, 
+			#{principal,jdbcType=VARCHAR}, 
+			#{taskrequest,jdbcType=VARCHAR}, 
+			#{createdate,jdbcType=DATE}, 
+			#{userid,jdbcType=VARCHAR}, 
+			#{partic,jdbcType=VARCHAR}, 
+			#{status,jdbcType=VARCHAR} 
+		) 
+	</insert>
+	
+	<!-- 更新语句 -->
+	<update id="update"  parameterType="Workorder" flushCache="true"> 
+		update workorder 
+		<set> 
+			<if test="guid != null">GUID=#{guid},</if>
+			<if test="ordername != null">ORDERNAME=#{ordername},</if>
+			<if test="startdate != null">STARTDATE=#{startdate},</if>
+			<if test="enddate != null">ENDDATE=#{enddate},</if>
+			<if test="principal != null">PRINCIPAL=#{principal},</if>
+			<if test="taskrequest != null">TASKREQUEST=#{taskrequest},</if>
+			<if test="createdate != null">CREATEDATE=#{createdate},</if>
+			<if test="userid != null">USERID=#{userid},</if>
+			<if test="partic != null">PARTIC=#{partic},</if>
+			<if test="status != null">STATUS=#{status},</if>
+		</set>
+		WHERE GUID = #{guid}
+	</update> 
+	
+	<!-- 单选删除语句 -->
+	<delete id="delete" parameterType="Workorder" flushCache="true"> 
+		DELETE FROM workorder WHERE GUID = #{guid}
+	</delete>
+	
+	<!-- 多选删除 -->
+	<delete id="mulDel" parameterType="java.lang.String" flushCache="true">
+		DELETE FROM workorder WHERE GUID IN
+		<foreach item="id" collection="array" open="(" separator="," close=")"> 
+			#{id}
+		</foreach> 
+	</delete>
+	
+	<!-- 查找语句 -->
+	<select id="findList" resultMap="resultList" parameterType="Workorder" flushCache="false" useCache="true">
+    	SELECT 
+	    	w.GUID AS guid, 
+	    	w.ORDERNAME AS ordername, 
+	    	w.STARTDATE AS startdate, 
+	    	w.ENDDATE AS enddate, 
+	    	w.PRINCIPAL AS principal, 
+	    	w.TASKREQUEST AS taskrequest, 
+	    	w.CREATEDATE AS createdate, 
+	    	w.USERID AS userid, 
+	    	w.STATUS AS status,
+	    	
+	    	T.GUID AS t_guid, 
+	    	T.USERID AS t_userid, 
+	    	T.WORKORDERID AS workorderid,
+	    	T.STATUS AS t_status, 
+	    	T.DESCRIPTION AS description, 
+	    	T.ENDDATE AS t_enddate 
+    	FROM workorder w
+    	LEFT JOIN tasks T on w.guid = T.workorderid
+    	where 1=1
+		<if test="t_userid != null and t_userid != ''"> 
+			AND T.USERID = #{t_userid} 
+		</if>
+		<if test="date != null and date != ''"> 
+			AND w.STARTDATE = #{date} 
+		</if>
+		ORDER BY w.CREATEDATE desc
+	</select>
+	
+	
+	<resultMap type="Workorder" id="resultList">
+		<id property="guid" column="guid" />
+		<result property="ordername" column="ordername" />
+		<result property="startdate" column="startdate" />
+		<result property="enddate" column="enddate" />
+		<result property="principal" column="principal" />
+		<result property="taskrequest" column="taskrequest" />
+		<result property="createdate" column="createdate" />
+		<result property="userid" column="userid" />
+		<result property="status" column="status" />
+		
+		<collection property="tasks" ofType="tasks">
+			<id property="guid" column="t_guid" />
+			<result property="userid" column="userid" />
+			<result property="workorderid" column="workorderid" />
+			<result property="status" column="t_status" />
+			<result property="description" column="description" />
+			<result property="enddate" column="t_enddate" />
+		</collection>
+		
+	</resultMap>
+</mapper>

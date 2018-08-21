@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="Company">
+	
+	<!-- 缓存条数 -->
+	<cache size="2000" />
+	
+	<!-- 条件语句 -->
+	<sql id="WhereSQL">
+		<where>
+			<if test="guid != null and guid != ''"> 
+			AND T.GUID = #{guid} 
+			</if>
+			<if test="companyname != null and companyname != ''"> 
+			AND T.COMPANYNAME = #{companyname} 
+			</if>
+			<if test="contactperson != null and contactperson != ''"> 
+			AND T.CONTACTPERSON = #{contactperson} 
+			</if>
+			<if test="province != null and province != ''"> 
+			AND T.PROVINCE = #{province} 
+			</if>
+			<if test="city != null and city != ''"> 
+			AND T.CITY = #{city} 
+			</if>
+			<if test="area != null and area != ''"> 
+			AND T.AREA = #{area} 
+			</if>
+			<if test="town != null and town != ''"> 
+			AND T.TOWN = #{town} 
+			</if>
+			<if test="plantarea != null and plantarea != ''"> 
+			AND T.PLANTAREA = #{plantarea} 
+			</if>
+			<if test="plantyears != null and plantyears != ''"> 
+			AND T.PLANTYEARS = #{plantyears} 
+			</if>
+			<if test="registdate != null and registdate != ''"> 
+			AND T.REGISTDATE = #{registdate} 
+			</if>
+			<if test="operatorid != null and operatorid != ''"> 
+			AND T.OPERATORID = #{operatorid} 
+			</if>
+			<if test="status != null and status != ''"> 
+			AND T.status = #{status} 
+			</if>
+		</where>
+	</sql>
+	
+	<!-- 查找语句 -->
+	<select id="find" resultType="Company" parameterType="Company" flushCache="false" useCache="true">
+    	SELECT 
+	    	T.GUID AS guid, 
+	    	T.COMPANYNAME AS companyname, 
+	    	T.CONTACTPERSON AS contactperson, 
+	    	T.PROVINCE AS province, 
+	    	T.CITY AS city, 
+	    	T.AREA AS area, 
+	    	T.TOWN AS town, 
+	    	T.PLANTAREA AS plantarea, 
+	    	T.PLANTYEARS AS plantyears, 
+	    	T.REGISTDATE AS registdate, 
+	    	T.OPERATORID AS operatorid, 
+	    	T.STATUS AS status
+    	FROM company T
+		<include refid="WhereSQL" />
+	</select>
+	
+	<!-- 获取总记录数语句 -->
+	<select id="findCount" resultType="java.lang.Integer" parameterType="Company" flushCache="false" useCache="true">
+    	SELECT COUNT(*)  FROM company T
+		<include refid="WhereSQL" />
+	</select>
+	
+	<!-- 插入语句 -->
+	<insert id="insert" parameterType="Company" flushCache="true"> 
+		INSERT INTO company
+		(
+			GUID, 
+			COMPANYNAME, 
+			CONTACTPERSON, 
+			PROVINCE, 
+			CITY, 
+			AREA, 
+			TOWN, 
+			PLANTAREA, 
+			PLANTYEARS, 
+			REGISTDATE, 
+			OPERATORID,
+			STATUS
+		 ) 
+		VALUES
+		(
+			#{guid,jdbcType=VARCHAR}, 
+			#{companyname,jdbcType=VARCHAR}, 
+			#{contactperson,jdbcType=VARCHAR}, 
+			#{province,jdbcType=VARCHAR}, 
+			#{city,jdbcType=VARCHAR}, 
+			#{area,jdbcType=VARCHAR}, 
+			#{town,jdbcType=VARCHAR}, 
+			#{plantarea,jdbcType=DECIMAL}, 
+			#{plantyears,jdbcType=DECIMAL}, 
+			#{registdate,jdbcType=TIMESTAMP}, 
+			#{operatorid,jdbcType=VARCHAR},
+			#{status,jdbcType=VARCHAR} 
+		) 
+	</insert>
+	
+	<!-- 更新语句 -->
+	<update id="update"  parameterType="Company" flushCache="true"> 
+		update company 
+		<set> 
+			<if test="guid != null">GUID=#{guid},</if>
+			<if test="companyname != null">COMPANYNAME=#{companyname},</if>
+			<if test="contactperson != null">CONTACTPERSON=#{contactperson},</if>
+			<if test="province != null">PROVINCE=#{province},</if>
+			<if test="city != null">CITY=#{city},</if>
+			<if test="area != null">AREA=#{area},</if>
+			<if test="town != null">TOWN=#{town},</if>
+			<if test="plantarea != null">PLANTAREA=#{plantarea},</if>
+			<if test="plantyears != null">PLANTYEARS=#{plantyears},</if>
+			<if test="registdate != null">REGISTDATE=#{registdate},</if>
+			<if test="operatorid != null">OPERATORID=#{operatorid},</if>
+			<if test="status != null">STATUS=#{status},</if>
+		</set>
+		WHERE GUID = #{guid}
+	</update> 
+	
+	<!-- 单选删除语句 -->
+	<delete id="delete" parameterType="Company" flushCache="true"> 
+		DELETE FROM company WHERE GUID = #{guid}
+	</delete>
+	
+	<!-- 多选删除 -->
+	<delete id="mulDel" parameterType="java.lang.String" flushCache="true">
+		DELETE FROM company WHERE GUID IN
+		<foreach item="id" collection="array" open="(" separator="," close=")"> 
+			#{id}
+		</foreach> 
+	</delete>
+</mapper>

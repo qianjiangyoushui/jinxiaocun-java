@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.1.xsd">
+	<!--     <bean id="realtimeSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
+		<property name="host" value="${mail.server.host}" />
+		<property name="port" value="${mail.server.port}"/>
+		<property name="username" value="${mail.server.username}" />
+		<property name="password" value="${mail.server.password}" />
+		<property name="javaMailProperties">  
+		<props>  
+		<prop key="mail.smtp.auth">${mail.server.auth}</prop>  
+		</props>
+		</property>  
+		</bean>
+		
+		################################邮件定时发送Job################################
+		要调用的工作类
+		<bean id="pooledMailSender" class="com.sunivo.web.base.job.PooledMailSender">
+		每次发送的数量
+		<property name="sendCount">
+		<value>200</value>
+		</property>
+		</bean>
+		定义调用对象和调用对象的方法
+		<bean id="sendMailJobTask" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		调用的类
+		<property name="targetObject">
+		<ref bean="pooledMailSender" />
+		</property>
+		调用类中的方法
+		<property name="targetMethod">
+		<value>work</value>
+		</property>				
+		</bean>
+		
+		定义邮件发送触发时间
+		<bean id="sendMailDoTime" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail">
+		<ref bean="sendMailJobTask" />
+		</property>
+		cron表达式,一分钟执行一次
+		<property name="cronExpression">
+		<value>0 0/1 * * * ? </value>
+		</property>
+		</bean> -->
+	<!-- 总管理类 如果将lazy-init='false'那么容器启动就会执行调度程序 -->
+	<!-- <bean id="sendMailScheduler"   class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+		<property name="triggers">
+		<list>
+		<ref bean="sendMailDoTime" />
+		<ref bean="updateOrderDoTime" />
+		<ref bean="updateonlinetime" />
+		<ref bean="updatebuyonlinetime" />
+		<ref bean="updateCerStatusDoTime" />
+		<ref bean="updateCerShopStatusDoTime" />
+		</list>
+		</property>
+		</bean> 
+	-->
+
+	<!--<bean id="realtimeSender"
+		class="org.springframework.mail.javamail.JavaMailSenderImpl" />-->
+	<!--<bean id="realtimeSender"
+		class="org.springframework.mail.javamail.JavaMailSenderImpl">
+	</bean>-->
+</beans>

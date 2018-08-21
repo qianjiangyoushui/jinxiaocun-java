@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="Users">
+
+	<!-- 缓存条数 -->
+	<cache size="2000" />
+
+	<!-- 条件语句 -->
+	<sql id="WhereSQL">
+		<where>
+			<if test="guid != null and guid != ''">
+				AND T.GUID = #{guid}
+			</if>
+			<if test="username != null and username != ''">
+				AND T.USERNAME = #{username}
+			</if>
+			<if test="telphone != null and telphone != ''">
+				AND T.TELPHONE = #{telphone}
+			</if>
+			<if test="password != null and password != ''">
+				AND T.PASSWORD = #{password}
+			</if>
+			<if test="registdate != null and registdate != ''">
+				AND T.REGISTDATE = #{registdate}
+			</if>
+		</where>
+	</sql>
+
+	<!-- 查找语句 -->
+	<select id="find" resultMap="users" parameterType="Users"
+		flushCache="false" useCache="true">
+		SELECT
+		T.GUID AS guid,
+		T.USERNAME AS username,
+		T.TELPHONE AS telphone,
+		T.PASSWORD AS password,
+		T.REGISTDATE AS registdate,
+		d.guid as d_guid,
+		d.departid as departid,
+		r.belongsname as departname,
+		c.guid as c_guid,
+		c.companyname as companyname,
+		c.contactperson as contactperson,
+		c.province as province,
+		c.city as city ,
+		c.area as area,
+		c.town as town,
+		c.plantarea as plantarea,
+		c.plantyears as plantyears,
+		c.status as c_status  
+		FROM users T 
+		left join department d 
+		on T.guid=d.userid 
+		left join company c 
+		on d.companyid = c.guid 
+		left join dictionary r 
+		on r.keyvalue=d.departid 
+		where r.belongsid='1' 
+			<if test="guid != null and guid != ''">
+				AND T.GUID = #{guid}
+			</if>
+			<if test="username != null and username != ''">
+				AND T.USERNAME = #{username}
+			</if>
+			<if test="telphone != null and telphone != ''">
+				AND T.TELPHONE = #{telphone}
+			</if>
+			<if test="password != null and password != ''">
+				AND T.PASSWORD = #{password}
+			</if>
+			<if test="registdate != null and registdate != ''">
+				AND T.REGISTDATE = #{registdate}
+			</if>
+			<if test="companyid != null and companyid != ''">
+				AND c.guid = #{companyid}
+			</if>
+			<if test="openid != null and openid != ''">
+				AND c.guid = #{openid}
+			</if>
+	</select>
+	
+	<resultMap type="Users" id="users">
+		<id property="guid" column="guid" />
+		<result property="username" column="username" />
+		<result property="telphone" column="telphone" />
+		<result property="password" column="password" />
+		<result property="registdate" column="registdate" />
+		<association property="depart" javaType="Department">
+			<id property="guid" column="d_guid"/>
+			<result property="departid" column="departid" />
+			<result property="departname" column="departname" />
+		</association>
+		<association property="company" javaType="Company">
+			<id property="guid" column="c_guid"/>
+			<result property="companyname" column="companyname" />
+			<result property="contactperson" column="contactperson" />
+			<result property="province" column="province" />
+			<result property="city" column="city" />
+			<result property="area" column="area" />
+			<result property="town" column="town" />
+			<result property="plantarea" column="plantarea" />
+			<result property="plantyears" column="plantyears" />
+			<result property="status" column="c_status" />
+		</association>
+	</resultMap>
+
+	<!-- 获取总记录数语句 -->
+	<select id="findCount" resultType="java.lang.Integer"
+		parameterType="Users" flushCache="false" useCache="true">
+		SELECT COUNT(*) FROM users T
+		<include refid="WhereSQL" />
+	</select>
+	<select id="findRoles" resultMap="userroles" parameterType="Users"
+			flushCache="false" useCache="true">
+		SELECT
+		T.GUID AS guid,
+		T.USERNAME AS username,
+		T.TELPHONE AS telphone,
+		T.PASSWORD AS password,
+		T.REGISTDATE AS registdate,
+		T.OPENID AS openid,
+		R.GUID AS r_guid,
+		R.NAME AS r_name
+		FROM users T
+		LEFT JOIN user_role UR ON T.GUID = UR.USER_GUID
+		LEFT JOIN ROLES R ON UR.ROLE_GUID = R.GUID
+		<include refid="WhereSQL" />
+	</select>
+	<resultMap type="Users" id="userroles">
+		<id property="guid" column="guid" />
+		<result property="username" column="username" />
+		<result property="telphone" column="telphone" />
+		<result property="password" column="password" />
+		<result property="registdate" column="registdate" />
+		<result property="openid" column="openid" />
+		<collection property="rolesList" ofType="Roles" >
+			<id property="guid" column="r_guid"/>
+			<result  property="name" column="r_name"/>
+		</collection>
+	</resultMap>
+	<!-- 插入语句 -->
+	<insert id="insert" parameterType="Users" flushCache="true">
+		INSERT INTO users
+		(
+		GUID,
+		USERNAME,
+		TELPHONE,
+		PASSWORD,
+		REGISTDATE
+		)
+		VALUES
+		(
+		#{guid,jdbcType=VARCHAR},
+		#{username,jdbcType=VARCHAR},
+		#{telphone,jdbcType=VARCHAR},
+		#{password,jdbcType=VARCHAR},
+		#{registdate,jdbcType=TIMESTAMP}
+		)
+	</insert>
+
+	<!-- 更新语句 -->
+	<update id="update" parameterType="Users" flushCache="true">
+		update users
+		<set>
+			<if test="guid != null">GUID=#{guid},</if>
+			<if test="username != null">USERNAME=#{username},</if>
+			<if test="telphone != null">TELPHONE=#{telphone},</if>
+			<if test="password != null">PASSWORD=#{password},</if>
+			<if test="registdate != null">REGISTDATE=#{registdate},</if>
+			<if test="openid != null">OPENID=#{openid},</if>
+		</set>
+		WHERE GUID = #{guid}
+	</update>
+
+	<!-- 单选删除语句 -->
+	<delete id="delete" parameterType="Users" flushCache="true">
+		DELETE FROM users WHERE GUID = #{guid}
+	</delete>
+
+	<!-- 多选删除 -->
+	<delete id="mulDel" parameterType="java.lang.String" flushCache="true">
+		DELETE FROM users WHERE GUID IN
+		<foreach item="id" collection="array" open="(" separator=","
+			close=")">
+			#{id}
+		</foreach>
+	</delete>
+
+
+</mapper>

@@ -1,0 +1,360 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="Farm">
+	
+	<!-- 缓存条数 -->
+	<cache size="2000" />
+	
+	<!-- 条件语句 -->
+	<sql id="WhereSQL">
+		<where>
+			<if test="guid != null and guid != ''"> 
+			AND T.GUID = #{guid} 
+			</if>
+			<if test="companyid != null and companyid != ''"> 
+			AND T.COMPANYID = #{companyid} 
+			</if>
+			<if test="farmname != null and farmname != ''"> 
+			AND T.FARMNAME = #{farmname} 
+			</if>
+			<if test="farmcode != null and farmcode != ''">
+			AND T.FARMCODE = #{farmcode}
+			</if>
+			<if test="leasearea != null and leasearea != ''">
+			AND T.LEASEAREA = #{leasearea} 
+			</if>
+			<if test="plantarea != null and plantarea != ''"> 
+			AND T.PLANTAREA = #{plantarea} 
+			</if>
+			<if test="soiltype != null and soiltype != ''"> 
+			AND T.SOILTYPE = #{soiltype} 
+			</if>
+			<if test="arableland != null and arableland != ''"> 
+			AND T.ARABLELAND = #{arableland} 
+			</if>
+			<if test="rainfall != null and rainfall != ''"> 
+			AND T.RAINFALL = #{rainfall} 
+			</if>
+			<if test="nofrost != null and nofrost != ''"> 
+			AND T.NOFROST = #{nofrost} 
+			</if>
+			<if test="transformer != null and transformer != ''"> 
+			AND T.TRANSFORMER = #{transformer} 
+			</if>
+			<if test="transfordesc != null and transfordesc != ''"> 
+			AND T.TRANSFORDESC = #{transfordesc} 
+			</if>
+			<if test="mechanical != null and mechanical != ''"> 
+			AND T.MECHANICAL = #{mechanical} 
+			</if>
+			<if test="staffing != null and staffing != ''"> 
+			AND T.STAFFING = #{staffing} 
+			</if>
+			<if test="altitude != null and altitude != ''"> 
+			AND T.ALTITUDE = #{altitude} 
+			</if>
+			<if test="ph != null and ph != ''"> 
+			AND T.PH = #{ph} 
+			</if>
+			<if test="leasestart != null and leasestart != ''"> 
+			AND T.LEASESTART = #{leasestart} 
+			</if>
+			<if test="leaseend != null and leaseend != ''"> 
+			AND T.LEASEEND = #{leaseend} 
+			</if>
+			<if test="createdate != null and createdate != ''"> 
+			AND T.CREATEDATE = #{createdate} 
+			</if>
+			<if test="operatorid != null and operatorid != ''"> 
+			AND T.OPERATORID = #{operatorid} 
+			</if>
+			<if test="url != null and url != ''"> 
+			AND T.url = #{url} 
+			</if>
+		</where>
+	</sql>
+	
+	<!-- 查找语句 -->
+	<select id="find" resultType="Farm" parameterType="Farm" flushCache="false" useCache="true">
+    	SELECT 
+	    	T.GUID AS guid, 
+	    	T.COMPANYID AS companyid, 
+	    	T.FARMNAME AS farmname,
+			T.FARMCODE AS farmcode,
+	    	T.LEASEAREA AS leasearea, 
+	    	T.PLANTAREA AS plantarea, 
+	    	T.SOILTYPE AS soiltype, 
+	    	T.ARABLELAND AS arableland, 
+	    	T.RAINFALL AS rainfall, 
+	    	T.NOFROST AS nofrost, 
+	    	T.TRANSFORMER AS transformer, 
+	    	T.TRANSFORDESC AS transfordesc, 
+	    	T.MECHANICAL AS mechanical, 
+	    	T.STAFFING AS staffing, 
+	    	T.ALTITUDE AS altitude, 
+	    	T.PH AS ph, 
+	    	T.LEASESTART AS leasestart, 
+	    	T.LEASEEND AS leaseend, 
+	    	T.CREATEDATE AS createdate, 
+	    	T.OPERATORID AS operatorid ,
+	    	T.url as url  
+    	FROM farm T
+		<include refid="WhereSQL" />
+		ORDER BY T.CREATEDATE 
+	</select>
+	
+	<!-- 获取总记录数语句 -->
+	<select id="findCount" resultType="java.lang.Integer" parameterType="Farm" flushCache="false" useCache="true">
+    	SELECT COUNT(*)  FROM farm T
+		<include refid="WhereSQL" />
+	</select>
+	
+	<!-- 插入语句 -->
+	<insert id="insert" parameterType="Farm" flushCache="true"> 
+		INSERT INTO farm
+		(
+			GUID, 
+			COMPANYID, 
+			FARMNAME,
+			FARMCODE,
+			LEASEAREA, 
+			PLANTAREA, 
+			SOILTYPE, 
+			ARABLELAND, 
+			RAINFALL, 
+			NOFROST, 
+			TRANSFORMER, 
+			TRANSFORDESC, 
+			MECHANICAL, 
+			STAFFING, 
+			ALTITUDE, 
+			PH, 
+			LEASESTART, 
+			LEASEEND, 
+			CREATEDATE, 
+			OPERATORID ,
+			url 
+		 ) 
+		VALUES
+		(
+			#{guid,jdbcType=VARCHAR}, 
+			#{companyid,jdbcType=VARCHAR}, 
+			#{farmname,jdbcType=VARCHAR},
+			#{farmcode,jdbcType=VARCHAR},
+			#{leasearea,jdbcType=DECIMAL}, 
+			#{plantarea,jdbcType=DECIMAL}, 
+			#{soiltype,jdbcType=VARCHAR}, 
+			#{arableland,jdbcType=VARCHAR}, 
+			#{rainfall,jdbcType=DECIMAL}, 
+			#{nofrost,jdbcType=INTEGER}, 
+			#{transformer,jdbcType=INTEGER}, 
+			#{transfordesc,jdbcType=VARCHAR}, 
+			#{mechanical,jdbcType=VARCHAR}, 
+			#{staffing,jdbcType=VARCHAR}, 
+			#{altitude,jdbcType=DECIMAL}, 
+			#{ph,jdbcType=DECIMAL}, 
+			#{leasestart,jdbcType=INTEGER}, 
+			#{leaseend,jdbcType=INTEGER}, 
+			#{createdate,jdbcType=DATE}, 
+			#{operatorid,jdbcType=VARCHAR} ,
+			#{url,jdbcType=VARCHAR} 
+		) 
+	</insert>
+	
+	<!-- 更新语句 -->
+	<update id="update"  parameterType="Farm" flushCache="true"> 
+		update farm 
+		<set> 
+			<if test="guid != null">GUID=#{guid},</if>
+			<if test="companyid != null">COMPANYID=#{companyid},</if>
+			<if test="farmname != null">FARMNAME=#{farmname},</if>
+			<if test="farmcode != null">FARMCODE=#{farmcode},</if>
+			<if test="leasearea != null">LEASEAREA=#{leasearea},</if>
+			<if test="plantarea != null">PLANTAREA=#{plantarea},</if>
+			<if test="soiltype != null">SOILTYPE=#{soiltype},</if>
+			<if test="arableland != null">ARABLELAND=#{arableland},</if>
+			<if test="rainfall != null">RAINFALL=#{rainfall},</if>
+			<if test="nofrost != null">NOFROST=#{nofrost},</if>
+			<if test="transformer != null">TRANSFORMER=#{transformer},</if>
+			<if test="transfordesc != null">TRANSFORDESC=#{transfordesc},</if>
+			<if test="mechanical != null">MECHANICAL=#{mechanical},</if>
+			<if test="staffing != null">STAFFING=#{staffing},</if>
+			<if test="altitude != null">ALTITUDE=#{altitude},</if>
+			<if test="ph != null">PH=#{ph},</if>
+			<if test="leasestart != null">LEASESTART=#{leasestart},</if>
+			<if test="leaseend != null">LEASEEND=#{leaseend},</if>
+			<if test="createdate != null">CREATEDATE=#{createdate},</if>
+			<if test="operatorid != null">OPERATORID=#{operatorid},</if>
+			<if test="url != null">url=#{url},</if>
+		</set>
+		WHERE GUID = #{guid}
+	</update> 
+	
+	<!-- 单选删除语句 -->
+	<delete id="delete" parameterType="Farm" flushCache="true"> 
+		DELETE FROM farm WHERE GUID = #{guid}
+	</delete>
+	
+	<!-- 多选删除 -->
+	<delete id="mulDel" parameterType="java.lang.String" flushCache="true">
+		DELETE FROM farm WHERE GUID IN
+		<foreach item="id" collection="array" open="(" separator="," close=")"> 
+			#{id}
+		</foreach> 
+	</delete>
+	
+	<select id="finddetail" resultMap="farmResult" parameterType="Farm" flushCache="false" useCache="true">
+    	SELECT 
+	    	T.GUID AS guid, 
+	    	T.COMPANYID AS companyid, 
+	    	T.FARMNAME AS farmname, 
+	    	T.FARMCODE AS farmcode,
+	    	T.LEASEAREA AS leasearea,
+	    	T.PLANTAREA AS plantarea, 
+	    	T.SOILTYPE AS soiltype, 
+	    	T.ARABLELAND AS arableland, 
+	    	T.RAINFALL AS rainfall, 
+	    	T.NOFROST AS nofrost, 
+	    	T.TRANSFORMER AS transformer, 
+	    	T.TRANSFORDESC AS transfordesc, 
+	    	T.MECHANICAL AS mechanical, 
+	    	T.STAFFING AS staffing, 
+	    	T.ALTITUDE AS altitude, 
+	    	T.PH AS ph, 
+	    	T.LEASESTART AS leasestart, 
+	    	T.LEASEEND AS leaseend, 
+	    	T.CREATEDATE AS createdate, 
+	    	T.OPERATORID AS operatorid ,
+	    	T.url as url ,
+	    	p.guid as p_guid ,
+	    	p.plotname as plotname ,
+	    	p.irrigatetype as irrigatetype,
+	    	p.irrigbrand as irrigbrand,
+	    	p.wellsamount as wellsamount,
+	    	p.wellsdisc as wellsdisc,
+	    	p.distvillage as distvillage,
+	    	p.distroad as distroad,
+	    	p.distother as distother,
+	    	p.createdate as p_createdate,
+	    	p.operatorid as p_operatorid ,
+	    	p.url as p_url,
+	    	s.GUID AS s_guid,
+			s.COMPANYID AS s_companyid,
+			s.BATCH AS batch,
+			s.VARIETY AS variety,
+			s.LEVEL AS level,
+			s.SEEDID AS seedid,
+			s.PLACEID AS placeid,
+			s.YEARS AS years,
+			s.STARTDATE AS startdate,
+			s.ENDDATE AS enddate,
+			s.BOTTLEAMOUNT AS bottleamount,
+			s.STRAINAMOUNT AS strainamount,
+			s.STUBBLE AS stubble,
+			s.STOPWATERDATE AS stopwaterdate,
+			s.KILLDATE AS killdate,
+			s.REWARDDATE AS rewarddate,
+			s.STOPMUCK AS stopmuck,
+			s.BUDDINGDATE AS buddingdate,
+			s.MUAMOUNT AS muamount,
+			s.TYPE AS type,
+			s.CODE AS code,
+			s.DESCRIPTION AS s_description,
+			s.VISIBLE AS visible,
+			s.CREATEDATE AS s_createdate,
+			s.OPERATORID AS s_operatorid ,
+			d.guid as d_guid,
+			d.belongsname as d_belongsname,
+			d.keyvalue as d_keyvalue ,
+			u.guid as u_guid,
+			u.url as u_url 
+    	FROM farm T 
+    	left join plots p 
+    	on T.guid=p.farmid 
+    	left join seedfile s 
+    	on s.placeid=p.guid 
+    	left join dictionary d
+		on s.variety =d.keyvalue and d.belongsid='2' 
+		left join upimage u 
+		on T.guid=u.relatedid 
+		<include refid="WhereSQL" />
+		ORDER BY T.CREATEDATE 
+	</select>
+	
+	<resultMap type="Farm" id="farmResult">
+		<id column="guid" property="guid"/>
+		<result column="companyid" property="companyid"/>
+		<result column="farmname" property="farmname"/>
+		<result column="farmcode" property="farmcode"/>
+		<result column="leasearea" property="leasearea"/>
+		<result column="plantarea" property="plantarea"/>
+		<result column="soiltype" property="soiltype"/>
+		<result column="arableland" property="arableland"/>
+		<result column="rainfall" property="rainfall"/>
+		<result column="nofrost" property="nofrost"/>
+		<result column="transformer" property="transformer"/>
+		<result column="transfordesc" property="transfordesc"/>
+		<result column="mechanical" property="mechanical"/>
+		<result column="staffing" property="staffing"/>
+		<result column="altitude" property="altitude"/>
+		<result column="ph" property="ph"/>
+		<result column="leasestart" property="leasestart"/>
+		<result column="leaseend" property="leaseend"/>
+		<result column="createdate" property="createdate"/>
+		<result column="operatorid" property="operatorid"/>
+		<result column="url" property="url"/>
+		<collection property="plots" ofType="Plots">
+			<id column="p_guid" property="guid"/>
+			<result column="plotname" property="plotname"/>
+			<result column="plotcode" property="plotcode"/>
+			<result column="irrigatetype" property="irrigatetype"/>
+			<result column="irrigbrand" property="irrigbrand"/>
+			<result column="wellsamount" property="wellsamount"/>
+			<result column="wellsdisc" property="wellsdisc"/>
+			<result column="distvillage" property="distvillage"/>
+			<result column="distroad" property="distroad"/>
+			<result column="distother" property="distother"/>
+			<result column="p_createdate" property="createdate"/>
+			<result column="p_operatorid" property="operatorid"/>
+			<result column="p_url" property="url"/>
+			
+			<collection property="seedfiles" ofType="Seedfile">
+				<id property="guid" column="s_guid" />
+				<result property="companyid" column="s_companyid" />
+				<result property="batch" column="batch" />
+				<result property="variety" column="variety" />
+				<result property="level" column="level" />
+				<result property="seedid" column="seedid" />
+				<result property="placeid" column="placeid" />
+				<result property="years" column="years" />
+				<result property="startdate" column="startdate" />
+				<result property="enddate" column="enddate" />
+				<result property="bottleamount" column="bottleamount" />
+				<result property="strainamount" column="strainamount" />
+				<result property="stubble" column="stubble" />
+				<result property="stopwaterdate" column="stopwaterdate" />
+				<result property="killdate" column="killdate" />
+				<result property="rewarddate" column="rewarddate" />
+				<result property="stopmuck" column="stopmuck" />
+				<result property="buddingdate" column="buddingdate" />
+				<result property="muamount" column="muamount" />
+				<result property="type" column="type" />
+				<result property="code" column="code" />
+				<result property="description" column="description" />
+				<result property="visible" column="visible" />
+				<result property="createdate" column="s_createdate" />
+				<result property="operatorid" column="s_operatorid" />
+				
+				<association property="varietys" javaType="Dictionary">
+					<id property="guid" column="d_guid" />
+					<result property="belongsname" column="d_belongsname" />
+					<result property="keyvalue" column="d_keyvalue" />
+				</association>
+			</collection>
+		</collection>
+		<collection property="images" ofType="Upimage">
+			<id column="u_guid" property="guid"/>
+			<result column="u_url" property="url"/>
+		</collection>
+	</resultMap>
+</mapper>

@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="Medium">
+	
+	<!-- 缓存条数 -->
+	<cache size="2000" />
+	
+	<!-- 条件语句 -->
+	<sql id="WhereSQL">
+		<where>
+			<if test="guid != null and guid != ''"> 
+			AND T.GUID = #{guid} 
+			</if>
+			<if test="seedfileid != null and seedfileid != ''"> 
+			AND T.SEEDFILEID = #{seedfileid} 
+			</if>
+			<if test="mediumname != null and mediumname != ''"> 
+			AND T.MEDIUMNAME = #{mediumname} 
+			</if>
+			<if test="comefrom != null and comefrom != ''"> 
+			AND T.COMEFROM = #{comefrom} 
+			</if>
+			<if test="scale != null and scale != ''"> 
+			AND T.SCALE = #{scale} 
+			</if>
+			<if test="createdate != null and createdate != ''"> 
+			AND T.CREATEDATE = #{createdate} 
+			</if>
+			<if test="operatorid != null and operatorid != ''"> 
+			AND T.OPERATORID = #{operatorid} 
+			</if>
+		</where>
+	</sql>
+	
+	<!-- 查找语句 -->
+	<select id="find" resultMap="mediumResult" parameterType="Medium" flushCache="false" useCache="true">
+    	SELECT 
+	    	T.GUID AS guid, 
+	    	T.SEEDFILEID AS seedfileid, 
+	    	T.MEDIUMNAME AS mediumname, 
+	    	T.COMEFROM AS comefrom, 
+	    	T.SCALE AS scale, 
+	    	T.CREATEDATE AS createdate, 
+	    	T.OPERATORID AS operatorid ,
+	    	d.guid as d_guid,
+	    	d.belongsname as belongsname,
+	    	d.keyvalue as keyvalue 
+    	FROM medium T 
+    	left join dictionary d 
+    	on T.comefrom = d.keyvalue 
+    	and d.belongsid ='4' 
+		<include refid="WhereSQL" />
+		ORDER BY T.CREATEDATE 
+	</select>
+	
+	<resultMap type="Medium" id="mediumResult">
+		<id property="guid" column="guid" />
+		<result property="seedfileid" column="seedfileid" />
+		<result property="mediumname" column="mediumname" />
+		<result property="comefrom" column="comefrom" />
+		<result property="scale" column="scale" />
+		<result property="createdate" column="createdate" />
+		<result property="operatorid" column="operatorid" />
+		<association property="come" javaType="Dictionary">
+			<id property="guid" column="d_guid" />
+			<result property="belongsname" column="belongsname" />
+			<result property="keyvalue" column="keyvalue" />
+		</association>
+	</resultMap>
+	
+	<!-- 获取总记录数语句 -->
+	<select id="findCount" resultType="java.lang.Integer" parameterType="Medium" flushCache="false" useCache="true">
+    	SELECT COUNT(*)  FROM medium T
+		<include refid="WhereSQL" />
+	</select>
+	
+	<!-- 插入语句 -->
+	<insert id="insert" parameterType="Medium" flushCache="true"> 
+		INSERT INTO medium
+		(
+			GUID, 
+			SEEDFILEID, 
+			MEDIUMNAME, 
+			COMEFROM, 
+			SCALE, 
+			CREATEDATE, 
+			OPERATORID 
+		 ) 
+		VALUES
+		(
+			#{guid,jdbcType=VARCHAR}, 
+			#{seedfileid,jdbcType=VARCHAR}, 
+			#{mediumname,jdbcType=VARCHAR}, 
+			#{comefrom,jdbcType=VARCHAR}, 
+			#{scale,jdbcType=VARCHAR}, 
+			#{createdate,jdbcType=TIMESTAMP}, 
+			#{operatorid,jdbcType=VARCHAR} 
+		) 
+	</insert>
+	
+	<!-- 更新语句 -->
+	<update id="update"  parameterType="Medium" flushCache="true"> 
+		update medium 
+		<set> 
+			<if test="guid != null">GUID=#{guid},</if>
+			<if test="seedfileid != null">SEEDFILEID=#{seedfileid},</if>
+			<if test="mediumname != null">MEDIUMNAME=#{mediumname},</if>
+			<if test="comefrom != null">COMEFROM=#{comefrom},</if>
+			<if test="scale != null">SCALE=#{scale},</if>
+			<if test="createdate != null">CREATEDATE=#{createdate},</if>
+			<if test="operatorid != null">OPERATORID=#{operatorid},</if>
+		</set>
+		WHERE GUID = #{guid}
+	</update> 
+	
+	<!-- 单选删除语句 -->
+	<delete id="delete" parameterType="Medium" flushCache="true"> 
+		DELETE FROM medium WHERE GUID = #{guid}
+	</delete>
+	
+	<!-- 多选删除 -->
+	<delete id="mulDel" parameterType="java.lang.String" flushCache="true">
+		DELETE FROM medium WHERE GUID IN
+		<foreach item="id" collection="array" open="(" separator="," close=")"> 
+			#{id}
+		</foreach> 
+	</delete>
+</mapper>

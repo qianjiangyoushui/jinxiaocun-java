@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="Culturemedium">
+
+    <!-- 缓存条数 -->
+    <cache size="2000" />
+
+    <!-- 条件语句 -->
+    <sql id="WhereSQL">
+        <where>
+            <if test="guid != null and guid != ''">
+                AND T.GUID = #{guid}
+            </if>
+            <if test="companyguid != null and companyguid != ''">
+                AND T.COMPANYGUID = #{companyguid}
+            </if>
+            <if test="name != null and name != ''">
+                AND T.NAME = #{name}
+            </if>
+            <if test="trait != null and trait != ''">
+                AND T.TRAIT = #{trait}
+            </if>
+            <if test="code != null and code != ''">
+                AND T.CODE = #{code}
+            </if>
+            <if test="formula != null and formula != ''">
+                AND T.FORMULA = #{formula}
+            </if>
+            <if test="createdate != null and createdate != ''">
+                AND T.CREATEDATE = #{createdate}
+            </if>
+            <if test="updatedate != null and updatedate != ''">
+                AND T.UPDATEDATE = #{updatedate}
+            </if>
+            <if test="remark != null and remark != ''">
+                AND T.REMARK = #{remark}
+            </if>
+        </where>
+    </sql>
+
+    <!-- 查找语句 -->
+    <select id="find" resultType="Culturemedium" parameterType="Culturemedium" flushCache="false" useCache="true">
+        SELECT
+        T.GUID AS guid,
+        T.COMPANYGUID AS companyguid,
+        T.NAME AS name,
+        T.TRAIT AS trait,
+        T.CODE AS code,
+        T.FORMULA AS formula,
+        T.CREATEDATE AS createdate,
+        T.UPDATEDATE AS updatedate,
+        T.REMARK AS remark
+        FROM culturemedium T
+        <include refid="WhereSQL" />
+        ORDER BY SORT
+    </select>
+
+    <!-- 获取总记录数语句 -->
+    <select id="findCount" resultType="java.lang.Integer" parameterType="Culturemedium" flushCache="false" useCache="true">
+        SELECT COUNT(*)  FROM culturemedium T
+        <include refid="WhereSQL" />
+    </select>
+
+    <!-- 插入语句 -->
+    <insert id="insert" parameterType="Culturemedium" flushCache="true">
+        INSERT INTO culturemedium
+        (
+        GUID,
+        COMPANYGUID,
+        NAME,
+        TRAIT,
+        CODE,
+        FORMULA,
+        CREATEDATE,
+        UPDATEDATE,
+        REMARK
+        )
+        VALUES
+        (
+        #{guid,jdbcType=VARCHAR},
+        #{companyguid,jdbcType=VARCHAR},
+        #{name,jdbcType=VARCHAR},
+        #{trait,jdbcType=VARCHAR},
+        #{code,jdbcType=VARCHAR},
+        #{formula,jdbcType=VARCHAR},
+        #{createdate,jdbcType=DATE},
+        #{updatedate,jdbcType=DATE},
+        #{remark,jdbcType=VARCHAR}
+        )
+    </insert>
+
+    <!-- 更新语句 -->
+    <update id="update"  parameterType="Culturemedium" flushCache="true">
+        update culturemedium
+        <set>
+            <if test="guid != null">GUID=#{guid},</if>
+            <if test="companyguid != null">COMPANYGUID=#{companyguid},</if>
+            <if test="name != null">NAME=#{name},</if>
+            <if test="trait != null">TRAIT=#{trait},</if>
+            <if test="code != null">CODE=#{code},</if>
+            <if test="formula != null">FORMULA=#{formula},</if>
+            <if test="createdate != null">CREATEDATE=#{createdate},</if>
+            <if test="updatedate != null">UPDATEDATE=#{updatedate},</if>
+            <if test="remark != null">REMARK=#{remark},</if>
+        </set>
+        WHERE GUID = #{guid}
+    </update>
+
+    <!-- 单选删除语句 -->
+    <delete id="delete" parameterType="Culturemedium" flushCache="true">
+        DELETE FROM culturemedium WHERE GUID = #{guid}
+    </delete>
+
+    <!-- 多选删除 -->
+    <delete id="mulDel" parameterType="java.lang.String" flushCache="true">
+        DELETE FROM culturemedium WHERE GUID IN
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

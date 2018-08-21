@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="Token">
+	
+	<!-- 缓存条数 -->
+	<cache size="2000" />
+	
+	<!-- 条件语句 -->
+	<sql id="WhereSQL">
+		<where>
+			<if test="id != null and id != ''"> 
+			AND T.ID = #{id} 
+			</if>
+			<if test="phone != null and phone != ''"> 
+			AND T.PHONE = #{phone} 
+			</if>
+			<if test="code != null and code != ''"> 
+			AND T.CODE = #{code} 
+			</if>
+			<if test="status != null and status != ''"> 
+			AND T.STATUS = #{status} 
+			</if>
+			<if test="type != null and type != ''"> 
+			AND T.TYPE = #{type} 
+			</if>
+			<if test="senddate != null and senddate != ''"> 
+			AND T.senddate = #{senddate} 
+			</if>
+		</where>
+	</sql>
+	
+	<!-- 查找语句 -->
+	<select id="find" resultType="Token" parameterType="Token" flushCache="false" useCache="true">
+    	SELECT 
+	    	T.ID AS id, 
+	    	T.PHONE AS phone, 
+	    	T.CODE AS code, 
+	    	T.STATUS AS status, 
+	    	T.TYPE AS type, 
+	    	T.senddate AS senddate 
+    	FROM token T 
+		<include refid="WhereSQL" />
+	</select>
+	
+	<!-- 获取总记录数语句 -->
+	<select id="findCount" resultType="java.lang.Integer" parameterType="Token" flushCache="false" useCache="true">
+    	SELECT COUNT(*)  FROM token T 
+		<include refid="WhereSQL" />
+	</select>
+	
+	<!-- 插入语句 -->
+	<insert id="insert" parameterType="Token" flushCache="true"> 
+		INSERT INTO token
+		(
+			ID, 
+			PHONE, 
+			CODE, 
+			STATUS, 
+			TYPE, 
+			senddate 
+		 ) 
+		VALUES
+		(
+			#{id,jdbcType=VARCHAR}, 
+			#{phone,jdbcType=VARCHAR}, 
+			#{code,jdbcType=VARCHAR}, 
+			#{status,jdbcType=INTEGER}, 
+			#{type,jdbcType=VARCHAR}, 
+			#{senddate,jdbcType=TIMESTAMP} 
+		) 
+	</insert>
+	
+	<!-- 更新语句 -->
+	<update id="update"  parameterType="Token" flushCache="true"> 
+		update token 
+		<set> 
+			<if test="id != null">ID=#{id},</if>
+			<if test="phone != null">PHONE=#{phone},</if>
+			<if test="code != null">CODE=#{code},</if>
+			<if test="status != null">STATUS=#{status},</if>
+			<if test="type != null">TYPE=#{type},</if>
+			<if test="senddate != null">senddate=#{senddate},</if>
+		</set>
+		WHERE ID = #{id} 
+	</update> 
+	
+	<!-- 单选删除语句 -->
+	<delete id="delete" parameterType="Token" flushCache="true"> 
+		DELETE FROM token WHERE ID = #{id}
+	</delete>
+	
+	<delete id="del" parameterType="Token" flushCache="true"> 
+		DELETE FROM token  
+		<where>
+			<if test="id != null and id != ''"> 
+			AND ID = #{id} 
+			</if>
+			<if test="phone != null and phone != ''"> 
+			AND PHONE = #{phone} 
+			</if>
+			<if test="code != null and code != ''"> 
+			AND CODE = #{code} 
+			</if>
+			<if test="status != null and status != ''"> 
+			AND STATUS = #{status} 
+			</if>
+			<if test="type != null and type != ''"> 
+			AND TYPE = #{type} 
+			</if>
+			<if test="senddate != null and senddate != ''"> 
+			AND senddate = #{senddate} 
+			</if>
+		</where>
+	</delete>
+	
+	<!-- 多选删除 -->
+	<delete id="mulDel" parameterType="java.lang.String" flushCache="true">
+		DELETE FROM token WHERE ID IN
+		<foreach item="id" collection="array" open="(" separator="," close=")"> 
+			#{id}
+		</foreach> 
+	</delete>
+</mapper>
