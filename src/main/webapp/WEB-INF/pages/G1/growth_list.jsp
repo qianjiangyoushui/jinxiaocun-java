@@ -119,27 +119,26 @@
 
 
 
-		<c:if test="${sessionScope.user.depart.departid eq '5' ||sessionScope.user.depart.departid eq '8'}">
 			<a href="${wechatPath}growth/add.action?relatedid=${seedfileid}&type=11&description=G1生长记录&url=${url}" style="position: absolute; right: 27px; top: 0px;">
 				<img src="${wechatPath}icon/add.png" style="width: 20px" />
 			</a>
 			<a href="JavaScript:add();" style="position: absolute; right: 10px; top: 15px; text-decoration: none; font-size: 12px; color: #333">新建记录</a>
-		</c:if>
 	</div>
 	<input type="hidden" id="date3" onchange="go(this.value,'${seedfileid}');">
 <div class="growth_list_body">
-<c:forEach items="${imageList}" var="list" varStatus="index">
+<c:forEach items="${recordList}" var="record" varStatus="index">
 	<div class="growth_list_item">
 	    <div class="growth_list_date">
-	        <div style='font-size:20px'>${list.key.month+1}月</div>
-	        <div style='font-size:10px'>${list.key.date}日</div>
+	        <div style='font-size:20px'>${record.month}月</div>
+	        <div style='font-size:10px'>${record.day}日</div>
 	    </div>
 	    <div class="growth_list_right">
-	        <div><fmt:formatDate value="${list.value[0].uploaddate}" type="date" pattern="yyyy年MM月dd日" /></div>
+	        <div><fmt:formatDate value="${record.createdate}" type="date" pattern="yyyy年MM月dd日" /></div>
+	        <p>${record.content}</p>
 	        <div class="growth_image_list">
-	            <c:forEach  items="${list.value}" var="image" varStatus="index2">
+	            <c:forEach  items="${record.images}" var="image" varStatus="index2">
 	              <div class="growth_image_item">
-                       <image class="image-item" name="${index2.count}" title="${list.key.time}" height="80px" width="80px" src="${image.url}"  />
+                       <image class="image-item" name="${index2.count}" title="${index.count}" height="80px" width="80px" src="${image.url2}"  />
 	              </div>
 	            </c:forEach>
 	        </div>
@@ -147,7 +146,7 @@
     </div>
 </c:forEach>
 </div>
-
+<jsp:include   page="../common/tabbar.jsp" flush="true"/>
 
 <script src="https://cdn.bootcss.com/jquery/1.11.0/jquery.min.js"></script>
 
@@ -158,20 +157,21 @@
 <!-- 	分页加载	 -->
 <script type="text/javascript">
 
-    $(".image-item").click(function(e){
-        let index = e.target.title;
-        let name = e.target.name-1;
+
+        $(".image-item").click(function(e){
+        let index1 = e.target.title-1;
+        let index2 = e.target.name-1;
         let items = [];
-        $.each(${resultMap},function(i,v){
-            if(i==index){
-                for(let k=0;k<v.length;k++){
-                    items.push(v[k].url);
+        $.each(${mapString},function(i,v){
+            if(i==index1){
+                for(let k=0;k<v.images.length;k++){
+                    items.push(v.images[k].url);
                 }
                 var pb = $.photoBrowser({
                    items: items,
-                   initIndex:name
+                   initIndex:index2
                  });
-                 pb.open(name);
+                 pb.open(index2);
             }
         });
     })

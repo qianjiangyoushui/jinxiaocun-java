@@ -153,7 +153,7 @@
 			</div>
 		</a>
 	</div>
-	
+	<jsp:include   page="../common/tabbar.jsp" flush="true"/>
 	
 	
 	

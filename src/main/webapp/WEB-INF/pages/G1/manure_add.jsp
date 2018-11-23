@@ -122,7 +122,7 @@
 			
 		</div>
 	</form>
-
+<jsp:include   page="../common/tabbar.jsp" flush="true"/>
 	<script src="${wechatPath}js/jquery-1.8.1.min.js"
 		type="text/javascript"></script>
 	<script src="${wechatPath}js/jquery-weui.min.js"
@@ -223,10 +223,7 @@
 			
 			
 			var r = /^(0|[1-9]\d{0,3})(\.\d{1,2})?$/;
-			if(!r.test(content)){
-				$.toptip('有效成分含量请输入正确数量', 'error');
-				return false;
-			}
+
 			if(!r.test(dosage)){
 				$.toptip('亩施用量请输入正确数量', 'error');
 				return false;

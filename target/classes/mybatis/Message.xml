@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="Message">
+
+    <!-- 缓存条数 -->
+    <cache size="2000" />
+
+    <!-- 条件语句 -->
+    <sql id="WhereSQL">
+        <where>
+            <if test="guid != null and guid != ''">
+                AND T.GUID = #{guid}
+            </if>
+            <if test="tittle != null and tittle != ''">
+                AND T.TITTLE = #{tittle}
+            </if>
+            <if test="userid != null and userid != ''">
+                AND T.USERID = #{userid}
+            </if>
+            <if test="des != null and des != ''">
+                AND T.DES = #{des}
+            </if>
+            <if test="createdate != null and createdate != ''">
+                AND T.CREATEDATE = #{createdate}
+            </if>
+            <if test="updatedate != null and updatedate != ''">
+                AND T.UPDATEDATE = #{updatedate}
+            </if>
+            <if test="state != null and state != ''">
+                AND T.STATE = #{state}
+            </if>
+            <if test="url != null and url != ''">
+                AND T.URL = #{url}
+            </if>
+            <if test="busid != null and busid != ''">
+                AND T.BUSID = #{busid}
+            </if>
+            <if test="remark != null and remark != ''">
+                AND T.REMARK = #{remark}
+            </if>
+        </where>
+    </sql>
+
+    <!-- 查找语句 -->
+    <select id="find" resultType="Message" parameterType="Message" flushCache="false" useCache="true">
+        SELECT
+        T.GUID AS guid,
+        T.TITTLE AS tittle,
+        T.USERID AS userid,
+        T.DES AS des,
+        T.CREATEDATE AS createdate,
+        T.UPDATEDATE AS updatedate,
+        T.STATE AS state,
+        T.URL AS url,
+        T.BUSID AS busid,
+        T.REMARK AS remark
+        FROM message T
+        <include refid="WhereSQL" />
+        ORDER BY SORT
+    </select>
+
+    <!-- 获取总记录数语句 -->
+    <select id="findCount" resultType="java.lang.Integer" parameterType="Message" flushCache="false" useCache="true">
+        SELECT COUNT(*)  FROM message T
+        <include refid="WhereSQL" />
+    </select>
+
+    <!-- 插入语句 -->
+    <insert id="insert" parameterType="Message" flushCache="true">
+        INSERT INTO message
+        (
+        GUID,
+        TITTLE,
+        USERID,
+        DES,
+        CREATEDATE,
+        UPDATEDATE,
+        STATE,
+        URL,
+        BUSID,
+        REMARK
+        )
+        VALUES
+        (
+        #{guid,jdbcType=VARCHAR},
+        #{tittle,jdbcType=VARCHAR},
+        #{userid,jdbcType=VARCHAR},
+        #{des,jdbcType=VARCHAR},
+        #{createdate,jdbcType=DATE},
+        #{updatedate,jdbcType=DATE},
+        #{state,jdbcType=VARCHAR},
+        #{url,jdbcType=VARCHAR},
+        #{busid,jdbcType=VARCHAR},
+        #{remark,jdbcType=VARCHAR}
+        )
+    </insert>
+
+    <!-- 更新语句 -->
+    <update id="update"  parameterType="Message" flushCache="true">
+        update message
+        <set>
+            <if test="guid != null">GUID=#{guid},</if>
+            <if test="tittle != null">TITTLE=#{tittle},</if>
+            <if test="userid != null">USERID=#{userid},</if>
+            <if test="des != null">DES=#{des},</if>
+            <if test="createdate != null">CREATEDATE=#{createdate},</if>
+            <if test="updatedate != null">UPDATEDATE=#{updatedate},</if>
+            <if test="state != null">STATE=#{state},</if>
+            <if test="url != null">URL=#{url},</if>
+            <if test="busid != null">BUSID=#{busid},</if>
+            <if test="remark != null">REMARK=#{remark},</if>
+        </set>
+        WHERE GUID = #{guid}
+    </update>
+
+    <!-- 单选删除语句 -->
+    <delete id="delete" parameterType="Message" flushCache="true">
+        DELETE FROM message WHERE GUID = #{guid}
+    </delete>
+
+    <!-- 多选删除 -->
+    <delete id="mulDel" parameterType="java.lang.String" flushCache="true">
+        DELETE FROM message WHERE GUID IN
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

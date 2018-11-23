@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="Outinstorage">
+	
+	<!-- 缓存条数 -->
+	<cache size="2000" />
+	
+	<!-- 条件语句 -->
+	<sql id="WhereSQL">
+		<where>
+			<if test="guid != null and guid != ''"> 
+			AND T.GUID = #{guid} 
+			</if>
+			<if test="depotid != null and depotid != ''"> 
+			AND T.DEPOTID = #{depotid} 
+			</if>
+			<if test="batch != null and batch != ''"> 
+			AND T.BATCH = #{batch} 
+			</if>
+			<if test="outamount != null and outamount != ''"> 
+			AND T.OUTAMOUNT = #{outamount} 
+			</if>
+			<if test="outuse != null and outuse != ''"> 
+			AND T.OUTUSE = #{outuse} 
+			</if>
+			<if test="outdate != null and outdate != ''"> 
+			AND T.OUTDATE = #{outdate} 
+			</if>
+			<if test="inamount != null and inamount != ''"> 
+			AND T.INAMOUNT = #{inamount} 
+			</if>
+			<if test="storagemethod != null and storagemethod != ''"> 
+			AND T.STORAGEMETHOD = #{storagemethod} 
+			</if>
+			<if test="indate != null and indate != ''"> 
+			AND T.INDATE = #{indate} 
+			</if>
+			<if test="description != null and description != ''"> 
+			AND T.DESCRIPTION = #{description} 
+			</if>
+			<if test="type != null and type != ''"> 
+			AND T.TYPE = #{type} 
+			</if>
+			<if test="createdate != null and createdate != ''"> 
+			AND T.CREATEDATE = #{createdate} 
+			</if>
+			<if test="operatorid != null and operatorid != ''"> 
+			AND T.OPERATORID = #{operatorid} 
+			</if>
+		</where>
+	</sql>
+	
+	<!-- 查找语句 -->
+	<select id="find" resultType="Outinstorage" parameterType="Outinstorage" flushCache="false" useCache="true">
+    	SELECT 
+	    	T.GUID AS guid, 
+	    	T.DEPOTID AS depotid, 
+	    	T.BATCH AS batch, 
+	    	T.OUTAMOUNT AS outamount, 
+	    	T.OUTUSE AS outuse, 
+	    	T.OUTDATE AS outdate, 
+	    	T.INAMOUNT AS inamount, 
+	    	T.STORAGEMETHOD AS storagemethod, 
+	    	T.INDATE AS indate, 
+	    	T.DESCRIPTION AS description, 
+	    	T.TYPE AS type, 
+	    	T.CREATEDATE AS createdate, 
+	    	T.OPERATORID AS operatorid,
+	    	s.batch  as  batchcode
+    	FROM outinstorage T left join seedfile s
+    	on T.batch=s.guid
+		<include refid="WhereSQL" />
+	</select>
+	
+	<!-- 获取总记录数语句 -->
+	<select id="findCount" resultType="java.lang.Integer" parameterType="Outinstorage" flushCache="false" useCache="true">
+    	SELECT COUNT(*)  FROM outinstorage T
+		<include refid="WhereSQL" />
+	</select>
+	
+	<!-- 插入语句 -->
+	<insert id="insert" parameterType="Outinstorage" flushCache="true"> 
+		INSERT INTO outinstorage
+		(
+			GUID, 
+			DEPOTID, 
+			BATCH, 
+			OUTAMOUNT, 
+			OUTUSE, 
+			OUTDATE, 
+			INAMOUNT, 
+			STORAGEMETHOD, 
+			INDATE, 
+			DESCRIPTION, 
+			TYPE, 
+			CREATEDATE, 
+			OPERATORID 
+		 ) 
+		VALUES
+		(
+			#{guid,jdbcType=VARCHAR}, 
+			#{depotid,jdbcType=VARCHAR}, 
+			#{batch,jdbcType=VARCHAR}, 
+			#{outamount,jdbcType=DECIMAL}, 
+			#{outuse,jdbcType=VARCHAR}, 
+			#{outdate,jdbcType=DATE}, 
+			#{inamount,jdbcType=DECIMAL}, 
+			#{storagemethod,jdbcType=VARCHAR}, 
+			#{indate,jdbcType=DATE}, 
+			#{description,jdbcType=VARCHAR}, 
+			#{type,jdbcType=VARCHAR}, 
+			#{createdate,jdbcType=DATE}, 
+			#{operatorid,jdbcType=VARCHAR} 
+		) 
+	</insert>
+	
+	<!-- 更新语句 -->
+	<update id="update"  parameterType="Outinstorage" flushCache="true"> 
+		update outinstorage 
+		<set> 
+			<if test="guid != null">GUID=#{guid},</if>
+			<if test="depotid != null">DEPOTID=#{depotid},</if>
+			<if test="batch != null">BATCH=#{batch},</if>
+			<if test="outamount != null">OUTAMOUNT=#{outamount},</if>
+			<if test="outuse != null">OUTUSE=#{outuse},</if>
+			<if test="outdate != null">OUTDATE=#{outdate},</if>
+			<if test="inamount != null">INAMOUNT=#{inamount},</if>
+			<if test="storagemethod != null">STORAGEMETHOD=#{storagemethod},</if>
+			<if test="indate != null">INDATE=#{indate},</if>
+			<if test="description != null">DESCRIPTION=#{description},</if>
+			<if test="type != null">TYPE=#{type},</if>
+			<if test="createdate != null">CREATEDATE=#{createdate},</if>
+			<if test="operatorid != null">OPERATORID=#{operatorid},</if>
+		</set>
+		WHERE GUID = #{guid}
+	</update> 
+	
+	<!-- 单选删除语句 -->
+	<delete id="delete" parameterType="Outinstorage" flushCache="true"> 
+		DELETE FROM outinstorage WHERE GUID = #{guid}
+	</delete>
+	
+	<!-- 多选删除 -->
+	<delete id="mulDel" parameterType="java.lang.String" flushCache="true">
+		DELETE FROM outinstorage WHERE GUID IN
+		<foreach item="id" collection="array" open="(" separator="," close=")"> 
+			#{id}
+		</foreach> 
+	</delete>
+	
+	<select id="findtj" resultType="java.util.Map" parameterType="Outinstorage" flushCache="false" useCache="true">
+	select  s.batch batch,d.belongsname,
+	MAX(CASE t.type WHEN '1' THEN t.amount ELSE 0 END ) ck,
+	  MAX(CASE t.type WHEN '2' THEN t.amount ELSE 0 END ) rk
+	from 
+	(select batch,guid,type, sum(outamount) as amount from outinstorage  o where o.depotid=#{depotid} 
+	group by batch,type) as t left join seedfile s on s.guid=t.batch
+	left join dictionary d on s.variety=d.keyvalue and d.belongsid='2'
+	group by t.batch
+</select>
+	
+</mapper>
+
+

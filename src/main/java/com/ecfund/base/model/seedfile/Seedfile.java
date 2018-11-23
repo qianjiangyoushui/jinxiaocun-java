@@ -2,12 +2,15 @@ package com.ecfund.base.model.seedfile;
 
 import java.util.Date;
 
+import com.alibaba.fastjson.annotation.JSONField;
 import com.ecfund.base.model.eliteG1.Greenhouses;
 import com.ecfund.base.model.g0.Seedbed;
 import com.ecfund.base.model.g2g3.Plots;
 import com.ecfund.base.model.publics.Dictionary;
+import com.ecfund.base.model.publics.Fileralation;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 /**
  * 
@@ -34,28 +37,32 @@ public class Seedfile implements java.io.Serializable {
 
 	private String seedid;
 
+	private String trainid;
+
 	private String placeid;
 
 	private Integer years;
 
+	@JSONField(format = "yy-MM-dd")
 	private Date startdate;
-
+	@JSONField(format = "yy-MM-dd")
 	private Date enddate;
 
-	private Integer bottleamount;
+	private Integer bottleamount;//每瓶个数
 
 	private Integer strainamount;
 
 	private Integer stubble;
 
+	@JSONField(format = "yy-MM-dd")
 	private Date stopwaterdate;
-
+	@JSONField(format = "yy-MM-dd")
 	private Date killdate;
-
+	@JSONField(format = "yy-MM-dd")
 	private Date rewarddate;
-
+	@JSONField(format = "yy-MM-dd")
 	private Date stopmuck;
-
+	@JSONField(format = "yy-MM-dd")
 	private Date buddingdate;
 
 	private BigDecimal muamount;
@@ -86,6 +93,17 @@ public class Seedfile implements java.io.Serializable {
 	
 	private Seedfile parentseed;//苗来源
 	private Plots plots;//所属地块
+
+	private  Integer expandbottle;//扩繁瓶数
+	private  Integer usebottle;//使用瓶数
+
+	private String mediumid;//培养基id
+
+	private List<Fileralation> ralationList;
+
+	private boolean checked;
+
+	private int yearBetween;
 
 	public Plots getPlots() {
 		return plots;
@@ -350,5 +368,60 @@ public class Seedfile implements java.io.Serializable {
 	public void setSource(String source) {
 		this.source = source;
 	}
-	
+
+	public String getTrainid() {
+		return trainid;
+	}
+
+	public void setTrainid(String trainid) {
+		this.trainid = trainid;
+	}
+
+	public Integer getExpandbottle() {
+		return expandbottle;
+	}
+
+	public void setExpandbottle(Integer expandbottle) {
+		this.expandbottle = expandbottle;
+	}
+
+	public Integer getUsebottle() {
+		return usebottle;
+	}
+
+	public void setUsebottle(Integer usebottle) {
+		this.usebottle = usebottle;
+	}
+
+	public String getMediumid() {
+		return mediumid;
+	}
+
+	public void setMediumid(String mediumid) {
+		this.mediumid = mediumid;
+	}
+
+	public List<Fileralation> getRalationList() {
+		return ralationList;
+	}
+
+	public int getYearBetween() {
+		return yearBetween;
+	}
+
+	public void setYearBetween(int yearBetween) {
+		this.yearBetween = yearBetween;
+	}
+
+	public void setRalationList(List<Fileralation> ralationList) {
+		this.ralationList = ralationList;
+	}
+
+	public boolean isChecked() {
+		return checked;
+	}
+
+	public void setChecked(boolean checked) {
+		this.checked = checked;
+	}
 }

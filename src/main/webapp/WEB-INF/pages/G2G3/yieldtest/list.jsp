@@ -77,6 +77,7 @@
 	</div>
 
 	<div style="height: 555px; width: 100%"></div>
+	<jsp:include   page="../../common/tabbar.jsp" flush="true"/>
 	<script src="${wechatPath}js/jquery-2.1.4.js"
 		type="text/javascript"></script>
 		<script src="${wechatPath}js/jquery-weui.min.js"

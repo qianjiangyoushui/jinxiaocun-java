@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="Eppo">
+	
+	<!-- 缓存条数 -->
+	<cache size="2000" />
+	
+	<!-- 条件语句 -->
+	<sql id="WhereSQL">
+		<where>
+			<if test="guid != null and guid != ''"> 
+			AND T.GUID = #{guid} 
+			</if>
+			<if test="seedfileid != null and seedfileid != ''"> 
+			AND T.SEEDFILEID = #{seedfileid} 
+			</if>
+			<if test="dodate != null and dodate != ''"> 
+			AND T.DODATE = #{dodate} 
+			</if>
+			<if test="usetype != null and usetype != ''"> 
+			AND T.USETYPE = #{usetype} 
+			</if>
+			<if test="drugkind != null and drugkind != ''"> 
+			AND T.DRUGKIND = #{drugkind} 
+			</if>
+			<if test="drugdose != null and drugdose != ''"> 
+			AND T.DRUGDOSE = #{drugdose} 
+			</if>
+			<if test="drugdoseunit != null and drugdoseunit != ''"> 
+			AND T.DRUGDOSEUNIT = #{drugdoseunit} 
+			</if>
+			<if test="squaredose != null and squaredose != ''"> 
+			AND T.SQUAREDOSE = #{squaredose} 
+			</if>
+			<if test="squarunit != null and squarunit != ''"> 
+			AND T.SQUARUNIT = #{squarunit} 
+			</if>
+			<if test="waterdose != null and waterdose != ''"> 
+			AND T.WATERDOSE = #{waterdose} 
+			</if>
+			<if test="drugusetype != null and drugusetype != ''"> 
+			AND T.DRUGUSETYPE = #{drugusetype} 
+			</if>
+			<if test="startdate != null and startdate != ''"> 
+			AND T.STARTDATE = #{startdate} 
+			</if>
+			<if test="enddate != null and enddate != ''"> 
+			AND T.ENDDATE = #{enddate} 
+			</if>
+			<if test="principal != null and principal != ''"> 
+			AND T.PRINCIPAL = #{principal} 
+			</if>
+			<if test="uploadperson != null and uploadperson != ''"> 
+			AND T.UPLOADPERSON = #{uploadperson} 
+			</if>
+			<if test="createdate != null and createdate != ''"> 
+			AND T.CREATEDATE = #{createdate} 
+			</if>
+			<if test="operatorid != null and operatorid != ''"> 
+			AND T.OPERATORID = #{operatorid} 
+			</if>
+		</where>
+	</sql>
+	
+	<!-- 查找语句 -->
+	<select id="find" resultType="Eppo" parameterType="Eppo" flushCache="false" useCache="true">
+    	SELECT 
+	    	T.GUID AS guid, 
+	    	T.SEEDFILEID AS seedfileid, 
+	    	T.DODATE AS dodate, 
+	    	T.USETYPE AS usetype, 
+	    	T.DRUGKIND AS drugkind, 
+	    	T.DRUGDOSE AS drugdose, 
+	    	T.DRUGDOSEUNIT AS drugdoseunit, 
+	    	T.SQUAREDOSE AS squaredose, 
+	    	T.SQUARUNIT AS squarunit, 
+	    	T.WATERDOSE AS waterdose, 
+	    	T.DRUGUSETYPE AS drugusetype, 
+	    	T.STARTDATE AS startdate, 
+	    	T.ENDDATE AS enddate, 
+	    	T.PRINCIPAL AS principal, 
+	    	T.UPLOADPERSON AS uploadperson, 
+	    	T.CREATEDATE AS createdate, 
+	    	T.OPERATORID AS operatorid 
+    	FROM eppo T
+		<include refid="WhereSQL" />
+		ORDER BY T.CREATEDATE desc
+	</select>
+	
+	<!-- 获取总记录数语句 -->
+	<select id="findCount" resultType="java.lang.Integer" parameterType="Eppo" flushCache="false" useCache="true">
+    	SELECT COUNT(*)  FROM eppo T
+		<include refid="WhereSQL" />
+	</select>
+	
+	<!-- 插入语句 -->
+	<insert id="insert" parameterType="Eppo" flushCache="true"> 
+		INSERT INTO eppo
+		(
+			GUID, 
+			SEEDFILEID, 
+			DODATE, 
+			USETYPE, 
+			DRUGKIND, 
+			DRUGDOSE, 
+			DRUGDOSEUNIT, 
+			SQUAREDOSE, 
+			SQUARUNIT, 
+			WATERDOSE, 
+			DRUGUSETYPE, 
+			STARTDATE, 
+			ENDDATE, 
+			PRINCIPAL, 
+			UPLOADPERSON, 
+			CREATEDATE, 
+			OPERATORID 
+		 ) 
+		VALUES
+		(
+			#{guid,jdbcType=VARCHAR}, 
+			#{seedfileid,jdbcType=VARCHAR}, 
+			#{dodate,jdbcType=DATE}, 
+			#{usetype,jdbcType=VARCHAR}, 
+			#{drugkind,jdbcType=VARCHAR}, 
+			#{drugdose,jdbcType=VARCHAR}, 
+			#{drugdoseunit,jdbcType=VARCHAR}, 
+			#{squaredose,jdbcType=VARCHAR}, 
+			#{squarunit,jdbcType=VARCHAR}, 
+			#{waterdose,jdbcType=VARCHAR}, 
+			#{drugusetype,jdbcType=VARCHAR}, 
+			#{startdate,jdbcType=VARCHAR}, 
+			#{enddate,jdbcType=VARCHAR}, 
+			#{principal,jdbcType=VARCHAR}, 
+			#{uploadperson,jdbcType=VARCHAR}, 
+			#{createdate,jdbcType=DATE}, 
+			#{operatorid,jdbcType=VARCHAR} 
+		) 
+	</insert>
+	
+	<!-- 更新语句 -->
+	<update id="update"  parameterType="Eppo" flushCache="true"> 
+		update eppo 
+		<set> 
+			<if test="guid != null">GUID=#{guid},</if>
+			<if test="seedfileid != null">SEEDFILEID=#{seedfileid},</if>
+			<if test="dodate != null">DODATE=#{dodate},</if>
+			<if test="usetype != null">USETYPE=#{usetype},</if>
+			<if test="drugkind != null">DRUGKIND=#{drugkind},</if>
+			<if test="drugdose != null">DRUGDOSE=#{drugdose},</if>
+			<if test="drugdoseunit != null">DRUGDOSEUNIT=#{drugdoseunit},</if>
+			<if test="squaredose != null">SQUAREDOSE=#{squaredose},</if>
+			<if test="squarunit != null">SQUARUNIT=#{squarunit},</if>
+			<if test="waterdose != null">WATERDOSE=#{waterdose},</if>
+			<if test="drugusetype != null">DRUGUSETYPE=#{drugusetype},</if>
+			<if test="startdate != null">STARTDATE=#{startdate},</if>
+			<if test="enddate != null">ENDDATE=#{enddate},</if>
+			<if test="principal != null">PRINCIPAL=#{principal},</if>
+			<if test="uploadperson != null">UPLOADPERSON=#{uploadperson},</if>
+			<if test="createdate != null">CREATEDATE=#{createdate},</if>
+			<if test="operatorid != null">OPERATORID=#{operatorid},</if>
+		</set>
+		WHERE GUID = #{guid}
+	</update> 
+	
+	<!-- 单选删除语句 -->
+	<delete id="delete" parameterType="Eppo" flushCache="true"> 
+		DELETE FROM eppo WHERE GUID = #{guid}
+	</delete>
+	
+	<!-- 多选删除 -->
+	<delete id="mulDel" parameterType="java.lang.String" flushCache="true">
+		DELETE FROM eppo WHERE GUID IN
+		<foreach item="id" collection="array" open="(" separator="," close=")"> 
+			#{id}
+		</foreach> 
+	</delete>
+</mapper>

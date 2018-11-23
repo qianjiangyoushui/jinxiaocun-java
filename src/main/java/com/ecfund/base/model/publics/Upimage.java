@@ -18,7 +18,8 @@ public class Upimage implements java.io.Serializable{
     private String guid;
     
     private String url;
-    
+    private String url2;
+
     private String imagename;
     
     private String imagetype;
@@ -86,5 +87,13 @@ public class Upimage implements java.io.Serializable{
 
     public void setTakedate(Date takedate) {
         this.takedate = takedate;
+    }
+
+    public String getUrl2() {
+        return url2;
+    }
+
+    public void setUrl2(String url2) {
+        this.url2 = url2;
     }
 }

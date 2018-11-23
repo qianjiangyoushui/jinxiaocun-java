@@ -28,6 +28,9 @@
 	<div style="height: 50px; line-height: 50px; background: #f7f7f7; text-align: center; font-size: 16px; border-bottom: 1px solid #bdbbbc; position: relative">
 		原原种(G1)溯源档案信息
 		<c:choose>
+		    <c:when test="${sessionScope.companyid!=null}">
+        		<a href="${wechatPath}president/indexList.action?type=6&companyid=${sessionScope.companyid}" style="position: absolute; left: 10px; top: 8px">
+        	 </c:when>
 			<c:when test="${sessionScope.operate eq '5'}">
 				<a href="${wechatPath}greenhouses/list.action?operate=${sessionScope.operate}" style="position: absolute; left: 10px; top: 8px">
 					<img src="${wechatPath}icon/back.png" style="width: 20px" />
@@ -277,7 +280,7 @@
           </a>
           </div>
 	</div>
-	
+<jsp:include   page="../common/tabbar.jsp" flush="true"/>
 	<script src="${wechatPath}js/jquery-1.8.1.min.js"
 		type="text/javascript"></script>
 	<script src="${wechatPath}js/jquery-weui.min.js"

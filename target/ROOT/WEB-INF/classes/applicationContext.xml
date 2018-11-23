@@ -38,6 +38,7 @@
 <!-- 	<import resource="applicationContext-validation.xml"/> -->
 	<!--数据库读写分离服务  -->
 	<import resource="applicationContext-datasource.xml"/>
+	<import resource="applicationContext-aop.xml"/>
 	<!--缓存服务  -->
 	<import resource="applicationContext-cache.xml"/>
 	<!--邮件任务  -->

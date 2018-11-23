@@ -261,10 +261,7 @@
 			
 			var r = /^(0|[1-9]\d{0,3})(\.\d{1,2})?$/;
 			var z = /([1-9]\d*\.?\d*)|(0\.\d*[1-9])/;
-			if(!r.test(content)){
-				$.toptip('有效成分含量请输入正确数量', 'error');
-				return false;
-			}
+
 			if(!z.test(dosage)){
 				$.toptip('施用总量请输入正确数量', 'error');
 				return false;

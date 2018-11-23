@@ -98,10 +98,13 @@
 					<c:if test="${type eq '5' }">
 					原种(G2)
 					</c:if>
+					<c:if test="${type eq '6' }">
+                    	所用种薯批次
+                    </c:if>
 					</label>
 				</div>
 				<div class="weui-cell__bd">
-					<input class="weui-input" type="text"  placeholder="请选择核心苗档案" name="_seedids"  id="_seedids" style="margin-top: 5px;margin-bottom: 5px;">
+					<input class="weui-input" type="text"  placeholder="请选择所用种子批次" name="_seedids"  id="_seedids" style="margin-top: 5px;margin-bottom: 5px;">
 					<input type="hidden" name="seedid" id="seedid">
 				</div>							
 			</div>
@@ -129,6 +132,8 @@
 		</div>
 	</form>
 	<div style="height: 10px;width: 100%"></div>
+
+	<jsp:include   page="../common/tabbar.jsp" flush="true"/>
 	<script src="${wechatPath}js/jquery-1.8.1.min.js"
 		type="text/javascript"></script>
 	<script src="${wechatPath}js/jquery-weui.min.js"
@@ -252,7 +257,7 @@
 			});
 		
 		$("#_seedids").select({
-			  title: "原种档案",
+			  title: "所用种子档案",
 			  items: [
 			<c:forEach items="${files}" var="file">       
 			    {

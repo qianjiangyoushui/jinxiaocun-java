@@ -1,5 +1,6 @@
 package com.ecfund.base.common;
 
+import java.util.Calendar;
 import java.util.UUID;
 
 /** 
@@ -17,9 +18,10 @@ public class UUIDCreate {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		for (int i = 0; i < 100; i++) {
-			//System.out.println(get());
-		}
+		Calendar calendar = Calendar.getInstance();
+		String month = calendar.get(Calendar.MONTH)+1+"";
+		String day = calendar.get(Calendar.DAY_OF_MONTH)+"";
+		System.out.println(month+"#"+day);
 	}
 
 

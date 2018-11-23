@@ -7,6 +7,8 @@ import java.util.*;
 
 import javax.servlet.http.HttpServletRequest;
 
+import com.ecfund.base.model.publics.Growthrecord;
+import com.ecfund.base.service.publics.GrowthrecordService;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
@@ -29,12 +31,34 @@ public class GrowthAction {
 	
 	@Autowired
 	private UpimageService upimgService;
+	@Autowired
+	private GrowthrecordService growthrecordService;
 	
 	@RequestMapping(value = "/list.action", method = RequestMethod.GET)
 	public String list(String seedfileid, HttpServletRequest request,Model model) throws Exception{
 		String url=request.getRequestURI();
 		url=url.substring(1, url.length());
 		
+		url=url+"?seedfileid="+seedfileid;
+		request.setAttribute("url", url);
+		request.setAttribute("seedfileid", seedfileid);
+		String operate = request.getParameter("operate");
+		request.setAttribute("operate", operate);
+		String relatedid = request.getParameter("relatedid");
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		Growthrecord growthrecord = new Growthrecord();
+		growthrecord.setBatchid(seedfileid);
+		List<Growthrecord> list = growthrecordService.find("findContainImages",growthrecord);
+		String mapString = com.alibaba.fastjson.JSONObject.toJSONString(list);
+		model.addAttribute("recordList",list);
+		model.addAttribute("mapString",mapString);
+		return "G1/growth_list";
+	}
+	@RequestMapping(value = "/list1.action", method = RequestMethod.GET)
+	public String list1(String seedfileid, HttpServletRequest request,Model model) throws Exception{
+		String url=request.getRequestURI();
+		url=url.substring(1, url.length());
+
 		url=url+"?seedfileid="+seedfileid;
 		request.setAttribute("url", url);
 		request.setAttribute("seedfileid", seedfileid);

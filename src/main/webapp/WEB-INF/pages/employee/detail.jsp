@@ -71,6 +71,17 @@
 					</select>
 				</div>							
 			</div>
+
+			<div class="weui-cell">
+				<div class="weui-cell__hd">
+					<label class="weui-label">选择角色</label>
+				</div>
+				<div class="weui-cell__bd">
+					<input class="weui-input" type="text" placeholder="选择角色" name="batch" id="batch" style="margin-top: 5px;margin-bottom: 5px;">
+					<input class="weui-input" type="hidden"name="roles" id="roles" >
+				</div>
+			</div>
+
 		</div>
 	</form>
 
@@ -79,6 +90,7 @@
 	<script src="${wechatPath}js/jquery-weui.min.js"
 		type="text/javascript"></script>
 	<script type="text/javascript">
+	    var batchArray=[];
 		var oldphone='${users.telphone}';
 		$("#submitid").on("click",function(){
 			var username=$("#username").val().replace(/^\s+|\s+$/g,"");
@@ -155,7 +167,43 @@
 				});
 			}
 		}
-		
+		$("#batch").select({
+                      title: "选择角色",
+                      multi: true,
+                      items: [],
+                      onClose:function(e){
+                        batchArray=[];
+                        var data = e.data.valuesArray;
+                        for(let i=0;i<data.length;i++){
+                            batchArray.push(data[i]);
+                        }
+                        $("#roles").val(batchArray);
+                      }
+                    });
+                    $(function(){
+                    $.ajax({
+                        url : "${wechatPath}employee/roleList.action",
+                        type : "GET",
+                        async : false,
+                        dataType : 'json',
+                        data : {
+                        },
+                        success : function(data) {
+                            let items = data;
+                            let persons = [];
+                            batchItem = "[";
+                            for(let i=0;i<items.length;i++){
+                                let item = items[i];
+                                persons.push({title: item.title, value: item.value});
+                             }
+                            $("#batch").select("update", { items: persons })
+                        },
+                        error : function(data) {
+                            $.hideLoading();
+                            $.alert("失败"+data);
+                        }
+                    });
+                    });
 	</script>
 </body>
 </html>

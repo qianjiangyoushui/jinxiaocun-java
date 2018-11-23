@@ -85,6 +85,32 @@ public class BottleseedAction {
 		}
 		
 	}
+	@RequestMapping(value = "/presidentList.action", method = RequestMethod.POST)
+	@ResponseBody
+	public void presidentList(Page page,Seedfile seedfile,HttpServletRequest request,PrintWriter out) {
+		JSONObject json=new JSONObject();
+		try {
+			String companyid=(String)request.getSession().getAttribute("companyid");
+			seedfile.setVisible("1");
+			seedfile.setType("2");
+			seedfile.setCompanyid(companyid);
+			Page pagelist=seedfileService.findpagelist(seedfile, page.getBegin(), page.getPageSize());
+			pagelist.setPageNo(page.getPageNo());
+			JsonConfig config = new JsonConfig();
+			config.registerJsonValueProcessor(Date.class, new DateJsonValueProcessor("yyyy-MM-dd"));
+			JSONObject jsons=JSONObject.fromObject(pagelist, config);
+			json.put("page", jsons);
+			json.put("years", seedfile.getYears());
+		} catch (Exception e) {
+			e.printStackTrace();
+			json.put("msg", "error");
+		}finally{
+			out.println(json.toString());
+			out.flush();
+			out.close();
+		}
+
+	}
 
 	@RequestMapping(value = "/add.action", method = RequestMethod.GET)
 	public String add(Model model, HttpServletRequest request) {

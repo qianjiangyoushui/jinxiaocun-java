@@ -91,7 +91,9 @@
 	    	T.TRANSFORDESC AS transfordesc, 
 	    	T.MECHANICAL AS mechanical, 
 	    	T.STAFFING AS staffing, 
-	    	T.ALTITUDE AS altitude, 
+	    	T.ALTITUDE AS altitude,
+			T.LATITUDE AS latitude,
+			T.LONGITUDE AS longitude,
 	    	T.PH AS ph, 
 	    	T.LEASESTART AS leasestart, 
 	    	T.LEASEEND AS leaseend, 
@@ -127,7 +129,9 @@
 			TRANSFORDESC, 
 			MECHANICAL, 
 			STAFFING, 
-			ALTITUDE, 
+			ALTITUDE,
+			LATITUDE,
+			LONGITUDE,
 			PH, 
 			LEASESTART, 
 			LEASEEND, 
@@ -151,8 +155,10 @@
 			#{transfordesc,jdbcType=VARCHAR}, 
 			#{mechanical,jdbcType=VARCHAR}, 
 			#{staffing,jdbcType=VARCHAR}, 
-			#{altitude,jdbcType=DECIMAL}, 
-			#{ph,jdbcType=DECIMAL}, 
+			#{altitude,jdbcType=DECIMAL},
+			#{latitude,jdbcType=VARCHAR},
+			#{longitude,jdbcType=VARCHAR},
+			#{ph,jdbcType=DECIMAL},
 			#{leasestart,jdbcType=INTEGER}, 
 			#{leaseend,jdbcType=INTEGER}, 
 			#{createdate,jdbcType=DATE}, 
@@ -180,6 +186,8 @@
 			<if test="mechanical != null">MECHANICAL=#{mechanical},</if>
 			<if test="staffing != null">STAFFING=#{staffing},</if>
 			<if test="altitude != null">ALTITUDE=#{altitude},</if>
+			<if test="latitude != null">LATITUDE=#{latitude},</if>
+			<if test="longitude != null">LONGITUDE=#{longitude},</if>
 			<if test="ph != null">PH=#{ph},</if>
 			<if test="leasestart != null">LEASESTART=#{leasestart},</if>
 			<if test="leaseend != null">LEASEEND=#{leaseend},</if>
@@ -220,7 +228,9 @@
 	    	T.MECHANICAL AS mechanical, 
 	    	T.STAFFING AS staffing, 
 	    	T.ALTITUDE AS altitude, 
-	    	T.PH AS ph, 
+	    	T.LATITUDE AS latitude,
+			T.LONGITUDE AS longitude,
+			T.PH AS ph,
 	    	T.LEASESTART AS leasestart, 
 	    	T.LEASEEND AS leaseend, 
 	    	T.CREATEDATE AS createdate, 
@@ -228,6 +238,8 @@
 	    	T.url as url ,
 	    	p.guid as p_guid ,
 	    	p.plotname as plotname ,
+	    	p.plotcode as plotcode ,
+	    	p.plantarea as p_plantarea ,
 	    	p.irrigatetype as irrigatetype,
 	    	p.irrigbrand as irrigbrand,
 	    	p.wellsamount as wellsamount,
@@ -297,6 +309,8 @@
 		<result column="mechanical" property="mechanical"/>
 		<result column="staffing" property="staffing"/>
 		<result column="altitude" property="altitude"/>
+		<result column="latitude" property="latitude"/>
+		<result column="longitude" property="longitude"/>
 		<result column="ph" property="ph"/>
 		<result column="leasestart" property="leasestart"/>
 		<result column="leaseend" property="leaseend"/>
@@ -307,6 +321,7 @@
 			<id column="p_guid" property="guid"/>
 			<result column="plotname" property="plotname"/>
 			<result column="plotcode" property="plotcode"/>
+			<result column="p_plantarea" property="plantarea"/>
 			<result column="irrigatetype" property="irrigatetype"/>
 			<result column="irrigbrand" property="irrigbrand"/>
 			<result column="wellsamount" property="wellsamount"/>

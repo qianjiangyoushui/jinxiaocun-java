@@ -13,11 +13,11 @@
 			http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.1.xsd 
 			http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee-3.1.xsd 
 			http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.1.xsd">
-<!-- 	<bean id="templateMsgSend" class="com.ecfund.base.common.aop.TemplateMsgSend" lazy-init ="false"/> -->
-<!-- 	<aop:config> -->
-<!-- 		<aop:aspect ref="templateMsgSend"> -->
-<!-- 			<aop:pointcut expression="execution(* com.ecfund.base.service.PayrecordService.insertPayRecordAndBills(com.ecfund.base.model.Payrecord,com.ecfund.base.model.Bills)) and args(payrecord, bill)" id="payMsg"/> -->
-<!-- 			<aop:after pointcut-ref="payMsg" method="payMsg" arg-names="payrecord, bill"/> -->
-<!-- 		</aop:aspect> -->
-<!-- 	</aop:config>   -->
+ 	<bean id="templateMsgSend" class="com.ecfund.base.common.aop.TemplateMsgSend" lazy-init ="false"/>
+ 	<aop:config>
+ 		<aop:aspect ref="templateMsgSend">
+ 			<aop:pointcut expression="execution(* com.ecfund.base.service.users.UsersService.regist(com.ecfund.base.model.users.Users,com.ecfund.base.model.users.Company)) and args(users, company)" id="payMsg"/>
+ 			<aop:after pointcut-ref="payMsg" method="payMsg" arg-names="users, company"/>
+ 		</aop:aspect>
+ 	</aop:config>
 </beans>

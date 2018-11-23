@@ -45,6 +45,8 @@ public class Company implements java.io.Serializable {
 	private String orgtype;
 	private int order;
 
+	private String[] provinceArray;
+
 	public String getGuid() {
 		return guid;
 	}
@@ -139,5 +141,13 @@ public class Company implements java.io.Serializable {
 
 	public void setStatus(String status) {
 		this.status = status;
+	}
+
+	public String[] getProvinceArray() {
+		return provinceArray;
+	}
+
+	public void setProvinceArray(String[] provinceArray) {
+		this.provinceArray = provinceArray;
 	}
 }

@@ -27,6 +27,8 @@ public class Plots implements java.io.Serializable{
     private String plotname;
 
     private String plotcode;
+
+    private BigDecimal plantarea;
     
     private String irrigatetype;
     
@@ -187,5 +189,13 @@ public class Plots implements java.io.Serializable{
 
     public void setPlotcode(String plotcode) {
         this.plotcode = plotcode;
+    }
+
+    public BigDecimal getPlantarea() {
+        return plantarea;
+    }
+
+    public void setPlantarea(BigDecimal plantarea) {
+        this.plantarea = plantarea;
     }
 }

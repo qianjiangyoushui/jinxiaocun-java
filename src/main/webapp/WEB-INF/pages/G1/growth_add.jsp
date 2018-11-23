@@ -225,7 +225,7 @@
 		</div>
 	</form>
 	
-	
+	<jsp:include   page="../common/tabbar.jsp" flush="true"/>
 	<script src="${wechatPath}js/jquery-1.8.1.min.js" type="text/javascript"></script>
 	<script src="${wechatPath}js/jquery-weui.min.js" type="text/javascript"></script>
 	<script src="${wechatPath}js/swiper.js"></script>
@@ -307,7 +307,7 @@
 			}
 			
 			$.ajax({
-				url : "${wechatPath}upload/save.action",
+				url : "${wechatPath}upload/growthsave.action",
 				type : "POST",
 				async : false,
 				dataType : 'json',

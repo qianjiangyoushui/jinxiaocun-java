@@ -69,10 +69,10 @@
 			
 			<div class="weui-cell">
 				<div class="weui-cell__hd">
-					<label class="weui-label">种植土豆年份</label>
+					<label class="weui-label">种植起始年份</label>
 				</div>
 				<div class="weui-cell__bd">
-					<input class="weui-input" type="text" name="plantyears" id="plantyears"  placeholder="请输入种植马铃薯年份" style="margin-top: 5px;margin-bottom: 5px;">
+					<input class="weui-input" type="text" name="plantyears" id="plantyears"  placeholder="请输入种植马铃薯起始年份" style="margin-top: 5px;margin-bottom: 5px;">
 				</div>
 			</div>
 			
@@ -233,7 +233,7 @@
 			}
 			
 			var plantyears=$("#plantyears").val().replace(/^\s+|\s+$/g,"");
-			var r = /^(0|[1-9]\d{0,2})(\.\d{1,2})?$/;
+			var r = /^\d{4}$/;
 			if(!r.test(plantyears)){
 				$.toptip('请输入正确种植年份,正整数', 'error');
 				return false;

@@ -26,8 +26,14 @@
 			<if test="seedid != null and seedid != ''">
 				AND T.SEEDID = #{seedid}
 			</if>
+			<if test="trainid != null and trainid != ''">
+				AND T.TRAINID = #{trainid}
+			</if>
 			<if test="placeid != null and placeid != ''">
 				AND T.PLACEID = #{placeid}
+			</if>
+			<if test="mediumid != null and mediumid != ''">
+				AND T.MEDIUMID = #{mediumid}
 			</if>
 			<if test="years != null and years != ''">
 				AND T.YEARS = #{years}
@@ -40,6 +46,12 @@
 			</if>
 			<if test="bottleamount != null and bottleamount != ''">
 				AND T.BOTTLEAMOUNT = #{bottleamount}
+			</if>
+			<if test="expandbottle != null and expandbottle != ''">
+				AND T.EXPANDBOTTLE = #{expandbottle}
+			</if>
+			<if test="usebottle != null and usebottle != ''">
+				AND T.USEBOTTLE = #{usebottle}
 			</if>
 			<if test="strainamount != null and strainamount != ''">
 				AND T.STRAINAMOUNT = #{strainamount}
@@ -83,6 +95,9 @@
 			<if test="operatorid != null and operatorid != ''">
 				AND T.OPERATORID = #{operatorid}
 			</if>
+            <if test="yearBetween != null and yearBetween != ''">
+               AND  YEARS between (#{yearBetween}-1) and #{yearBetween}
+            </if>
 		</where>
 	</sql>
 
@@ -96,11 +111,15 @@
 		T.VARIETY AS variety,
 		T.LEVEL AS level,
 		T.SEEDID AS seedid,
+		T.TRAINID AS trainid,
 		T.PLACEID AS placeid,
+		T.MEDIUMID AS mediumid,
 		T.YEARS AS years,
 		T.STARTDATE AS startdate,
 		T.ENDDATE AS enddate,
 		T.BOTTLEAMOUNT AS bottleamount,
+		T.expandbottle AS expandbottle,
+		T.usebottle AS usebottle,
 		T.STRAINAMOUNT AS strainamount,
 		T.STUBBLE AS stubble,
 		T.STOPWATERDATE AS stopwaterdate,
@@ -133,7 +152,7 @@
 		FROM seedfile T  
 		where T.type in ('3','4','5')  
 		and T.companyid =#{companyid}  
-		ORDER BY T.CREATEDATE 
+		ORDER BY T.CREATEDATE DESC
 	</select>
 
 	<!-- 获取总记录数语句 -->
@@ -153,11 +172,15 @@
 		VARIETY,
 		LEVEL,
 		SEEDID,
+		TRAINID,
 		PLACEID,
+		MEDIUMID,
 		YEARS,
 		STARTDATE,
 		ENDDATE,
 		BOTTLEAMOUNT,
+		EXPANDBOTTLE,
+		USEBOTTLE,
 		STRAINAMOUNT,
 		STUBBLE,
 		STOPWATERDATE,
@@ -183,11 +206,15 @@
 		#{variety,jdbcType=VARCHAR},
 		#{level,jdbcType=VARCHAR},
 		#{seedid,jdbcType=VARCHAR},
+		#{trainid,jdbcType=VARCHAR},
 		#{placeid,jdbcType=VARCHAR},
+		#{mediumid,jdbcType=VARCHAR},
 		#{years,jdbcType=INTEGER},
 		#{startdate,jdbcType=DATE},
 		#{enddate,jdbcType=DATE},
 		#{bottleamount,jdbcType=INTEGER},
+		#{expandbottle,jdbcType=INTEGER},
+		#{usebottle,jdbcType=INTEGER},
 		#{strainamount,jdbcType=INTEGER},
 		#{stubble,jdbcType=INTEGER},
 		#{stopwaterdate,jdbcType=DATE},
@@ -217,11 +244,15 @@
 			<if test="variety != null">VARIETY=#{variety},</if>
 			<if test="level != null">LEVEL=#{level},</if>
 			<if test="seedid != null">SEEDID=#{seedid},</if>
+			<if test="trainid != null">TRAINID=#{trainid},</if>
 			<if test="placeid != null">PLACEID=#{placeid},</if>
+			<if test="mediumid != null">MEDIUMID=#{mediumid},</if>
 			<if test="years != null">YEARS=#{years},</if>
 			<if test="startdate != null">STARTDATE=#{startdate},</if>
 			<if test="enddate != null">ENDDATE=#{enddate},</if>
 			<if test="bottleamount != null">BOTTLEAMOUNT=#{bottleamount},</if>
+			<if test="expandbottle != null">EXPANDBOTTLE=#{expandbottle},</if>
+			<if test="usebottle != null">usebottle=#{usebottle},</if>
 			<if test="strainamount != null">STRAINAMOUNT=#{strainamount},</if>
 			<if test="stubble != null">STUBBLE=#{stubble},</if>
 			<if test="stopwaterdate != null">STOPWATERDATE=#{stopwaterdate},</if>
@@ -264,11 +295,15 @@
 		T.VARIETY AS variety,
 		T.LEVEL AS level,
 		T.SEEDID AS seedid,
+		T.TRAINID AS trainid,
 		T.PLACEID AS placeid,
+		T.MEDIUMID AS mediumid,
 		T.YEARS AS years,
 		T.STARTDATE AS startdate,
 		T.ENDDATE AS enddate,
 		T.BOTTLEAMOUNT AS bottleamount,
+		T.EXPANDBOTTLE AS expandbottle,
+		T.USEBOTTLE AS usebottle,
 		T.STRAINAMOUNT AS strainamount,
 		T.STUBBLE AS stubble,
 		T.STOPWATERDATE AS stopwaterdate,
@@ -301,7 +336,7 @@
 		left join dictionary d2
 		on T.level =d2.keyvalue and d2.belongsid='3'
 		<include refid="WhereSQL" />
-		ORDER BY T.CREATEDATE
+		ORDER BY T.CREATEDATE DESC
 	</select>
 
 	<select id="findg0" resultMap="g0result" parameterType="Seedfile"
@@ -313,11 +348,15 @@
 		T.VARIETY AS variety,
 		T.LEVEL AS level,
 		T.SEEDID AS seedid,
+		T.TRAINID AS trainid,
 		T.PLACEID AS placeid,
+		T.MEDIUMID AS mediumid,
 		T.YEARS AS years,
 		T.STARTDATE AS startdate,
 		T.ENDDATE AS enddate,
 		T.BOTTLEAMOUNT AS bottleamount,
+		T.EXPANDBOTTLE AS expandbottle,
+		T.USEBOTTLE AS usebottle,
 		T.STRAINAMOUNT AS strainamount,
 		T.STUBBLE AS stubble,
 		T.STOPWATERDATE AS stopwaterdate,
@@ -350,7 +389,7 @@
 		left join dictionary d2
 		on T.level =d2.keyvalue and d2.belongsid='3'
 		<include refid="WhereSQL" />
-		ORDER BY T.CREATEDATE
+		ORDER BY T.CREATEDATE DESC
 	</select>
 	
 	
@@ -363,7 +402,9 @@
 		T.VARIETY AS variety,
 		T.LEVEL AS level,
 		T.SEEDID AS seedid,
+		T.TRAINID AS trainid,
 		T.PLACEID AS placeid,
+		T.MEDIUMID AS mediumid,
 		T.YEARS AS years,
 		T.STARTDATE AS startdate,
 		T.ENDDATE AS enddate,
@@ -415,7 +456,7 @@
 		on T.level =d2.keyvalue and d2.belongsid='3'
 		left join plots p on p.guid=T.placeid
 		<include refid="WhereSQL" />
-		ORDER BY T.CREATEDATE
+		ORDER BY T.CREATEDATE DESC
 	</select>
 	
 	
@@ -428,7 +469,9 @@
 		T.VARIETY AS variety,
 		T.LEVEL AS level,
 		T.SEEDID AS seedid,
+		T.TRAINID AS trainid,
 		T.PLACEID AS placeid,
+		T.MEDIUMID AS mediumid,
 		T.YEARS AS years,
 		T.STARTDATE AS startdate,
 		T.ENDDATE AS enddate,
@@ -468,7 +511,7 @@
 		on T.level =d2.keyvalue and d2.belongsid='3'
 		LEFT JOIN greenhouses g ON T.placeid = g.guid
 		<include refid="WhereSQL" />
-		ORDER BY T.CREATEDATE
+		ORDER BY T.CREATEDATE DESC
 	</select>
 	
 	
@@ -480,11 +523,15 @@
 		<result property="variety" column="variety" />
 		<result property="level" column="level" />
 		<result property="seedid" column="seedid" />
+		<result property="trainid" column="trainid" />
 		<result property="placeid" column="placeid" />
+		<result property="mediumid" column="mediumid" />
 		<result property="years" column="years" />
 		<result property="startdate" column="startdate" />
 		<result property="enddate" column="enddate" />
 		<result property="bottleamount" column="bottleamount" />
+		<result property="expandbottle" column="expandbottle" />
+		<result property="usebottle" column="usebottle" />
 		<result property="strainamount" column="strainamount" />
 		<result property="stubble" column="stubble" />
 		<result property="stopwaterdate" column="stopwaterdate" />
@@ -527,11 +574,15 @@
 		<result property="variety" column="variety" />
 		<result property="level" column="level" />
 		<result property="seedid" column="seedid" />
+		<result property="trainid" column="trainid" />
 		<result property="placeid" column="placeid" />
+		<result property="mediumid" column="mediumid" />
 		<result property="years" column="years" />
 		<result property="startdate" column="startdate" />
 		<result property="enddate" column="enddate" />
 		<result property="bottleamount" column="bottleamount" />
+		<result property="expandbottle" column="expandbottle" />
+		<result property="usebottle" column="usebottle" />
 		<result property="strainamount" column="strainamount" />
 		<result property="stubble" column="stubble" />
 		<result property="stopwaterdate" column="stopwaterdate" />
@@ -591,11 +642,15 @@
 		<result property="variety" column="variety" />
 		<result property="level" column="level" />
 		<result property="seedid" column="seedid" />
+		<result property="trainid" column="trainid" />
 		<result property="placeid" column="placeid" />
+		<result property="mediumid" column="mediumid" />
 		<result property="years" column="years" />
 		<result property="startdate" column="startdate" />
 		<result property="enddate" column="enddate" />
 		<result property="bottleamount" column="bottleamount" />
+		<result property="expandbottle" column="expandbottle" />
+		<result property="usebottle" column="usebottle" />
 		<result property="strainamount" column="strainamount" />
 		<result property="stubble" column="stubble" />
 		<result property="stopwaterdate" column="stopwaterdate" />

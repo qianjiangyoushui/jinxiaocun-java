@@ -29,7 +29,7 @@
   margin-bottom: 7px;
   height: 70px;
   text-align: center;
-  line-height:70px; 
+  line-height:70px;
   font-size: 16px;
   top: 50%
 }
@@ -40,7 +40,7 @@
   margin-bottom: 7px;
   margin-right:5px;
   text-align: center;
-  line-height:70px; 
+  line-height:70px;
   height: 70px;
   font-size: 16px;
 }
@@ -54,105 +54,28 @@ span {
 	</div>
 
 	<div class="weui-grids">
-            <a href="${wechatPath}seedfile/list.action" class="weui-grid js_grid">
+	<c:forEach items="${menuList}" var="menu">
+            <a href="${wechatPath}${menu.url}" class="weui-grid js_grid">
                 <div class="weui-grid__icon">
-                  <img src="${wechatPath}icon/hexin.png" alt="">
+                  <img src="${wechatPath}${menu.icon}" alt="">
                 </div>
                 <p class="weui-grid__label">
-                  核心苗档案
+                  ${menu.name}
                 </p>
             </a>
-            <a href="javascript:;" id="g0" class="weui-grid js_grid">
-              <div class="weui-grid__icon">
-                <img src="${wechatPath}icon/zupei.png" alt="">
-              </div>
-              <p class="weui-grid__label">
-                瓶苗(G))管理
-              </p>
-            </a>
-           <a href="${wechatPath}greenhouses/index.action" id="g1"  class="weui-grid js_grid">
-              <div class="weui-grid__icon">
-                <img src="${wechatPath}icon/peng.png" alt="">
-              </div>
-              <p class="weui-grid__label">
-                原原种(G1)管理
-              </p>
-           </a>
-           <a href="${wechatPath}g2g3/index.action?type=4" id="g2" class="weui-grid js_grid">
-              <div class="weui-grid__icon">
-                <img src="${wechatPath}icon/farm.png" alt="">
-              </div>
-              <p class="weui-grid__label">
-                原种(G2)管理
-              </p>
-           </a>
-           <a href="${wechatPath}g2g3/index.action?type=5" id="g3" class="weui-grid js_grid">
-              <div class="weui-grid__icon">
-                <img src="${wechatPath}icon/farm_grid_farm.png" alt="">
-              </div>
-              <p class="weui-grid__label">
-                一级种(G3)管理
-              </p>
-           </a>
-           <a href="${wechatPath}sales/index.action" id="sales" class="weui-grid js_grid">
-              <div class="weui-grid__icon">
-                <img src="${wechatPath}icon/sale.png" alt="">
-              </div>
-              <p class="weui-grid__label">
-                销售售后管理
-              </p>
-           </a>
-           <a href="${wechatPath}depot/index.action" id="depotid" class="weui-grid js_grid">
-              <div class="weui-grid__icon">
-                <img src="${wechatPath}icon/ku.png" alt="">
-              </div>
-              <p class="weui-grid__label">
-                仓储管理
-              </p>
-           </a>
-           <a href="javascript:;" id="employeeid" class="weui-grid js_grid">
-              <div class="weui-grid__icon">
-                <img src="${wechatPath}icon/users.png" alt="">
-              </div>
-              <p class="weui-grid__label">
-                职工用户管理
-              </p>
-           </a>
-           <a href="${wechatPath}setup/index.action" id="depotid" class="weui-grid js_grid">
-              <div class="weui-grid__icon">
-                <img src="${wechatPath}icon/setting.png" alt="">
-              </div>
-              <p class="weui-grid__label">
-                设置
-              </p>
-           </a>
-           <a href="${wechatPath}tasks/index.action"  class="weui-grid js_grid">
-              <div class="weui-grid__icon">
-                <img src="${wechatPath}icon/renwu.png" alt="">
-              </div>
-              <p class="weui-grid__label">
-                我的任务
-              </p>
-           </a>
-           <a href="${wechatPath}workorder/index.action" class="weui-grid js_grid">
-              <div class="weui-grid__icon">
-                <img src="${wechatPath}icon/gongdan.png" alt="">
-              </div>
-              <p class="weui-grid__label">
-                工单指派
-              </p>
-           </a>
+    </c:forEach>
      </div>
 	<hr/>
-	
+
 	<div class="weui-footer">
 	  <p class="weui-footer__links">
 	    <a href="javascript:void(0);" class="weui-footer__link">${sessionScope.user.company.companyname}</a>
 	  </p>
 	  <p class="weui-footer__text">种薯质量可追溯</p>
 	</div>
-	
-	<script src="${wechatPath}js/jquery-1.8.1.min.js" type="text/javascript"></script>
+	<jsp:include   page="../common/tabbar.jsp" flush="true"/>
+  	<script src="${wechatPath}js/jquery-1.8.1.min.js" type="text/javascript"></script>
+  	<script src="${wechatPath}js/weui.min.js" type="text/javascript"></script>
 	<script src="${wechatPath}js/jquery-weui.min.js" type="text/javascript"></script>
 	<script type="text/javascript">
 	var departid='${sessionScope.user.depart.departid}';

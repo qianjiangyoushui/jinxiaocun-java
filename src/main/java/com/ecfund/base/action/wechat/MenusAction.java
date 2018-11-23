@@ -38,6 +38,7 @@ public class MenusAction {
 		List<Menus> list = new ArrayList();
 		for (Roles role:roleList
 			 ) {
+			if("2".equals(role.getDescription()))continue;
 			role = userService.findRoleMenulist(role);
 			list.addAll(role.getMenuList());
 		}

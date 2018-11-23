@@ -35,6 +35,9 @@
 		<c:if test="${type eq '5' }">
 		一级种(G3)溯源信息管理
 		</c:if>
+		<c:if test="${type eq '6' }">
+         商品薯(G4)溯源信息管理
+         </c:if>
 		<a href="${wechatPath}g2g3/index.action?type=${type}" style="position: absolute; left: 10px; top: 8px">
 			<img src="${wechatPath}icon/back.png" style="width: 20px" />
 		</a>
@@ -75,7 +78,7 @@
 
 	<div style="height: 555px; width: 100%"></div>
 
-
+<jsp:include   page="../common/tabbar.jsp" flush="true"/>
 	<script src="${wechatPath}js/jquery-1.8.1.min.js"
 		type="text/javascript"></script>
 		<script src="${wechatPath}js/jquery-weui.min.js"

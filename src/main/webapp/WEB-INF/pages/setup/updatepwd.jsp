@@ -61,6 +61,7 @@
 		<div style="width: 100%;height: 5px;"></div>
 		<div style="width: 100%;height: 25px;<c:if test="${empty msg}">display: none;</c:if>"  ><span style="color: red;">${msg}</span></div>
 	</form>
+	<jsp:include   page="../common/tabbar.jsp" flush="true"/>
 	<script src="${wechatPath}js/jquery-1.8.1.min.js" type="text/javascript"></script>
 	<script src="${wechatPath}js/jquery-weui.min.js" type="text/javascript"></script>
 	<script>

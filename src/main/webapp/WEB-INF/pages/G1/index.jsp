@@ -120,7 +120,7 @@
 		</a> --%>
 	</div>
 	
-	
+	<jsp:include   page="../common/tabbar.jsp" flush="true"/>
 	<script src="${wechatPath}js/jquery-1.8.1.min.js" type="text/javascript"></script>
 	<script src="${wechatPath}js/jquery-weui.min.js" type="text/javascript"></script>
 <!-- 	分页加载	 -->

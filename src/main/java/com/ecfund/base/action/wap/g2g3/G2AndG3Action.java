@@ -102,6 +102,32 @@ public class G2AndG3Action {
 		}
 
 	}
+	@RequestMapping(value = "/presidentList.action", method = RequestMethod.POST)
+	@ResponseBody
+	public void presidentList(Page page, Seedfile seedfile, HttpServletRequest request, PrintWriter out) {
+		JSONObject json = new JSONObject();
+		try {
+			String  companyid = (String) request.getSession().getAttribute("companyid");
+			seedfile.setVisible("1");
+			seedfile.setType(seedfile.getType());
+			seedfile.setCompanyid(companyid);
+			Page pagelist = seedfileService.findpageG2G3list(seedfile, page.getBegin(), page.getPageSize());
+			pagelist.setPageNo(page.getPageNo());
+			JsonConfig config = new JsonConfig();
+			config.registerJsonValueProcessor(Date.class, new DateJsonValueProcessor("yyyy-MM-dd"));
+			JSONObject jsons = JSONObject.fromObject(pagelist, config);
+			json.put("page", jsons);
+			json.put("years", seedfile.getYears());
+		} catch (Exception e) {
+			e.printStackTrace();
+			json.put("msg", "error");
+		} finally {
+			out.println(json.toString());
+			out.flush();
+			out.close();
+		}
+
+	}
 
 	@RequestMapping(value = "/add.action", method = RequestMethod.GET)
 	public String add(String type, Model model, HttpServletRequest request) {
@@ -127,6 +153,8 @@ public class G2AndG3Action {
 				seedfile.setType("3");
 			} else if ("5".equals(type)) {
 				seedfile.setType("4");
+			}else if("6".equals(type)){
+				seedfile.setType("5");
 			}
 
 			List<Seedfile> files = seedfileService.find(seedfile);
@@ -200,6 +228,7 @@ public class G2AndG3Action {
 			case "3":return "G1";
 			case "4":return "G2";
 			case "5":return "G3";
+			case "6":return "G4";
 			default:return "G";
 		}
 	}
@@ -385,7 +414,7 @@ public class G2AndG3Action {
 	 */
 	private String buildBatchCode(String year, String palceid, String variety, String level) throws  Exception{
 		String batchCode="";
-		if("5".equals(level)||"4".equals(level)){
+		if("6".equals(level)||"5".equals(level)||"4".equals(level)){
 			//原种一级种
 			Plots plots = new Plots();
 			plots.setGuid(palceid);

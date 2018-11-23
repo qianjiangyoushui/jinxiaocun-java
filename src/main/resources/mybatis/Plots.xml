@@ -63,6 +63,7 @@
 	    	T.FARMID AS farmid, 
 	    	T.PLOTNAME AS plotname, 
 	    	T.PLOTCODE AS plotcode,
+	    	T.PLANTAREA AS plantarea,
 	    	T.IRRIGATETYPE AS irrigatetype,
 	    	T.IRRIGBRAND AS irrigbrand, 
 	    	T.WELLSAMOUNT AS wellsamount, 
@@ -125,6 +126,7 @@
 	    	T.FARMID AS farmid, 
 	    	T.PLOTNAME AS plotname, 
 	    	T.PLOTCODE AS plotcode,
+	    	T.PLANTAREA AS plantarea,
 	    	T.IRRIGATETYPE AS irrigatetype,
 	    	T.IRRIGBRAND AS irrigbrand, 
 	    	T.WELLSAMOUNT AS wellsamount, 
@@ -155,6 +157,7 @@
 			FARMID, 
 			PLOTNAME, 
 			PLOTCODE,
+			PLANTAREA,
 			IRRIGATETYPE,
 			IRRIGBRAND, 
 			WELLSAMOUNT, 
@@ -173,6 +176,7 @@
 			#{farmid,jdbcType=VARCHAR}, 
 			#{plotname,jdbcType=VARCHAR}, 
 			#{plotcode,jdbcType=VARCHAR},
+			#{plantarea,jdbcType=DECIMAL},
 			#{irrigatetype,jdbcType=VARCHAR},
 			#{irrigbrand,jdbcType=VARCHAR}, 
 			#{wellsamount,jdbcType=INTEGER}, 
@@ -228,6 +232,7 @@
 		<result property="farmid" column="farmid" />
 		<result property="plotname" column="plotname" />
 		<result property="plotcode" column="plotcode" />
+		<result property="plantarea" column="plantarea" />
 		<result property="irrigatetype" column="irrigatetype" />
 		<result property="irrigbrand" column="irrigbrand" />
 		<result property="wellsamount" column="wellsamount" />

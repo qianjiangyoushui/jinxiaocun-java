@@ -46,7 +46,7 @@ public class UsersAction {
 			user.setPassword(MD5Utils.encryString(user.getPassword()));
 			user = userService.view(user);
 			if (user != null) {
-				if(user.getCompany().getStatus().equals("2")){
+				if(user.getCompany()==null||user.getCompany().getStatus().equals("2")){
 					request.getSession().setAttribute("user", user);
 					json.put("msg", "ok");
 				}else{
@@ -98,7 +98,7 @@ public class UsersAction {
 	 * 检查电话号码
 	 * 
 	 * @param out
-	 * @param request
+	 * @param
 	 */
 	@RequestMapping(value = "/checkphone.action", method = RequestMethod.POST)
 	@ResponseBody
@@ -128,7 +128,7 @@ public class UsersAction {
 	 * 检查电话号码
 	 * 
 	 * @param out
-	 * @param request
+	 * @param
 	 */
 	@RequestMapping(value = "/checkcompany.action", method = RequestMethod.POST)
 	@ResponseBody

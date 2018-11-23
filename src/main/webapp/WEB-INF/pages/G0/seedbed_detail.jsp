@@ -115,6 +115,7 @@
 			<span tyle="color: #FFFFFF">苗床详细信息</span>
 		</div>
 	</div>
+	<jsp:include   page="../common/tabbar.jsp" flush="true"/>
 	<script src="${wechatPath}js/jquery-1.8.1.min.js" type="text/javascript"></script>
 	<script src="${wechatPath}js/jquery-weui.min.js" type="text/javascript"></script>
 	

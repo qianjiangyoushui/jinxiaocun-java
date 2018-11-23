@@ -1,5 +1,7 @@
 package com.ecfund.base.model.eliteG1;
 
+import com.alibaba.fastjson.annotation.JSONField;
+
 import java.util.Date;
 import java.util.Date;
 
@@ -19,7 +21,8 @@ public class Eppo implements java.io.Serializable{
     private String guid;
     
     private String seedfileid;
-    
+
+    @JSONField(format = "yyyy-MM-dd")
     private Date dodate;
     
     private String usetype;

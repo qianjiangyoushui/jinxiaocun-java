@@ -25,6 +25,7 @@
 				不好意思，系统挂了.......!
 			</p>
 		</div>
+		<jsp:include   page="../common/tabbar.jsp" flush="true"/>
 <!-- 		<div class="weui-msg__opr-area"> -->
 <!-- 			<p class="weui-btn-area"> -->
 <!-- 				<a href="javascript:;" class="weui-btn weui-btn_primary">推荐操作</a> <a -->

@@ -92,7 +92,35 @@ public class GreenhousesAction{
 			out.close();
 		}
 	}
-	
+
+	@RequestMapping(value = "/presidentList.action", method = RequestMethod.POST)
+	@ResponseBody
+	public void presidentList(Page page,Seedfile seedfile,HttpServletRequest request,PrintWriter out){
+		JSONObject json=new JSONObject();
+		try {
+			String companyid =(String) request.getSession().getAttribute("companyid");
+			seedfile.setCompanyid(companyid);
+			seedfile.setLevel("3");
+			seedfile.setType("3");
+			seedfile.setVisible("1");
+			seedfile.setYears(null);
+			Page listpage =seedfileService.findg1pagelist(seedfile,page.getBegin(), page.getPageSize());
+			listpage.setPageNo(page.getPageNo());
+			JsonConfig config = new JsonConfig();
+			config.registerJsonValueProcessor(Date.class, new DateJsonValueProcessor("yyyy-MM-dd"));
+			JSONObject jsons=JSONObject.fromObject(listpage, config);
+			json.put("page", jsons);
+			json.put("years", seedfile.getYears());
+		} catch (Exception e) {
+			e.printStackTrace();
+			json.put("msg", "error");
+		}finally{
+			out.println(json.toString());
+			out.flush();
+			out.close();
+		}
+	}
+
 	@RequestMapping(value = "/pageG1Seesfile.action", method = RequestMethod.POST)
 	@ResponseBody
 	public void pageG1Seesfile(Page page,HttpServletRequest request,PrintWriter out){
@@ -116,7 +144,8 @@ public class GreenhousesAction{
 			out.close();
 		}
 	}
-	
+
+
 	@RequestMapping(value = "/list.action", method = RequestMethod.GET)
 	public String list(Page page,PrintWriter out, String operate,HttpServletRequest request, HttpServletResponse response,Model model) {
 		/*try {

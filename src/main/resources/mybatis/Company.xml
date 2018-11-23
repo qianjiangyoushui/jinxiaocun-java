@@ -65,7 +65,45 @@
     	FROM company T
 		<include refid="WhereSQL" />
 	</select>
-	
+	<select id="findIn" resultType="Company" parameterType="Company" flushCache="false" useCache="true">
+    	SELECT
+	    	T.GUID AS guid,
+	    	T.COMPANYNAME AS companyname,
+	    	T.CONTACTPERSON AS contactperson,
+	    	T.PROVINCE AS province,
+	    	T.CITY AS city,
+	    	T.AREA AS area,
+	    	T.TOWN AS town,
+	    	T.PLANTAREA AS plantarea,
+	    	T.PLANTYEARS AS plantyears,
+	    	T.REGISTDATE AS registdate,
+	    	T.OPERATORID AS operatorid,
+	    	T.STATUS AS status
+    	FROM company T WHERE T.status = 2  AND
+		T.PROVINCE like  CONCAT('%',#{province},'%')
+	</select>
+		<!-- 查找语句 -->
+	<select id="findByProvincelike" resultType="Company" parameterType="java.lang.String"  flushCache="false" useCache="true">
+    	SELECT
+	    	T.GUID AS guid,
+	    	T.COMPANYNAME AS companyname,
+	    	T.CONTACTPERSON AS contactperson,
+	    	T.PROVINCE AS province,
+	    	T.CITY AS city,
+	    	T.AREA AS area,
+	    	T.TOWN AS town,
+	    	T.PLANTAREA AS plantarea,
+	    	T.PLANTYEARS AS plantyears,
+	    	T.REGISTDATE AS registdate,
+	    	T.OPERATORID AS operatorid,
+	    	T.STATUS AS status
+    	FROM company T
+		WHERE T.status = 2  AND PROVINCE IN
+		<foreach item="id" collection="provinceArray" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</select>
+
 	<!-- 获取总记录数语句 -->
 	<select id="findCount" resultType="java.lang.Integer" parameterType="Company" flushCache="false" useCache="true">
     	SELECT COUNT(*)  FROM company T

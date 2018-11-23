@@ -3,7 +3,6 @@ import java.io.*;
 import java.awt.*;
 import java.awt.image.*;
 import javax.imageio.ImageIO;
-import com.sun.image.codec.jpeg.*;
 /**
  * 图片压缩处理
  * @author 崔素强
@@ -12,13 +11,9 @@ public class ImgCompress {
 	private Image img;
 	private int width;
 	private int height;
-	private static String infilePath="D:\\tudouji\\images\\15947217447\\77-16061Q44U6444.jpg";
-	private static String outfilePath="D:\\tudouji\\images\\15947217447\\77-16061Q44U6444-suo.jpg";
-	@SuppressWarnings("deprecation")
-	public static void main(String[] args) throws Exception {
-		ImgCompress imgCom = new ImgCompress(infilePath,outfilePath);
-		imgCom.resizeFix(79, 79);
-	}
+	private  String infilePath="";
+	private  String outfilePath="";
+
 	/**
 	 * 默认构造函数
 	 */
@@ -69,15 +64,22 @@ public class ImgCompress {
 	 * @param h int 新高度
 	 */
 	public void resize(int w, int h) throws IOException {
-		// SCALE_SMOOTH 的缩略算法 生成缩略图片的平滑度的 优先级比速度高 生成的图片质量比较好 但速度慢
-		BufferedImage image = new BufferedImage(w, h,BufferedImage.TYPE_INT_RGB ); 
-		image.getGraphics().drawImage(img, 0, 0, w, h, null); // 绘制缩小后的图
-		File destFile = new File(outfilePath);
-		FileOutputStream out = new FileOutputStream(destFile); // 输出到文件流
-		// 可以正常实现bmp、png、gif转jpg
-		JPEGImageEncoder encoder = JPEGCodec.createJPEGEncoder(out);
-		encoder.encode(image); // JPEG编码
-		out.close();
+//		synchronized(this) {
+			// SCALE_SMOOTH 的缩略算法 生成缩略图片的平滑度的 优先级比速度高 生成的图片质量比较好 但速度慢
+			BufferedImage image = new BufferedImage(w, h, BufferedImage.TYPE_INT_RGB);
+			image.getGraphics().drawImage(img, 0, 0, w, h, null); // 绘制缩小后的图
+			File destFile = new File(outfilePath);
+			FileOutputStream out = new FileOutputStream(destFile); // 输出到文件流
+			// 可以正常实现bmp、png、gif转jpg
+//		JPEGImageEncoder encoder = JPEGCodec.createJPEGEncoder(out);
+//		encoder.encode(image); // JPEG编码
+			ImageIO.setUseCache(false);
+			ImageIO.write(image, "JPEG", out);
+			System.out.println(infilePath + "***" + outfilePath);
+			out.flush();
+			out.close();
+//		}
+//		out.close();
 	}
 	
 	/**
@@ -92,11 +94,12 @@ public class ImgCompress {
 		BufferedImage image = new BufferedImage(w, h,BufferedImage.TYPE_INT_RGB ); 
 		image.getGraphics().drawImage(img, 0, 0, w, h, null); // 绘制缩小后的图
 		File destFile = new File(outfilePath+".png");
-		FileOutputStream out = new FileOutputStream(destFile); // 输出到文件流
-		// 可以正常实现bmp、png、gif转jpg
-		JPEGImageEncoder encoder = JPEGCodec.createJPEGEncoder(out);
-		encoder.encode(image); // JPEG编码
-		out.close();
+//		FileOutputStream out = new FileOutputStream(destFile); // 输出到文件流
+//		// 可以正常实现bmp、png、gif转jpg
+//		JPEGImageEncoder encoder = JPEGCodec.createJPEGEncoder(out);
+//		encoder.encode(image); // JPEG编码
+//		out.close();
+		ImageIO.write(image, "JPEG", destFile);
 //		原图
 		File file = new File(outfilePath+"-base.png");// 读入文件
 		FileOutputStream t = new FileOutputStream(file); // 输出到文件流

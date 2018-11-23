@@ -15,9 +15,7 @@
 <title></title>
 <link rel="stylesheet" type="text/css" href="${wechatPath}css/weui.min.css">
 <link rel="stylesheet" type="text/css" href="${wechatPath}css/jquery-weui.min.css">
-<link rel="stylesheet" type="text/css" href="${wechatPath}css/demos.css">
 <link rel="stylesheet" type="text/css" href="${wechatPath}css/weui.css">
-<link rel="stylesheet" href="${wechatPath}css/mui/mui.min.css">
 <link rel="stylesheet" href="${wechatPath}css/mui/baocun.css">
 <body>
 	<div style="height: 50px; line-height: 50px; background: #f7f7f7; text-align: center; font-size: 16px; border-bottom: 1px solid #bdbbbc; position: relative">
@@ -131,6 +129,7 @@
 		</div>
 		</form>
 </div>
+<jsp:include   page="../common/tabbar.jsp" flush="true"/>
 	<script src="${wechatPath}js/jquery-1.8.1.min.js"
 		type="text/javascript"></script>
 	<script src="${wechatPath}js/jquery-weui.min.js"

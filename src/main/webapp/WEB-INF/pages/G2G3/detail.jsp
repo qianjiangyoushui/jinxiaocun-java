@@ -12,12 +12,8 @@
 <meta name="apple-mobile-web-app-status-bar-style"
 	content="black-translucen" />
 <title></title>
-		<link rel="stylesheet" href="${wechatPath}css/mui/mui.min.css">
-		<link rel="stylesheet" href="${wechatPath}css/mui/app.css">
 		<link rel="stylesheet" type="text/css" href="${wechatPath}css/weui.min.css">
 		<link rel="stylesheet" type="text/css" href="${wechatPath}css/jquery-weui.min.css">
-		<link rel="stylesheet" href="${wechatPath}css/swiper-3.3.1.min.css">
-		<link rel="stylesheet" type="text/css" href="${wechatPath}css/weui.css">
 <style type="text/css">
 	 p{
 		color: #000000;
@@ -28,8 +24,12 @@
 	<div style="height: 50px; line-height: 50px; background: #f7f7f7; text-align: center; font-size: 16px; border-bottom: 1px solid #bdbbbc; position: relative">
 		<c:if test="${seedfile.type eq '4' }">G2溯源档案信息</c:if>
 		<c:if test="${seedfile.type eq '5' }">G3溯源档案信息</c:if>
+		<c:if test="${seedfile.type eq '6' }">商品薯溯源档案信息</c:if>
 		
 		<c:choose>
+			<c:when test="${sessionScope.companyid!=null}">
+				<a href="${wechatPath}president/indexList.action?type=6&companyid=${sessionScope.companyid}" style="position: absolute; left: 10px; top: 8px">
+			</c:when>
 			<c:when test="${sessionScope.operate eq '8' || sessionScope.operate eq '11'}">
 				<a href="${wechatPath}g2g3/list.action?type=${sessionScope.g2g3Type}&operate=${sessionScope.operate}" style="position: absolute; left: 10px; top: 8px">
 			</c:when>
@@ -40,7 +40,6 @@
 			<img src="${wechatPath}icon/back.png" style="width: 20px" />
 		</a>
 	</div>
-	
 	<div  class="bd" style="margin-top: -20px;">
 		<div class="weui-cells">
           <a class="weui-cell weui-cell_access" href="javascript:;">
@@ -67,14 +66,26 @@
 	               <div class="weui-cell__ft"></div>
 	             </a>
 		   </c:when>
-		   <c:otherwise> 
-		    <a class="weui-cell weui-cell_access" href="${wechatPath}greenhouses/housedetail.action?guid=${seedfile.seedid}">
-	               <div class="weui-cell__bd" style="margin-top:8px;">
-	              	   <c:if test="${seedfile.type eq '4' }"> <p>原原种批次档案</p></c:if>
-					   <c:if test="${seedfile.type eq '5' }"> <p>原种批次档案</p></c:if>
-	               </div>
-	               <div class="weui-cell__ft"></div>
-	             </a>
+		   <c:otherwise>
+		   <c:choose>
+		    <c:when test="${seedfile.type eq '4' }">
+		    <a class="weui-cell weui-cell_access" href="${wechatPath}greenhouses/housedetail.action?guid=${seedfile.seedid}" >
+                   <div class="weui-cell__bd" style="margin-top:8px;">
+                       <p>原原种批次档案</p>
+                   </div>
+                   <div class="weui-cell__ft"></div>
+             </a>
+		    </c:when>
+		    <c:otherwise>
+                 <a class="weui-cell weui-cell_access" href="${wechatPath}g2g3/detail.action?seedfileid=${seedfile.seedid}" >
+                       <div class="weui-cell__bd" style="margin-top:8px;">
+                           <c:if test="${seedfile.type eq '5' }"> <p>原种批次档案</p></c:if>
+                           <c:if test="${seedfile.type eq '6' }"> <p>所用种薯批次档案</p></c:if>
+                       </div>
+                       <div class="weui-cell__ft"></div>
+                 </a>
+		    </c:otherwise>
+		    </c:choose>
 		   </c:otherwise>
 		</c:choose>
           
@@ -232,6 +243,7 @@
           </a>
         </div>
 	</div>
+	<jsp:include   page="../common/tabbar.jsp" flush="true"/>
 	<script src="${wechatPath}js/jquery-1.8.1.min.js"
 		type="text/javascript"></script>
 		<script src="${wechatPath}js/jquery-weui.min.js"

@@ -7,7 +7,7 @@
 		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
 	<!-- mvc注解驱动 -->
-	<mvc:annotation-driven conversion-service="conversionService"/>
+	<mvc:annotation-driven conversion-service="myconversionService"/>
 	<context:component-scan base-package="com.ecfund.base.action" />
 
 	<!-- 使用注解方式定义验证器 -->
@@ -27,7 +27,7 @@
 		<property name="suffix" value=".jsp"></property>
 	</bean>
 	<!-- 避免IE执行AJAX时,返回JSON出现下载文件 -->
-	<bean class="org.springframework.http.converter.json.MappingJacksonHttpMessageConverter" id="mappingJacksonHttpMessageConverter">
+	<bean class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter" id="mappingJackson2HttpMessageConverter">
 		<property name="supportedMediaTypes">
 			<list>
 				<value>text/html;charset=UTF-8</value>
@@ -39,7 +39,7 @@
 	<bean class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter">
 		<property name="messageConverters">
 			<list>
-				<ref bean="mappingJacksonHttpMessageConverter" /><!-- json转换器 -->
+				<ref bean="mappingJackson2HttpMessageConverter" /><!-- json转换器 -->
 			</list>
 		</property>
 	</bean>
@@ -57,8 +57,8 @@
 		</property>
 	</bean>
 
-	<!-- 类型转换器-->
-	<bean id="conversionService" class="org.springframework.format.support.FormattingConversionServiceFactoryBean">
+	 <!--类型转换器-->
+	<bean id="myconversionService" class="org.springframework.format.support.FormattingConversionServiceFactoryBean">
 		<property name="converters">
 			<set>
 				<ref bean="dateConvert"/>

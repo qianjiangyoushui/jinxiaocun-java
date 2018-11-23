@@ -1,5 +1,7 @@
 package com.ecfund.base.model.fertilization;
 
+import com.alibaba.fastjson.annotation.JSONField;
+
 import java.util.Date;
 import java.math.BigDecimal;
 import java.util.Date;
@@ -22,7 +24,7 @@ public class Fertilization implements java.io.Serializable{
     private String guid;
     
     private String seedfileid;
-    
+    @JSONField(format = "yyyy-MM-dd")
     private Date manuredate;
     
     private String muck;

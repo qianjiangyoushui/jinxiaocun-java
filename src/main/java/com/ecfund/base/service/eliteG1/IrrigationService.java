@@ -5,8 +5,13 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 
+import com.ecfund.base.dao.publics.GrowthrecordDAO;
+import com.ecfund.base.dao.seedfile.SeedfileDAO;
+import com.ecfund.base.model.publics.Growthrecord;
+import com.ecfund.base.model.seedfile.Seedfile;
 import org.apache.commons.configuration.Configuration;
 import org.apache.commons.configuration.PropertiesConfiguration;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,6 +57,10 @@ public class IrrigationService extends BaseService<Irrigation> {
 	
 	@Autowired
 	private LogsService logService;
+	@Autowired
+	private GrowthrecordDAO growthrecordDAO;
+	@Autowired
+	private SeedfileDAO seedfileDAO;
 	
 	@Transactional
 	public void saveIrrigation(Irrigation irrigation, Users user, JSONArray imageids) throws Exception {
@@ -95,5 +104,39 @@ public class IrrigationService extends BaseService<Irrigation> {
 			logService.insert(log);
 		}
 	}
-
+	@Transactional
+    public String[] batchsaveFertilization_wechat(Irrigation irrigation, Users user, String[] batchArray) throws Exception{
+		String[] result = new String[batchArray.length];
+		for(int j=0;j<batchArray.length;j++){
+			irrigation.setSeedfileid(batchArray[j]);
+			String manureid = this.insert(irrigation);
+			result[j]=manureid;
+			Logs log=new Logs();
+			log.setDescription("新增浇水记录");
+			log.setOperatedate(new Date(System.currentTimeMillis()));
+			log.setOperatorid(user.getGuid());
+			log.setRelatedid(irrigation.getSeedfileid());
+			logService.insert(log);
+			Seedfile seedfile = new Seedfile();
+			seedfile.setGuid(batchArray[j]);
+			seedfile = seedfileDAO.view(seedfile);
+			Growthrecord growthrecord = new Growthrecord();
+			growthrecord.setBatchcode(seedfile.getBatch());
+			growthrecord.setBatchid(seedfile.getGuid());
+			growthrecord.setCompanyid(seedfile.getCompanyid());
+			growthrecord.setUserid(user.getGuid());
+			growthrecord.setVisible(1);
+			growthrecord.setType(seedfile.getType());
+			growthrecord.setStep("浇水");
+			growthrecord.setContent("排灌水");
+			growthrecord.setCreatedate(Calendar.getInstance().getTime());
+			String month = growthrecord.getCreatedate().getMonth()+1+"";
+			String day = growthrecord.getCreatedate().getDate()+"";
+			growthrecord.setDay(day);
+			growthrecord.setMonth(month);
+			String guid = growthrecordDAO.insert(growthrecord);
+			result[j] = guid;
+		}
+		return result;
+    }
 }

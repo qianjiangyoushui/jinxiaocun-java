@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="Accident">
+	
+	<!-- 缓存条数 -->
+	<cache size="2000" />
+	
+	<!-- 条件语句 -->
+	<sql id="WhereSQL">
+		<where>
+			<if test="guid != null and guid != ''"> 
+			AND T.GUID = #{guid} 
+			</if>
+			<if test="depotid != null and depotid != ''"> 
+			AND T.DEPOTID = #{depotid} 
+			</if>
+			<if test="reportdate != null and reportdate != ''"> 
+			AND T.REPORTDATE = #{reportdate} 
+			</if>
+			<if test="fumigation != null and fumigation != ''"> 
+			AND T.FUMIGATION = #{fumigation} 
+			</if>
+			<if test="isdisinfect != null and isdisinfect != ''"> 
+			AND T.ISDISINFECT = #{isdisinfect} 
+			</if>
+			<if test="temprange != null and temprange != ''"> 
+			AND T.TEMPRANGE = #{temprange} 
+			</if>
+			<if test="ischange != null and ischange != ''"> 
+			AND T.ISCHANGE = #{ischange} 
+			</if>
+			<if test="changereason != null and changereason != ''"> 
+			AND T.CHANGEREASON = #{changereason} 
+			</if>
+			<if test="instock != null and instock != ''"> 
+			AND T.INSTOCK = #{instock} 
+			</if>
+			<if test="occurdate != null and occurdate != ''"> 
+			AND T.OCCURDATE = #{occurdate} 
+			</if>
+			<if test="occurpoint != null and occurpoint != ''"> 
+			AND T.OCCURPOINT = #{occurpoint} 
+			</if>
+			<if test="occurtype != null and occurtype != ''"> 
+			AND T.OCCURTYPE = #{occurtype} 
+			</if>
+			<if test="placechange != null and placechange != ''"> 
+			AND T.PLACECHANGE = #{placechange} 
+			</if>
+			<if test="changedetail != null and changedetail != ''"> 
+			AND T.CHANGEDETAIL = #{changedetail} 
+			</if>
+			<if test="reportname != null and reportname != ''"> 
+			AND T.REPORTNAME = #{reportname} 
+			</if>
+			<if test="createdate != null and createdate != ''"> 
+			AND T.CREATEDATE = #{createdate} 
+			</if>
+			<if test="operatorid != null and operatorid != ''"> 
+			AND T.OPERATORID = #{operatorid} 
+			</if>
+		</where>
+	</sql>
+	
+	<!-- 查找语句 -->
+	<select id="find" resultType="Accident" parameterType="Accident" flushCache="false" useCache="true">
+    	SELECT 
+	    	T.GUID AS guid, 
+	    	T.DEPOTID AS depotid, 
+	    	T.REPORTDATE AS reportdate, 
+	    	T.FUMIGATION AS fumigation, 
+	    	T.ISDISINFECT AS isdisinfect, 
+	    	T.TEMPRANGE AS temprange, 
+	    	T.ISCHANGE AS ischange, 
+	    	T.CHANGEREASON AS changereason, 
+	    	T.INSTOCK AS instock, 
+	    	T.OCCURDATE AS occurdate, 
+	    	T.OCCURPOINT AS occurpoint, 
+	    	T.OCCURTYPE AS occurtype, 
+	    	T.PLACECHANGE AS placechange, 
+	    	T.CHANGEDETAIL AS changedetail, 
+	    	T.REPORTNAME AS reportname, 
+	    	T.CREATEDATE AS createdate, 
+	    	T.OPERATORID AS operatorid 
+    	FROM accident T
+		<include refid="WhereSQL" />
+	</select>
+	
+	<!-- 获取总记录数语句 -->
+	<select id="findCount" resultType="java.lang.Integer" parameterType="Accident" flushCache="false" useCache="true">
+    	SELECT COUNT(*)  FROM accident T
+		<include refid="WhereSQL" />
+	</select>
+	
+	<!-- 插入语句 -->
+	<insert id="insert" parameterType="Accident" flushCache="true"> 
+		INSERT INTO accident
+		(
+			GUID, 
+			DEPOTID, 
+			REPORTDATE, 
+			FUMIGATION, 
+			ISDISINFECT, 
+			TEMPRANGE, 
+			ISCHANGE, 
+			CHANGEREASON, 
+			INSTOCK, 
+			OCCURDATE, 
+			OCCURPOINT, 
+			OCCURTYPE, 
+			PLACECHANGE, 
+			CHANGEDETAIL, 
+			REPORTNAME, 
+			CREATEDATE, 
+			OPERATORID 
+		 ) 
+		VALUES
+		(
+			#{guid,jdbcType=VARCHAR}, 
+			#{depotid,jdbcType=VARCHAR}, 
+			#{reportdate,jdbcType=DATE}, 
+			#{fumigation,jdbcType=VARCHAR}, 
+			#{isdisinfect,jdbcType=VARCHAR}, 
+			#{temprange,jdbcType=VARCHAR}, 
+			#{ischange,jdbcType=VARCHAR}, 
+			#{changereason,jdbcType=VARCHAR}, 
+			#{instock,jdbcType=DECIMAL}, 
+			#{occurdate,jdbcType=DATE}, 
+			#{occurpoint,jdbcType=VARCHAR}, 
+			#{occurtype,jdbcType=VARCHAR}, 
+			#{placechange,jdbcType=VARCHAR}, 
+			#{changedetail,jdbcType=VARCHAR}, 
+			#{reportname,jdbcType=VARCHAR}, 
+			#{createdate,jdbcType=DATE}, 
+			#{operatorid,jdbcType=VARCHAR} 
+		) 
+	</insert>
+	
+	<!-- 更新语句 -->
+	<update id="update"  parameterType="Accident" flushCache="true"> 
+		update accident 
+		<set> 
+			<if test="guid != null">GUID=#{guid},</if>
+			<if test="depotid != null">DEPOTID=#{depotid},</if>
+			<if test="reportdate != null">REPORTDATE=#{reportdate},</if>
+			<if test="fumigation != null">FUMIGATION=#{fumigation},</if>
+			<if test="isdisinfect != null">ISDISINFECT=#{isdisinfect},</if>
+			<if test="temprange != null">TEMPRANGE=#{temprange},</if>
+			<if test="ischange != null">ISCHANGE=#{ischange},</if>
+			<if test="changereason != null">CHANGEREASON=#{changereason},</if>
+			<if test="instock != null">INSTOCK=#{instock},</if>
+			<if test="occurdate != null">OCCURDATE=#{occurdate},</if>
+			<if test="occurpoint != null">OCCURPOINT=#{occurpoint},</if>
+			<if test="occurtype != null">OCCURTYPE=#{occurtype},</if>
+			<if test="placechange != null">PLACECHANGE=#{placechange},</if>
+			<if test="changedetail != null">CHANGEDETAIL=#{changedetail},</if>
+			<if test="reportname != null">REPORTNAME=#{reportname},</if>
+			<if test="createdate != null">CREATEDATE=#{createdate},</if>
+			<if test="operatorid != null">OPERATORID=#{operatorid},</if>
+		</set>
+		WHERE GUID = #{guid}
+	</update> 
+	
+	<!-- 单选删除语句 -->
+	<delete id="delete" parameterType="Accident" flushCache="true"> 
+		DELETE FROM accident WHERE GUID = #{guid}
+	</delete>
+	
+	<!-- 多选删除 -->
+	<delete id="mulDel" parameterType="java.lang.String" flushCache="true">
+		DELETE FROM accident WHERE GUID IN
+		<foreach item="id" collection="array" open="(" separator="," close=")"> 
+			#{id}
+		</foreach> 
+	</delete>
+</mapper>

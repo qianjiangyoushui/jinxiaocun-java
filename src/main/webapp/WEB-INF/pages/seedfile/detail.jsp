@@ -101,6 +101,7 @@
 			<input class="postpara" type="hidden" name="" value="">
 		</form>
 </div>
+
 	<script src="${wechatPath}js/jquery-1.8.1.min.js"
 		type="text/javascript"></script>
 	<script src="${wechatPath}js/jquery-weui.min.js"

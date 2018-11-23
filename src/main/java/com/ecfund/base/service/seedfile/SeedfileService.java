@@ -8,6 +8,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
+import com.ecfund.base.dao.publics.FileralationDAO;
+import com.ecfund.base.model.publics.Fileralation;
 import org.apache.commons.configuration.Configuration;
 import org.apache.commons.configuration.PropertiesConfiguration;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,6 +51,8 @@ public class SeedfileService extends BaseService<Seedfile> {
 	
 	@Autowired
 	private LogsService logService;
+	@Autowired
+	private FileralationDAO fileralationDAO;
 
 	@Autowired
 	public void setBaseDAO(SeedfileDAO seedfileDAO) {
@@ -125,4 +129,38 @@ public class SeedfileService extends BaseService<Seedfile> {
 	public List<Seedfile> findsales(Seedfile seedfile) throws Exception{
 		return seedfileDAO.findsales(seedfile);
 	}
+
+	@Transactional
+    public String insert(Seedfile seedfile, String selectValue, String selectName) throws Exception{
+		String guid = insert(seedfile);
+		String[] guidArray = selectValue.split(",");
+		String[] batchArray = selectName.split(",");
+		for (int i = 0; i < guidArray.length; i++) {
+			Fileralation  fileralation = new Fileralation();
+			fileralation.setBatchcode(batchArray[i]);
+			fileralation.setFileid(guid);
+			fileralation.setRalationid(guidArray[i]);
+			fileralationDAO.insert(fileralation);
+		}
+		return guid;
+    }
+
+    public void updateDatetime(String selectValue, String type, String date) throws Exception{
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		Date d = sdf.parse(date);
+		int t = Integer.parseInt(type);
+		String[] guidArray = selectValue.split(",");
+		for (int i = 0; i < guidArray.length; i++) {
+			Seedfile  seedfile = new Seedfile();
+			seedfile.setGuid(guidArray[i]);
+			switch (t){
+				case 1:seedfile.setStartdate(d);break;
+				case 2:seedfile.setStopwaterdate(d);break;
+				case 3:seedfile.setStopmuck(d);break;
+				case 4:seedfile.setKilldate(d);break;
+				case 5:seedfile.setRewarddate(d);break;
+			}
+			update(seedfile);
+		}
+    }
 }

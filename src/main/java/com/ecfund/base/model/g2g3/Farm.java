@@ -48,6 +48,9 @@ public class Farm implements java.io.Serializable{
     private String staffing;
     
     private BigDecimal altitude;
+
+    private String latitude;
+    private String longitude;
     
     private BigDecimal ph;
     
@@ -229,5 +232,21 @@ public class Farm implements java.io.Serializable{
 
     public void setFarmcode(String farmcode) {
         this.farmcode = farmcode;
+    }
+
+    public String getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(String latitude) {
+        this.latitude = latitude;
+    }
+
+    public String getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(String longitude) {
+        this.longitude = longitude;
     }
 }

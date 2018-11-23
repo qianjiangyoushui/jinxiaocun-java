@@ -30,6 +30,7 @@
            <mvc:mapping path="/accident/**" />
            <mvc:mapping path="/setup/**" />
            <mvc:mapping path="/greenhouses/**" />
+           <mvc:mapping path="/president/**" />
            <bean class="com.ecfund.base.interceptor.LoginInterceptor"></bean>
         </mvc:interceptor>  
     </mvc:interceptors> 

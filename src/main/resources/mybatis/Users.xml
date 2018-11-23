@@ -52,10 +52,10 @@
 		left join department d 
 		on T.guid=d.userid 
 		left join company c 
-		on d.companyid = c.guid 
-		left join dictionary r 
-		on r.keyvalue=d.departid 
-		where r.belongsid='1' 
+		on d.companyid = c.guid
+		left join dictionary r
+		on r.keyvalue=d.departid
+		where 1=1
 			<if test="guid != null and guid != ''">
 				AND T.GUID = #{guid}
 			</if>
@@ -120,7 +120,8 @@
 		T.REGISTDATE AS registdate,
 		T.OPENID AS openid,
 		R.GUID AS r_guid,
-		R.NAME AS r_name
+		R.NAME AS r_name,
+		R.DESCRIPTION AS description
 		FROM users T
 		LEFT JOIN user_role UR ON T.GUID = UR.USER_GUID
 		LEFT JOIN ROLES R ON UR.ROLE_GUID = R.GUID
@@ -136,6 +137,7 @@
 		<collection property="rolesList" ofType="Roles" >
 			<id property="guid" column="r_guid"/>
 			<result  property="name" column="r_name"/>
+			<result  property="description" column="description"/>
 		</collection>
 	</resultMap>
 	<!-- 插入语句 -->

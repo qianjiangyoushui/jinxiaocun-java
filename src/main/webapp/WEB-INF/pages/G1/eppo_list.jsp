@@ -52,12 +52,10 @@
 		<a href="${wechatPath}greenhouses/housedetail.action?guid=${eppo.seedfileid}" style="position: absolute; left: 10px; top: 8px">
 			<img src="${wechatPath}icon/back.png" style="width: 20px" />
 		</a>
-		<c:if test="${sessionScope.user.depart.departid eq '5' || sessionScope.user.depart.departid eq '8'}">
 			<a href="${wechatPath}eppo/add.action?seedfileid=${eppo.seedfileid}" style="position: absolute; right: 27px; top: 0px;">
 				<img src="${wechatPath}icon/add.png" style="width: 20px" />
 			</a>
 			<a href="${wechatPath}eppo/add.action?seedfileid=${eppo.seedfileid}" style="position: absolute; right: 10px; top: 15px; text-decoration: none; font-size: 12px; color: #333">新建记录</a>
-		</c:if>
 	</div>
 	
 	<div id="list">
@@ -80,7 +78,7 @@
         	</div>
 		</div> --%>
 	</div>
-	
+	<jsp:include   page="../common/tabbar.jsp" flush="true"/>
 	
 	
 	

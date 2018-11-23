@@ -87,7 +87,29 @@ public class UploadAction {
 			out.close();
 		}
 	}
-	
+
+	@RequestMapping(value="/growthsave.action",method=RequestMethod.POST)
+	@ResponseBody
+	public void  growthsave(String operate,String relatedid,String desc,HttpServletRequest request,PrintWriter out){
+
+		JSONObject json=new JSONObject();
+		try {
+			Users users=(Users)request.getSession().getAttribute("user");
+
+			JSONArray imageids=JSONArray.parseArray(request.getParameter("imageids"));
+			upimgService.uploadGrowthImg(users, relatedid, imageids,desc);
+			json.put("msg", "ok");
+			json.put("operate", operate);
+		} catch (Exception e) {
+			e.printStackTrace();
+			json.put("error", "error");
+		}finally{
+			out.println(json.toString());
+			out.flush();
+			out.close();
+		}
+	}
+
 	
 	@RequestMapping(value="/imagesave.action",method=RequestMethod.POST)
 	@ResponseBody

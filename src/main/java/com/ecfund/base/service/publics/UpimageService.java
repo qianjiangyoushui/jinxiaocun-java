@@ -5,8 +5,13 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 
+import com.ecfund.base.dao.publics.GrowthrecordDAO;
+import com.ecfund.base.dao.seedfile.SeedfileDAO;
+import com.ecfund.base.model.publics.Growthrecord;
+import com.ecfund.base.model.seedfile.Seedfile;
 import org.apache.commons.configuration.Configuration;
 import org.apache.commons.configuration.PropertiesConfiguration;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,6 +48,10 @@ public class UpimageService extends BaseService<Upimage> {
 
 	@Autowired
 	private LogsService logService;
+	@Autowired
+	private SeedfileDAO seedfileDAO;
+	@Autowired
+	private GrowthrecordDAO growthrecordDAO;
 
 	@Autowired
 	public void setBaseDAO(UpimageDAO upimageDAO) {
@@ -64,6 +73,38 @@ public class UpimageService extends BaseService<Upimage> {
 			log.setOperatorid(users.getGuid());
 			log.setRelatedid(relatedid);
 			logService.insert(log);
+	}
+	@Transactional
+	public void uploadGrowthImg(Users users, String relatedid, JSONArray imageids,String desc) throws Exception {
+		Seedfile seedfile = new Seedfile();
+		seedfile.setGuid(relatedid);
+		seedfile = seedfileDAO.view(seedfile);
+		Growthrecord growthrecord = new Growthrecord();
+		growthrecord.setBatchcode(seedfile.getBatch());
+		growthrecord.setBatchid(seedfile.getGuid());
+		growthrecord.setCompanyid(seedfile.getCompanyid());
+		growthrecord.setVisible(1);
+		growthrecord.setType(seedfile.getType());
+		growthrecord.setStep("植保");
+		growthrecord.setContent(desc);
+		growthrecord.setCreatedate(Calendar.getInstance().getTime());
+		String month = growthrecord.getCreatedate().getMonth()+1+"";
+		String day = growthrecord.getCreatedate().getDate()+"";
+		growthrecord.setDay(day);
+		growthrecord.setMonth(month);
+		String guid = growthrecordDAO.insert(growthrecord);
+		for(int i=0;i<imageids.size();i++){
+			Upimage image = new Upimage();
+			image.setGuid(imageids.get(i).toString());
+			image.setRelatedid(guid);
+			this.update(image);
+		}
+		Logs log = new Logs();
+		log.setDescription("上传"+desc);
+		log.setOperatedate(new Date(System.currentTimeMillis()));
+		log.setOperatorid(users.getGuid());
+		log.setRelatedid(relatedid);
+		logService.insert(log);
 	}
 
 	@Transactional
@@ -138,4 +179,20 @@ public class UpimageService extends BaseService<Upimage> {
 		return imageid;
 	}
 
+	/**
+	 * 批量上传图片
+	 * @param upimage
+	 * @param jsonArray
+	 * @return
+	 * @throws Exception
+	 */
+	public String[] batchInsert(Upimage upimage,String[] jsonArray)throws  Exception{
+		String[] result = new String[jsonArray.length];
+		for (int i = 0; i < jsonArray.length; i++) {
+			String guid = jsonArray[i];
+			upimage.setRelatedid(guid);
+			result[i]= insert(upimage);
+		}
+		return result;
+	}
 }

@@ -40,7 +40,8 @@
     	SELECT 
 	    	T.GUID AS guid, 
 	    	T.URL AS url, 
-	    	T.IMAGENAME AS imagename, 
+	    	T.URL2 AS url2,
+	    	T.IMAGENAME AS imagename,
 	    	T.IMAGETYPE AS imagetype, 
 	    	T.UPLOADDATE AS uploaddate, 
 	    	T.OPERATORID AS operatorid, 
@@ -63,7 +64,8 @@
 		(
 			GUID, 
 			URL, 
-			IMAGENAME, 
+			URL2,
+			IMAGENAME,
 			IMAGETYPE, 
 			UPLOADDATE, 
 			OPERATORID, 
@@ -74,7 +76,8 @@
 		(
 			#{guid,jdbcType=VARCHAR}, 
 			#{url,jdbcType=VARCHAR}, 
-			#{imagename,jdbcType=VARCHAR}, 
+			#{url2,jdbcType=VARCHAR},
+			#{imagename,jdbcType=VARCHAR},
 			#{imagetype,jdbcType=VARCHAR}, 
 			#{uploaddate,jdbcType=DATE}, 
 			#{operatorid,jdbcType=VARCHAR}, 
@@ -89,6 +92,7 @@
 		<set> 
 			<if test="guid != null">GUID=#{guid},</if>
 			<if test="url != null">URL=#{url},</if>
+			<if test="url2 != null">URL=#{url2},</if>
 			<if test="imagename != null">IMAGENAME=#{imagename},</if>
 			<if test="imagetype != null">IMAGETYPE=#{imagetype},</if>
 			<if test="uploaddate != null">UPLOADDATE=#{uploaddate},</if>
