@@ -8,8 +8,10 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
+import com.ecfund.base.dao.g2g3.PlotsDAO;
 import com.ecfund.base.dao.publics.GrowthrecordDAO;
 import com.ecfund.base.dao.seedfile.SeedfileDAO;
+import com.ecfund.base.model.g2g3.Plots;
 import com.ecfund.base.model.publics.Growthrecord;
 import com.ecfund.base.model.seedfile.Seedfile;
 import org.apache.commons.configuration.Configuration;
@@ -53,6 +55,8 @@ public class PlantprotectService extends BaseService<Plantprotect> {
 	private GrowthrecordDAO growthrecordDAO;
 	@Autowired
 	private SeedfileDAO seedfileDAO;
+	@Autowired
+	private PlotsDAO plotsDAO;
 
 
 	@Autowired
@@ -118,6 +122,9 @@ public class PlantprotectService extends BaseService<Plantprotect> {
 			Seedfile seedfile = new Seedfile();
 			seedfile.setGuid(batchArray[j]);
 			seedfile = seedfileDAO.view(seedfile);
+			Plots plots = new Plots();
+			plots.setGuid(seedfile.getPlaceid());
+			plots = plotsDAO.view(plots);
 			Growthrecord growthrecord = new Growthrecord();
 			growthrecord.setBatchcode(seedfile.getBatch());
 			growthrecord.setBatchid(seedfile.getGuid());
@@ -126,6 +133,7 @@ public class PlantprotectService extends BaseService<Plantprotect> {
 			growthrecord.setVisible(1);
 			growthrecord.setType(seedfile.getType());
 			growthrecord.setStep("植保");
+			growthrecord.setPlot(plots.getPlotname());
 			growthrecord.setContent(plantprotect.getDrugkind());
 			growthrecord.setCreatedate(Calendar.getInstance().getTime());
 			String month = growthrecord.getCreatedate().getMonth()+1+"";

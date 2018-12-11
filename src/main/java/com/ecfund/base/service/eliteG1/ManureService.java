@@ -1,37 +1,26 @@
 package com.ecfund.base.service.eliteG1;
 
-import java.io.BufferedOutputStream;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.OutputStream;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-
+import com.alibaba.fastjson.JSONArray;
+import com.ecfund.base.dao.eliteG1.ManureDAO;
+import com.ecfund.base.dao.g2g3.PlotsDAO;
 import com.ecfund.base.dao.publics.GrowthrecordDAO;
 import com.ecfund.base.dao.seedfile.SeedfileDAO;
-import com.ecfund.base.model.fertilization.Fertilization;
+import com.ecfund.base.model.eliteG1.Manure;
+import com.ecfund.base.model.g2g3.Plots;
 import com.ecfund.base.model.publics.Growthrecord;
+import com.ecfund.base.model.publics.Logs;
+import com.ecfund.base.model.publics.Upimage;
 import com.ecfund.base.model.seedfile.Seedfile;
-import org.apache.commons.configuration.Configuration;
-import org.apache.commons.configuration.PropertiesConfiguration;
+import com.ecfund.base.model.users.Users;
+import com.ecfund.base.service.BaseService;
+import com.ecfund.base.service.publics.LogsService;
+import com.ecfund.base.service.publics.UpimageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import sun.misc.BASE64Decoder;
-
-import com.alibaba.fastjson.JSONArray;
-import com.ecfund.base.service.BaseService;
-import com.ecfund.base.service.publics.LogsService;
-import com.ecfund.base.service.publics.UpimageService;
-import com.ecfund.base.util.common.UUIDCreate;
-import com.ecfund.base.model.eliteG1.Aphid;
-import com.ecfund.base.model.eliteG1.Manure;
-import com.ecfund.base.model.publics.Logs;
-import com.ecfund.base.model.publics.Upimage;
-import com.ecfund.base.model.users.Users;
-import com.ecfund.base.dao.eliteG1.ManureDAO;
+import java.util.Calendar;
+import java.util.Date;
 
 /**
  * 
@@ -62,6 +51,8 @@ public class ManureService extends BaseService<Manure> {
 	private GrowthrecordDAO growthrecordDAO;
 	@Autowired
 	private SeedfileDAO seedfileDAO;
+	@Autowired
+	private PlotsDAO plotsDAO;
 	
 	
 	@Transactional
@@ -121,6 +112,9 @@ public class ManureService extends BaseService<Manure> {
 			Seedfile seedfile = new Seedfile();
 			seedfile.setGuid(batchArray[j]);
 			seedfile = seedfileDAO.view(seedfile);
+			Plots plots = new Plots();
+			plots.setGuid(seedfile.getPlaceid());
+			plots = plotsDAO.view( plots);
 			Growthrecord growthrecord = new Growthrecord();
 			growthrecord.setBatchcode(seedfile.getBatch());
 			growthrecord.setBatchid(seedfile.getGuid());
@@ -129,6 +123,7 @@ public class ManureService extends BaseService<Manure> {
 			growthrecord.setVisible(1);
 			growthrecord.setType(seedfile.getType());
 			growthrecord.setStep("施肥");
+			growthrecord.setPlot(plots.getPlotname());
 			growthrecord.setContent(manure.getMuck());
 			growthrecord.setCreatedate(Calendar.getInstance().getTime());
 			String month = growthrecord.getCreatedate().getMonth()+1+"";

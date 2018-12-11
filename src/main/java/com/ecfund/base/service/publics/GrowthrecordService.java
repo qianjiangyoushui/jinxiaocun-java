@@ -3,7 +3,9 @@ package com.ecfund.base.service.publics;
 
 import com.alibaba.fastjson.JSONArray;
 import com.ecfund.base.dao.publics.GrowthrecordDAO;
+import com.ecfund.base.dao.seedfile.SeedfileDAO;
 import com.ecfund.base.model.publics.Growthrecord;
+import com.ecfund.base.model.seedfile.Seedfile;
 import com.ecfund.base.service.BaseService;
 import com.ecfund.base.util.common.Page;
 import org.apache.commons.collections.list.GrowthList;
@@ -28,7 +30,8 @@ public class GrowthrecordService extends BaseService<Growthrecord> {
 
     @Autowired
     private GrowthrecordDAO growthrecordDAO;
-
+    @Autowired
+    private SeedfileDAO seedfileDAO;
     @Autowired
     public void setBaseDAO(GrowthrecordDAO growthrecordDAO) {
         super.setBaseDAO(growthrecordDAO);
@@ -38,7 +41,11 @@ public class GrowthrecordService extends BaseService<Growthrecord> {
         String[] result = new String[jsonArray.length];
         for (int i = 0; i < jsonArray.length; i++) {
             String guid = jsonArray[i];
+            Seedfile seedfile = new Seedfile();
+            seedfile.setGuid(guid);
+            seedfile = seedfileDAO.view("findg2g3",seedfile);
             growthrecord.setBatchid(guid);
+            growthrecord.setPlot(seedfile.getPlots().getPlotname());
             growthrecord.setBatchcode(jsonArray2[i]);
             result[i]= insert(growthrecord);
 

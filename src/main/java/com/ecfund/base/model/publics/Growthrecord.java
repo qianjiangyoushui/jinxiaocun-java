@@ -45,6 +45,8 @@ public class Growthrecord implements java.io.Serializable{
 
     private Date createdate;
 
+    private String plot;
+
     private Integer sort;
 
     private List<Upimage> images;
@@ -153,6 +155,14 @@ public class Growthrecord implements java.io.Serializable{
 
     public String[] getGuids() {
         return guids;
+    }
+
+    public String getPlot() {
+        return plot;
+    }
+
+    public void setPlot(String plot) {
+        this.plot = plot;
     }
 
     public void setGuids(String[] guids) {

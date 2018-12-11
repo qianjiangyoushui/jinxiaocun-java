@@ -65,11 +65,13 @@
         T.TYPE AS type,
         T.MONTH AS month,
         T.DAY AS day,
+        T.PLOT AS plot,
         T.VISIBLE AS visible,
         T.CREATEDATE AS createdate,
         T.SORT AS sort
         FROM growthrecord T
         <include refid="WhereSQL" />
+        GROUP BY T.content
         ORDER BY CREATEDATE DESC
     </select>
     <!-- 查找语句 -->
@@ -85,6 +87,7 @@
         T.TYPE AS type,
         T.MONTH AS month,
         T.DAY AS day,
+        T.PLOT AS plot,
         T.VISIBLE AS visible,
         T.CREATEDATE AS createdate,
         T.SORT AS sort,
@@ -124,6 +127,7 @@
         TYPE,
         MONTH,
         DAY,
+        PLOT,
         VISIBLE,
         CREATEDATE,
         SORT
@@ -140,6 +144,7 @@
         #{type,jdbcType=VARCHAR},
         #{month,jdbcType=VARCHAR},
         #{day,jdbcType=VARCHAR},
+        #{plot,jdbcType=VARCHAR},
         #{visible,jdbcType=INTEGER},
         #{createdate,jdbcType=DATE},
         #{sort,jdbcType=INTEGER}
@@ -190,6 +195,7 @@
         <result property="type" column="type" />
         <result property="month" column="month" />
         <result property="day" column="day" />
+        <result property="plot" column="plot" />
         <result property="visible" column="visible" />
         <result property="createdate" column="createdate" />
         <result property="sort" column="sort" />
