@@ -240,6 +240,9 @@
 	    	p.plotname as plotname ,
 	    	p.plotcode as plotcode ,
 	    	p.plantarea as p_plantarea ,
+	    	p.area as p_area ,
+	    	p.longitude as p_longitude ,
+	    	p.latitude as p_latitude ,
 	    	p.irrigatetype as irrigatetype,
 	    	p.irrigbrand as irrigbrand,
 	    	p.wellsamount as wellsamount,
@@ -322,6 +325,9 @@
 			<result column="plotname" property="plotname"/>
 			<result column="plotcode" property="plotcode"/>
 			<result column="p_plantarea" property="plantarea"/>
+			<result column="p_area" property="area"/>
+			<result column="p_longitude" property="longitude"/>
+			<result column="p_latitude" property="latitude"/>
 			<result column="irrigatetype" property="irrigatetype"/>
 			<result column="irrigbrand" property="irrigbrand"/>
 			<result column="wellsamount" property="wellsamount"/>

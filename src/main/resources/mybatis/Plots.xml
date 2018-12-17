@@ -127,6 +127,7 @@
 	    	T.PLOTNAME AS plotname, 
 	    	T.PLOTCODE AS plotcode,
 	    	T.PLANTAREA AS plantarea,
+	    	T.AREA AS area,
 	    	T.IRRIGATETYPE AS irrigatetype,
 	    	T.IRRIGBRAND AS irrigbrand, 
 	    	T.WELLSAMOUNT AS wellsamount, 
@@ -137,7 +138,9 @@
 	    	T.CREATEDATE AS createdate, 
 	    	T.OPERATORID AS operatorid ,
 	    	T.url as url ,
-	    	T.companyid as companyid 
+	    	T.latitude as latitude ,
+	    	T.longitude as longitude ,
+	    	T.companyid as companyid
     	FROM plots T 
 		<include refid="WhereSQL" />
 		ORDER BY T.CREATEDATE 
@@ -158,6 +161,7 @@
 			PLOTNAME, 
 			PLOTCODE,
 			PLANTAREA,
+			AREA,
 			IRRIGATETYPE,
 			IRRIGBRAND, 
 			WELLSAMOUNT, 
@@ -168,7 +172,9 @@
 			CREATEDATE, 
 			OPERATORID ,
 			url ,
-			companyid 
+			latitude ,
+			longitude ,
+			companyid
 		 ) 
 		VALUES
 		(
@@ -177,6 +183,7 @@
 			#{plotname,jdbcType=VARCHAR}, 
 			#{plotcode,jdbcType=VARCHAR},
 			#{plantarea,jdbcType=DECIMAL},
+			#{area,jdbcType=DECIMAL},
 			#{irrigatetype,jdbcType=VARCHAR},
 			#{irrigbrand,jdbcType=VARCHAR}, 
 			#{wellsamount,jdbcType=INTEGER}, 
@@ -187,7 +194,9 @@
 			#{createdate,jdbcType=DATE}, 
 			#{operatorid,jdbcType=VARCHAR} ,
 			#{url,jdbcType=VARCHAR} ,
-			#{companyid,jdbcType=VARCHAR} 
+			#{latitude,jdbcType=VARCHAR} ,
+			#{longitude,jdbcType=VARCHAR} ,
+			#{companyid,jdbcType=VARCHAR}
 		) 
 	</insert>
 	
@@ -199,6 +208,8 @@
 			<if test="farmid != null">FARMID=#{farmid},</if>
 			<if test="plotname != null">PLOTNAME=#{plotname},</if>
 			<if test="plotcode != null">PLOTCODE=#{plotcode},</if>
+			<if test="plantarea != null">PLANTAREA=#{plantarea},</if>
+			<if test="area != null">AREA=#{area},</if>
 			<if test="irrigatetype != null">IRRIGATETYPE=#{irrigatetype},</if>
 			<if test="irrigbrand != null">IRRIGBRAND=#{irrigbrand},</if>
 			<if test="wellsamount != null">WELLSAMOUNT=#{wellsamount},</if>
@@ -209,6 +220,8 @@
 			<if test="createdate != null">CREATEDATE=#{createdate},</if>
 			<if test="operatorid != null">OPERATORID=#{operatorid},</if>
 			<if test="url != null">url=#{url},</if>
+			<if test="latitude != null">latitude=#{latitude},</if>
+			<if test="longitude != null">longitude=#{longitude},</if>
 			<if test="companyid != null">companyid=#{companyid},</if>
 		</set>
 		WHERE GUID = #{guid}
@@ -233,6 +246,7 @@
 		<result property="plotname" column="plotname" />
 		<result property="plotcode" column="plotcode" />
 		<result property="plantarea" column="plantarea" />
+		<result property="area" column="area" />
 		<result property="irrigatetype" column="irrigatetype" />
 		<result property="irrigbrand" column="irrigbrand" />
 		<result property="wellsamount" column="wellsamount" />

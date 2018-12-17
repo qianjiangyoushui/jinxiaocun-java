@@ -114,6 +114,16 @@ public class G4Action {
 		result.put("content", "");
 		return result.toJSONString();
 	}
+	@RequestMapping(value = "/update.action",produces = "application/json;charset=utf-8")
+	public @ResponseBody
+	String update(Seedfile seedfile,HttpServletRequest request) throws Exception{
+		seedfileService.update(seedfile);
+		JSONObject content = new JSONObject();
+		JSONObject result = new JSONObject();
+		result.put("success",true);
+		result.put("content", content);
+		return result.toJSONString();
+	}
 	@RequestMapping(value = "/add.action",produces = "application/json;charset=utf-8")
 	public @ResponseBody
 	String add(HttpServletRequest request) throws Exception{
@@ -373,6 +383,18 @@ public class G4Action {
 		content.put("manures",manures);
 		content.put("plantprotects",plantprotects);
 		content.put("waterings",waterings);
+		JSONObject result = new JSONObject();
+		result.put("success",true);
+		result.put("content", content);
+		return result.toJSONString();
+	}
+	@RequestMapping(value = "/singledetail.action",produces = "application/json;charset=utf-8")
+	public @ResponseBody
+	String singledetail(Seedfile seedfile,HttpServletRequest request) throws Exception{
+		seedfile = seedfileService.view(seedfile);
+
+		JSONObject content = new JSONObject();
+		content.put("seedfile",seedfile);
 		JSONObject result = new JSONObject();
 		result.put("success",true);
 		result.put("content", content);

@@ -29,7 +29,9 @@ public class Plots implements java.io.Serializable{
     private String plotcode;
 
     private BigDecimal plantarea;
-    
+
+    private BigDecimal area;
+
     private String irrigatetype;
     
     private String irrigbrand;
@@ -49,7 +51,9 @@ public class Plots implements java.io.Serializable{
     private String operatorid;
     
     private String url;
-    
+    private String latitude;
+    private String longitude;
+
     private String companyid;
     
     private List<Seedfile> seedfiles;
@@ -197,5 +201,29 @@ public class Plots implements java.io.Serializable{
 
     public void setPlantarea(BigDecimal plantarea) {
         this.plantarea = plantarea;
+    }
+
+    public String getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(String latitude) {
+        this.latitude = latitude;
+    }
+
+    public String getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(String longitude) {
+        this.longitude = longitude;
+    }
+
+    public BigDecimal getArea() {
+        return area;
+    }
+
+    public void setArea(BigDecimal area) {
+        this.area = area;
     }
 }

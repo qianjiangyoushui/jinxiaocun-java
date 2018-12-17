@@ -66,6 +66,7 @@ public class Seedfile implements java.io.Serializable {
 	private Date buddingdate;
 
 	private BigDecimal muamount;
+	private BigDecimal realmu;
 
 	private String type;
 
@@ -423,5 +424,13 @@ public class Seedfile implements java.io.Serializable {
 
 	public void setChecked(boolean checked) {
 		this.checked = checked;
+	}
+
+	public BigDecimal getRealmu() {
+		return realmu;
+	}
+
+	public void setRealmu(BigDecimal realmu) {
+		this.realmu = realmu;
 	}
 }

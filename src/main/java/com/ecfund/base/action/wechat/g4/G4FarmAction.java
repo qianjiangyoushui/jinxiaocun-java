@@ -221,7 +221,7 @@ public class G4FarmAction {
 
 	@RequestMapping(value = "/plotsave.action", method = RequestMethod.POST)
 	@ResponseBody
-	public String  plotsave(String plantarea,String plotcode,String plotname,String farmid, HttpServletRequest request) {
+	public String  plotsave(Plots plot, HttpServletRequest request) {
 		JSONObject json = new JSONObject();
 		try {
 			String skey = request.getHeader(Constants.WX_HEADER_SKEY);
@@ -229,15 +229,15 @@ public class G4FarmAction {
 			user.setGuid(skey);
 			user = userService.view(user);
 			// 完善信息
-			Plots plot = new Plots();
-			plot.setPlotname(plotname);
-			plot.setPlotcode(plotcode);
-			plot.setFarmid(farmid);
+//			Plots plot = new Plots();
+//			plot.setPlotname(plotname);
+//			plot.setPlotcode(plotcode);
+//			plot.setFarmid(farmid);
 			plot.setCreatedate(new Date(System.currentTimeMillis()));
 			plot.setOperatorid(user.getGuid());
 			plot.setCompanyid(user.getCompany().getGuid());
-			BigDecimal area = new BigDecimal(plantarea);
-			plot.setPlantarea(area);
+//			BigDecimal area = new BigDecimal(plantarea);
+//			plot.setPlantarea(area);
 			JSONArray imageids = JSONArray.parseArray(request.getParameter("imageids"));
 
 			plotService.insert(plot);
@@ -249,6 +249,42 @@ public class G4FarmAction {
 		} finally {
 		}
 		return json.toString();
+	}
+	@RequestMapping(value = "/plotdetail.action", method = RequestMethod.POST,produces = "application/json;charset=utf-8")
+	@ResponseBody
+	public String  plotdetail(Plots plot, HttpServletRequest request) {
+		JSONObject result = new JSONObject();
+		try {
+			plot = plotService.view("findPlots",plot);
+			JSONObject content = new JSONObject();
+			content.put("plot",plot);
+			result.put("success",true);
+			result.put("content",content);
+		} catch (Exception e) {
+			e.printStackTrace();
+			result.put("success",false);
+			result.put("erro",e.getMessage());
+		} finally {
+		}
+		return result.toString();
+	}
+	@RequestMapping(value = "/plotupdate.action", method = RequestMethod.POST,produces = "application/json;charset=utf-8")
+	@ResponseBody
+	public String  plotupdate(Plots plot, HttpServletRequest request) {
+		JSONObject result = new JSONObject();
+		try {
+			plotService.update(plot);
+			JSONObject content = new JSONObject();
+			content.put("plot",plot);
+			result.put("success",true);
+			result.put("content",content);
+		} catch (Exception e) {
+			e.printStackTrace();
+			result.put("success",false);
+			result.put("erro",e.getMessage());
+		} finally {
+		}
+		return result.toString();
 	}
 
 }

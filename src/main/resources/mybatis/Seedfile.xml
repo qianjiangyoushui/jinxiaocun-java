@@ -128,6 +128,7 @@
 		T.STOPMUCK AS stopmuck,
 		T.BUDDINGDATE AS buddingdate,
 		T.MUAMOUNT AS muamount,
+		T.REALMU AS realmu,
 		T.TYPE AS type,
 		T.CODE AS code,
 		T.DESCRIPTION AS description,
@@ -189,6 +190,7 @@
 		STOPMUCK,
 		BUDDINGDATE,
 		MUAMOUNT,
+		REALMU,
 		TYPE,
 		CODE,
 		DESCRIPTION,
@@ -223,6 +225,7 @@
 		#{stopmuck,jdbcType=DATE},
 		#{buddingdate,jdbcType=DATE},
 		#{muamount,jdbcType=DECIMAL},
+		#{realmu,jdbcType=DECIMAL},
 		#{type,jdbcType=VARCHAR},
 		#{code,jdbcType=VARCHAR},
 		#{description,jdbcType=VARCHAR},
@@ -261,6 +264,7 @@
 			<if test="stopmuck != null">STOPMUCK=#{stopmuck},</if>
 			<if test="buddingdate != null">BUDDINGDATE=#{buddingdate},</if>
 			<if test="muamount != null">MUAMOUNT=#{muamount},</if>
+			<if test="realmu != null">REALMU=#{realmu},</if>
 			<if test="type != null">TYPE=#{type},</if>
 			<if test="code != null">CODE=#{code},</if>
 			<if test="description != null">DESCRIPTION=#{description},</if>
@@ -312,6 +316,7 @@
 		T.STOPMUCK AS stopmuck,
 		T.BUDDINGDATE AS buddingdate,
 		T.MUAMOUNT AS muamount,
+		T.REALMU AS realmu,
 		T.TYPE AS type,
 		T.CODE AS code,
 		T.DESCRIPTION AS description,
@@ -365,6 +370,7 @@
 		T.STOPMUCK AS stopmuck,
 		T.BUDDINGDATE AS buddingdate,
 		T.MUAMOUNT AS muamount,
+		T.REALMU AS realmu,
 		T.TYPE AS type,
 		T.CODE AS code,
 		T.DESCRIPTION AS description,
@@ -417,6 +423,7 @@
 		T.STOPMUCK AS stopmuck,
 		T.BUDDINGDATE AS buddingdate,
 		T.MUAMOUNT AS muamount,
+		T.REALMU AS realmu,
 		T.TYPE AS type,
 		T.CODE AS code,
 		T.DESCRIPTION AS description,
@@ -484,6 +491,7 @@
 		T.STOPMUCK AS stopmuck,
 		T.BUDDINGDATE AS buddingdate,
 		T.MUAMOUNT AS muamount,
+		T.REALMU AS realmu,
 		T.TYPE AS type,
 		T.CODE AS code,
 		T.DESCRIPTION AS description,
@@ -540,6 +548,7 @@
 		<result property="stopmuck" column="stopmuck" />
 		<result property="buddingdate" column="buddingdate" />
 		<result property="muamount" column="muamount" />
+		<result property="realmu" column="realmu" />
 		<result property="type" column="type" />
 		<result property="code" column="code" />
 		<result property="description" column="description" />
@@ -591,6 +600,7 @@
 		<result property="stopmuck" column="stopmuck" />
 		<result property="buddingdate" column="buddingdate" />
 		<result property="muamount" column="muamount" />
+		<result property="realmu" column="realmu" />
 		<result property="type" column="type" />
 		<result property="code" column="code" />
 		<result property="description" column="description" />
@@ -659,6 +669,7 @@
 		<result property="stopmuck" column="stopmuck" />
 		<result property="buddingdate" column="buddingdate" />
 		<result property="muamount" column="muamount" />
+		<result property="realmu" column="realmu" />
 		<result property="type" column="type" />
 		<result property="code" column="code" />
 		<result property="description" column="description" />
