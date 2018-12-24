@@ -247,7 +247,6 @@ public class CommonAction {
 		growthrecord.setDay(day);
 		growthrecord.setCompanyid(user.getCompany().getGuid());
 		growthrecord.setUserid(user.getGuid());
-		growthrecord.setVisible(1);
 		String[] array = selectValue.split(",");
 		String[] array2 = selectName.split(",");
 		String[] guid = growthrecordService.batchInsert(growthrecord,array,array2);

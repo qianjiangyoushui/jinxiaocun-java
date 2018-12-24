@@ -97,7 +97,7 @@ public class IrrigationService extends BaseService<Irrigation> {
 		}
 	}
 	@Transactional
-    public String[] batchsaveFertilization_wechat(Irrigation irrigation, Users user, String[] batchArray) throws Exception{
+    public String[] batchsaveFertilization_wechat(Irrigation irrigation, Users user, String[] batchArray,int visible) throws Exception{
 		String[] result = new String[batchArray.length];
 		for(int j=0;j<batchArray.length;j++){
 			irrigation.setSeedfileid(batchArray[j]);
@@ -120,7 +120,7 @@ public class IrrigationService extends BaseService<Irrigation> {
 			growthrecord.setBatchid(seedfile.getGuid());
 			growthrecord.setCompanyid(seedfile.getCompanyid());
 			growthrecord.setUserid(user.getGuid());
-			growthrecord.setVisible(1);
+			growthrecord.setVisible(visible);
 			growthrecord.setType(seedfile.getType());
 			growthrecord.setStep("浇水");
 			growthrecord.setContent("排灌水");

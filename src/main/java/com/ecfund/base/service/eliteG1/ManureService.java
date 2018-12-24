@@ -97,7 +97,7 @@ public class ManureService extends BaseService<Manure> {
 		}
 	}
 	@Transactional
-    public String[] batchsaveFertilization_wechat(Manure manure, Users user, String[] batchArray) throws Exception{
+    public String[] batchsaveFertilization_wechat(Manure manure, Users user, String[] batchArray,int visible) throws Exception{
 		String[] result = new String[batchArray.length];
 		for(int j=0;j<batchArray.length;j++){
 			manure.setSeedfileid(batchArray[j]);
@@ -120,11 +120,11 @@ public class ManureService extends BaseService<Manure> {
 			growthrecord.setBatchid(seedfile.getGuid());
 			growthrecord.setCompanyid(seedfile.getCompanyid());
 			growthrecord.setUserid(user.getGuid());
-			growthrecord.setVisible(1);
+			growthrecord.setVisible(visible);
 			growthrecord.setType(seedfile.getType());
 			growthrecord.setStep("施肥");
 			growthrecord.setPlot(plots.getPlotname());
-			growthrecord.setContent(manure.getMuck());
+			growthrecord.setContent("施肥操作：施用"+manure.getMuck()+"每亩按照"+manure.getDosage()+manure.getDosageunit());
 			growthrecord.setCreatedate(Calendar.getInstance().getTime());
 			String month = growthrecord.getCreatedate().getMonth()+1+"";
 			String day = growthrecord.getCreatedate().getDate()+"";

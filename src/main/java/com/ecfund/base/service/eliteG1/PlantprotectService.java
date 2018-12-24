@@ -107,7 +107,7 @@ public class PlantprotectService extends BaseService<Plantprotect> {
 		}
     }
 	@Transactional
-	public String[] batchsaveFertilization_wechat(Plantprotect plantprotect, Users user, String[] batchArray) throws Exception{
+	public String[] batchsaveFertilization_wechat(Plantprotect plantprotect, Users user, String[] batchArray,int visible) throws Exception{
 		String[] result = new String[batchArray.length];
 		for(int j=0;j<batchArray.length;j++){
 			plantprotect.setSeedfileid(batchArray[j]);
@@ -130,11 +130,11 @@ public class PlantprotectService extends BaseService<Plantprotect> {
 			growthrecord.setBatchid(seedfile.getGuid());
 			growthrecord.setCompanyid(seedfile.getCompanyid());
 			growthrecord.setUserid(user.getGuid());
-			growthrecord.setVisible(1);
+			growthrecord.setVisible(visible);
 			growthrecord.setType(seedfile.getType());
 			growthrecord.setStep("植保");
 			growthrecord.setPlot(plots.getPlotname());
-			growthrecord.setContent(plantprotect.getDrugkind());
+			growthrecord.setContent("植保操作："+plantprotect.getDrugkind());
 			growthrecord.setCreatedate(Calendar.getInstance().getTime());
 			String month = growthrecord.getCreatedate().getMonth()+1+"";
 			String day = growthrecord.getCreatedate().getDate()+"";

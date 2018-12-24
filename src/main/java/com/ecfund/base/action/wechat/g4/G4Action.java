@@ -211,7 +211,7 @@ public class G4Action {
 	}
 	@RequestMapping(value = "/manureSave.action",produces = "application/json;charset=utf-8")
 	public @ResponseBody
-	String manureSave(HttpServletRequest request, Manure manure, String selectValue, String selectName) throws Exception{
+	String manureSave(HttpServletRequest request, Manure manure,int visible, String selectValue, String selectName) throws Exception{
 		String skey = request.getHeader(Constants.WX_HEADER_SKEY);
 		Users user = new Users();
 		user.setGuid(skey);
@@ -219,7 +219,7 @@ public class G4Action {
 		manure.setCreatedate(new Date());
 		manure.setOperatorid(user.getGuid());
 		String[] batchArray = selectValue.split(",");
-		String[] r= this.manureService.batchsaveFertilization_wechat(manure,user,batchArray);
+		String[] r= this.manureService.batchsaveFertilization_wechat(manure,user,batchArray,visible);
 		StringBuffer rr =new StringBuffer();
 		for (String s:r ) {
 			rr.append(s).append(",");
@@ -234,7 +234,7 @@ public class G4Action {
 	}
 	@RequestMapping(value = "/protectSave.action",produces = "application/json;charset=utf-8")
 	public @ResponseBody
-	String protectSave(HttpServletRequest request, Plantprotect plantprotect, String selectValue, String selectName) throws Exception{
+	String protectSave(HttpServletRequest request,int visible, Plantprotect plantprotect, String selectValue, String selectName) throws Exception{
 		String skey = request.getHeader(Constants.WX_HEADER_SKEY);
 		Users user = new Users();
 		user.setGuid(skey);
@@ -242,7 +242,7 @@ public class G4Action {
 		plantprotect.setCreatedate(new Date());
 		plantprotect.setOperatorid(user.getGuid());
 		String[] batchArray = selectValue.split(",");
-		String[] r= this.plantprotectService.batchsaveFertilization_wechat(plantprotect,user,batchArray);
+		String[] r= this.plantprotectService.batchsaveFertilization_wechat(plantprotect,user,batchArray,visible);
 		StringBuffer rr =new StringBuffer();
 		for (String s:r ) {
 			rr.append(s).append(",");
@@ -257,7 +257,7 @@ public class G4Action {
 	}
 	@RequestMapping(value = "/waterSave.action",produces = "application/json;charset=utf-8")
 	public @ResponseBody
-	String waterSave(HttpServletRequest request, Irrigation irrigation, String selectValue, String selectName) throws Exception{
+	String waterSave(HttpServletRequest request, Irrigation irrigation, int visible,String selectValue, String selectName) throws Exception{
 		String skey = request.getHeader(Constants.WX_HEADER_SKEY);
 		Users user = new Users();
 		user.setGuid(skey);
@@ -265,7 +265,7 @@ public class G4Action {
 		irrigation.setCreatedate(new Date());
 		irrigation.setOperatorid(user.getGuid());
 		String[] batchArray = selectValue.split(",");
-		String[] r= irrigationService.batchsaveFertilization_wechat(irrigation,user,batchArray);
+		String[] r= irrigationService.batchsaveFertilization_wechat(irrigation,user,batchArray,visible);
 		StringBuffer rr =new StringBuffer();
 		for (String s:r ) {
 			rr.append(s).append(",");
