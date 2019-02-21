@@ -85,7 +85,11 @@ public class SQLTypes {
 			str[0] = "VARCHAR";
 			str[1] = "String";
 			str[2] = "";
-		} else {
+		} else if(Types.BIGINT==type){
+			str[0] = "BIGINT";
+			str[1] = "Long";
+			str[2] = "";
+		}else{
 			throw new Exception("数据类型错误!");
 		}
 		return str;

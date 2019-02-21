@@ -8,6 +8,8 @@
 	<name>zszs-Webapp</name>
 	<url>http://zhongshu.tudouji.com.cn/</url>
 	<dependencies>
+
+
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
@@ -247,6 +249,11 @@
 			<groupId>net.sf.ehcache</groupId>
 			<artifactId>ehcache-core</artifactId>
 			<version>${ehcache.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>sshtools</groupId>
+			<artifactId>j2ssh-core</artifactId>
+			<version>0.2.9</version>
 		</dependency>
 		<!--<dependency>-->
 			<!--<groupId>com.gexin.platform</groupId>-->

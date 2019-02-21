@@ -7,6 +7,7 @@ import com.ecfund.base.model.users.Company;
 import com.ecfund.base.model.users.Users;
 import com.ecfund.base.service.publics.TokenService;
 import com.ecfund.base.service.users.UsersService;
+import com.ecfund.base.service.users.WxUserService;
 import com.ecfund.base.service.wechat.SessionInfoService;
 import com.ecfund.base.util.common.MD5Utils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,7 +47,13 @@ public class WechatAction {
 		String code = request.getHeader(Constants.WX_HEADER_CODE);
 		String userName = request.getParameter("userName");
 		String passwd= request.getParameter("passwd");
-		String content = sessionInfoService.login(code,"1",userName,passwd);
+		String appid= request.getParameter("appid");
+		if(!"".equals(appid)&&null!=appid&&!"null".equals(appid)){
+			appid=appid;
+		}else{
+			appid="1";
+		}
+		String content = sessionInfoService.login(code,appid,userName,passwd);
 		JSONObject result = new JSONObject();
 		result.put("success",true);
 		result.put("content",JSONObject.parseObject(content));
@@ -108,7 +115,7 @@ public class WechatAction {
 					company.setCity(adds[1]);
 					company.setArea(adds[2]);
 					company.setRegistdate(new Date(System.currentTimeMillis()));
-					company.setStatus("1");
+					company.setStatus("2");
 					String guid = userService.regist(users, company);
 					content.put("guid",guid);
 					content.put("msg", "ok");//验证通过
@@ -137,4 +144,25 @@ public class WechatAction {
 	return result.toJSONString();
 	}
 
+	/**
+	 * 根据code建立用户体系，返回用户的guid等信息
+	 * @param request
+	 * @param code
+	 * @param appid
+	 * @return
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/code2key.action",produces = "application/json;charset=utf-8")
+	public @ResponseBody
+	String login(HttpServletRequest request,String code,String appid) throws Exception{
+		JSONObject result =  sessionInfoService.updateSession(code,appid);
+		return result.toJSONString();
+	}
+	@RequestMapping(value = "/completeUserInfo.action",produces = "application/json;charset=utf-8")
+	public @ResponseBody
+	String completeUserInfo(HttpServletRequest request,String userInfo) throws Exception{
+		String skey = request.getHeader(Constants.WX_HEADER_SKEY);
+		JSONObject result = sessionInfoService.updateUserInfo(skey,userInfo);
+		return result.toJSONString();
+	}
 }

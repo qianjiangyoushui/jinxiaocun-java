@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="Answer">
+
+    <!-- 缓存条数 -->
+    <cache size="2000" />
+
+    <!-- 条件语句 -->
+    <sql id="WhereSQL">
+        <where>
+            <if test="guid != null and guid != ''">
+                AND T.GUID = #{guid}
+            </if>
+            <if test="wxUserId != null and wxUserId != ''">
+                AND T.WX_USER_ID = #{wxUserId}
+            </if>
+            <if test="questionId != null and questionId != ''">
+                AND T.QUESTION_ID = #{questionId}
+            </if>
+            <if test="content != null and content != ''">
+                AND T.CONTENT = #{content}
+            </if>
+            <if test="createdate != null and createdate != ''">
+                AND T.CREATEDATE = #{createdate}
+            </if>
+            <if test="status != null and status != ''">
+                AND T.STATUS = #{status}
+            </if>
+            <if test="sort != null and sort != ''">
+                AND T.SORT = #{sort}
+            </if>
+        </where>
+    </sql>
+
+    <!-- 查找语句 -->
+    <select id="findDetail" resultType="Answer" parameterType="Answer" flushCache="false" useCache="true">
+        SELECT
+        T.GUID AS guid,
+        T.WX_USER_ID AS wxUserId,
+        T.QUESTION_ID AS questionId,
+        T.CONTENT AS content,
+        T.CREATEDATE AS createdate,
+        T.STATUS AS status,
+        T.SORT AS sort
+        FROM answer T
+        <include refid="WhereSQL" />
+        ORDER BY SORT
+    </select>
+    <!-- 查找语句 -->
+    <select id="find" resultMap="answerMap" parameterType="Answer" flushCache="false" useCache="true">
+        SELECT
+        T.GUID AS guid,
+        T.WX_USER_ID AS wxUserId,
+        T.QUESTION_ID AS questionId,
+        T.CONTENT AS content,
+        T.CREATEDATE AS createdate,
+        T.STATUS AS status,
+        T.SORT AS sort,
+        W.NICKNAME as nickName,
+        W.AVATARURL as avatarUrl,
+        W.PROVINCE as w_province,
+        W.CITY as w_city
+        FROM answer T LEFT JOIN WX_USER W ON  T.WX_USER_ID=W.GUID
+        <include refid="WhereSQL" />
+        ORDER BY CREATEDATE DESC
+    </select>
+
+    <!-- 获取总记录数语句 -->
+    <select id="findCount" resultType="java.lang.Integer" parameterType="Answer" flushCache="false" useCache="true">
+        SELECT COUNT(*)  FROM answer T
+        <include refid="WhereSQL" />
+    </select>
+
+    <!-- 插入语句 -->
+    <insert id="insert" parameterType="Answer" flushCache="true">
+        INSERT INTO answer
+        (
+        GUID,
+        WX_USER_ID,
+        QUESTION_ID,
+        CONTENT,
+        CREATEDATE,
+        STATUS,
+        SORT
+        )
+        VALUES
+        (
+        #{guid,jdbcType=VARCHAR},
+        #{wxUserId,jdbcType=VARCHAR},
+        #{questionId,jdbcType=VARCHAR},
+        #{content,jdbcType=VARCHAR},
+        #{createdate,jdbcType=TIMESTAMP},
+        #{status,jdbcType=INTEGER},
+        #{sort,jdbcType=INTEGER}
+        )
+    </insert>
+
+    <!-- 更新语句 -->
+    <update id="update"  parameterType="Answer" flushCache="true">
+        update answer
+        <set>
+            <if test="guid != null">GUID=#{guid},</if>
+            <if test="wxUserId != null">WX_USER_ID=#{wxUserId},</if>
+            <if test="questionId != null">QUESTION_ID=#{questionId},</if>
+            <if test="content != null">CONTENT=#{content},</if>
+            <if test="createdate != null">CREATEDATE=#{createdate},</if>
+            <if test="status != null">STATUS=#{status},</if>
+            <if test="sort != null">SORT=#{sort},</if>
+        </set>
+        WHERE GUID = #{guid}
+    </update>
+
+    <!-- 单选删除语句 -->
+    <delete id="delete" parameterType="Answer" flushCache="true">
+        DELETE FROM answer WHERE GUID = #{guid}
+    </delete>
+
+    <!-- 多选删除 -->
+    <delete id="mulDel" parameterType="java.lang.String" flushCache="true">
+        DELETE FROM answer WHERE GUID IN
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    <resultMap id="answerMap" type="Answer">
+        <id property="guid" column="guid" />
+        <result property="questionId" column="questionId"/>
+        <result property="content" column="content"/>
+        <result property="createdate" column="createdate"/>
+        <result property="sort" column="sort"/>
+        <association  property="user" javaType="WxUser">
+            <result property="nickname" column="nickName" />
+            <result property="avatarurl" column="avatarUrl" />
+            <result property="province" column="w_province" />
+            <result property="city" column="w_city" />
+        </association >
+    </resultMap>
+</mapper>

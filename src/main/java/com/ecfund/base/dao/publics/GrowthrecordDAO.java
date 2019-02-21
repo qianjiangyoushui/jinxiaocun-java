@@ -3,7 +3,10 @@ package com.ecfund.base.dao.publics;
 
 import com.ecfund.base.dao.BaseDAO;
 import com.ecfund.base.model.publics.Growthrecord;
+import com.ecfund.base.model.publics.PerformanceCount;
 import org.springframework.stereotype.Repository;
+
+import java.util.List;
 
 /**
  *
@@ -17,4 +20,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public class GrowthrecordDAO extends BaseDAO<Growthrecord> {
 
+    public List<PerformanceCount> performanceCount(String[] ids){
+        return sqlSessionTemplate.selectList(Growthrecord.class.getSimpleName() + ".findDayCount",ids);
+    }
 }

@@ -1545,5 +1545,9 @@ public class DateUtil {
            	i++;
    		}
            return list;
-   }   
+   }
+    public static String todayFormatString(Date date) {
+        SimpleDateFormat time = new SimpleDateFormat("yyyyMMdd");
+        return time.format(date);
+    }
 }  

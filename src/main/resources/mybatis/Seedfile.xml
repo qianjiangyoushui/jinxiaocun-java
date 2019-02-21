@@ -90,7 +90,7 @@
 				AND T.VISIBLE = #{visible}
 			</if>
 			<if test="createdate != null and createdate != ''">
-				AND T.CREATEDATE = #{createdate}
+				AND T.CREATEDATE &gt;= #{createdate}
 			</if>
 			<if test="operatorid != null and operatorid != ''">
 				AND T.OPERATORID = #{operatorid}

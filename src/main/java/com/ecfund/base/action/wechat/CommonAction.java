@@ -14,8 +14,7 @@ import com.ecfund.base.service.publics.DictionaryService;
 import com.ecfund.base.service.publics.GrowthrecordService;
 import com.ecfund.base.service.publics.UpimageService;
 import com.ecfund.base.service.users.UsersService;
-import com.ecfund.base.util.common.ImgCompress;
-import com.ecfund.base.util.common.Page;
+import com.ecfund.base.util.common.*;
 import org.apache.commons.configuration.Configuration;
 import org.apache.commons.configuration.PropertiesConfiguration;
 import org.slf4j.Logger;
@@ -23,6 +22,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
@@ -262,4 +262,38 @@ public class CommonAction {
 		result.put("content", content);
 		return result.toJSONString();
 	}
+	@ResponseBody
+	@RequestMapping(value = "uploadFile.action", method = RequestMethod.POST)
+	public String uploadFile(HttpServletRequest request, MultipartFile file) {
+		JSONObject result = new JSONObject();
+		try {
+			String wxSessionId = request.getParameter("wxSessionId");
+			if (file == null || file.getInputStream() == null) {
+				result.put("success",false);
+				result.put("erro","图片服务器异常");
+				return result.toJSONString();
+			}
+
+			String extendType = FileUploadUtil.getExtend(file.getOriginalFilename());
+			String uuidName = UUID.randomUUID().toString().replace("-", "");
+			String fileName = uuidName+ "." + extendType;
+			String currDate = DateUtil.todayFormatString(new Date());
+			String imgServerUrl = FileUploadUtil.uploadFile("qa/" + currDate + "/", file.getInputStream(), fileName);
+			String outFileName = uuidName+"-suolue."+extendType;
+			String suolueImageUrl = FileUploadUtil.ImgCompress("qa/" + currDate + "/",file.getInputStream(),outFileName,77,77);
+			result.put("success",true);
+			JSONObject content = new JSONObject();
+			content.put("url",imgServerUrl);
+			content.put("suolueUrl",suolueImageUrl);
+			result.put("content",content);
+			return result.toJSONString();
+		} catch (Exception e) {
+			logger.error(e.getMessage(), e);
+			result.put("success",false);
+			result.put("erro",e.getMessage());
+			return result.toJSONString();
+		}
+	}
+
+
 }

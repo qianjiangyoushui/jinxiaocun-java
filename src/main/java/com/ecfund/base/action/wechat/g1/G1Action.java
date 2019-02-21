@@ -226,7 +226,7 @@ public class G1Action {
 		plantprotect.setCreatedate(new Date());
 		plantprotect.setOperatorid(user.getGuid());
 		String[] batchArray = selectValue.split(",");
-		String[] r= plantprotectService.batchsaveFertilization_wechat(plantprotect,user,batchArray);
+		String[] r= plantprotectService.batchsaveFertilization_wechat(plantprotect,user,batchArray,1);
 		StringBuffer rr =new StringBuffer();
 		for (String s:r ) {
 			rr.append(s).append(",");

@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="Nycalculate">
+
+    <!-- 缓存条数 -->
+    <cache size="2000" />
+
+    <!-- 条件语句 -->
+    <sql id="WhereSQL">
+        <where>
+            <if test="guid != null and guid != ''">
+                AND T.GUID = #{guid}
+            </if>
+            <if test="format != null and format != ''">
+                AND T.FORMAT = #{format}
+            </if>
+            <if test="name != null and name != ''">
+                AND T.NAME = #{name}
+            </if>
+            <if test="perPrice != null and perPrice != ''">
+                AND T.PER_PRICE = #{perPrice}
+            </if>
+            <if test="state != null and state != ''">
+                AND T.STATE = #{state}
+            </if>
+            <if test="sumPrice != null and sumPrice != ''">
+                AND T.SUM_PRICE = #{sumPrice}
+            </if>
+            <if test="sumuseage != null and sumuseage != ''">
+                AND T.SUMUSEAGE = #{sumuseage}
+            </if>
+            <if test="sumusewater != null and sumusewater != ''">
+                AND T.SUMUSEWATER = #{sumusewater}
+            </if>
+            <if test="times != null and times != ''">
+                AND T.TIMES = #{times}
+            </if>
+            <if test="unit != null and unit != ''">
+                AND T.UNIT = #{unit}
+            </if>
+            <if test="useage != null and useage != ''">
+                AND T.USEAGE = #{useage}
+            </if>
+            <if test="water != null and water != ''">
+                AND T.WATER = #{water}
+            </if>
+            <if test="sort != null and sort != ''">
+                AND T.SORT = #{sort}
+            </if>
+        </where>
+    </sql>
+
+    <!-- 查找语句 -->
+    <select id="find" resultType="Nycalculate" parameterType="Nycalculate" flushCache="false" useCache="true">
+        SELECT
+        T.GUID AS guid,
+        T.FORMAT AS format,
+        T.NAME AS name,
+        T.PER_PRICE AS perPrice,
+        T.STATE AS state,
+        T.SUM_PRICE AS sumPrice,
+        T.SUMUSEAGE AS sumuseage,
+        T.SUMUSEWATER AS sumusewater,
+        T.TIMES AS times,
+        T.UNIT AS unit,
+        T.USEAGE AS useage,
+        T.WATER AS water,
+        T.SORT AS sort
+        FROM nycalculate T
+        <include refid="WhereSQL" />
+        ORDER BY SORT
+    </select>
+
+    <!-- 获取总记录数语句 -->
+    <select id="findCount" resultType="java.lang.Integer" parameterType="Nycalculate" flushCache="false" useCache="true">
+        SELECT COUNT(*)  FROM nycalculate T
+        <include refid="WhereSQL" />
+    </select>
+
+    <!-- 插入语句 -->
+    <insert id="insert" parameterType="Nycalculate" flushCache="true">
+        INSERT INTO nycalculate
+        (
+        GUID,
+        FORMAT,
+        NAME,
+        PER_PRICE,
+        STATE,
+        SUM_PRICE,
+        SUMUSEAGE,
+        SUMUSEWATER,
+        TIMES,
+        UNIT,
+        USEAGE,
+        WATER,
+        SORT
+        )
+        VALUES
+        (
+        #{guid,jdbcType=VARCHAR},
+        #{format,jdbcType=VARCHAR},
+        #{name,jdbcType=VARCHAR},
+        #{perPrice,jdbcType=DECIMAL},
+        #{state,jdbcType=INTEGER},
+        #{sumPrice,jdbcType=DECIMAL},
+        #{sumuseage,jdbcType=DECIMAL},
+        #{sumusewater,jdbcType=DECIMAL},
+        #{times,jdbcType=INTEGER},
+        #{unit,jdbcType=VARCHAR},
+        #{useage,jdbcType=DECIMAL},
+        #{water,jdbcType=DECIMAL},
+        #{sort,jdbcType=INTEGER}
+        )
+    </insert>
+
+    <!-- 更新语句 -->
+    <update id="update"  parameterType="Nycalculate" flushCache="true">
+        update nycalculate
+        <set>
+            <if test="guid != null">GUID=#{guid},</if>
+            <if test="format != null">FORMAT=#{format},</if>
+            <if test="name != null">NAME=#{name},</if>
+            <if test="perPrice != null">PER_PRICE=#{perPrice},</if>
+            <if test="state != null">STATE=#{state},</if>
+            <if test="sumPrice != null">SUM_PRICE=#{sumPrice},</if>
+            <if test="sumuseage != null">SUMUSEAGE=#{sumuseage},</if>
+            <if test="sumusewater != null">SUMUSEWATER=#{sumusewater},</if>
+            <if test="times != null">TIMES=#{times},</if>
+            <if test="unit != null">UNIT=#{unit},</if>
+            <if test="useage != null">USEAGE=#{useage},</if>
+            <if test="water != null">WATER=#{water},</if>
+            <if test="sort != null">SORT=#{sort},</if>
+        </set>
+        WHERE GUID = #{guid}
+    </update>
+
+    <!-- 单选删除语句 -->
+    <delete id="delete" parameterType="Nycalculate" flushCache="true">
+        DELETE FROM nycalculate WHERE GUID = #{guid}
+    </delete>
+
+    <!-- 多选删除 -->
+    <delete id="mulDel" parameterType="java.lang.String" flushCache="true">
+        DELETE FROM nycalculate WHERE GUID IN
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

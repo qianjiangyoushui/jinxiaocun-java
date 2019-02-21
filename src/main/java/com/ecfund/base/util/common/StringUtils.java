@@ -6,6 +6,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import org.apache.commons.lang3.StringEscapeUtils;
+
+
 /**
  * 
  * 字符串操作类
@@ -16,7 +19,7 @@ import java.util.Random;
  * 
  */
 
-public class StringUtils {
+public class StringUtils extends org.apache.commons.lang3.StringUtils{
 
 	/**
 	 * 将obj类型转换为String，如果为null，则返回null
@@ -256,5 +259,10 @@ public class StringUtils {
 		String[] array = new String[] { "1", "2", "3", "4" };
 		//System.out.println(convertStrArray(array, "-"));
 	}
-
+	public static boolean isNotBlankAndEmpty(String s) {
+		if (isNotBlank(s) && isNotEmpty(s)) {
+			return true;
+		}
+		return false;
+	}
 }

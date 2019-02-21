@@ -112,6 +112,14 @@
         SELECT COUNT(*)  FROM growthrecord T
         <include refid="WhereSQL" />
     </select>
+    <!-- 统计上传图片 -->
+    <select id="findDayCount" resultType="PerformanceCount" parameterType="java.lang.String" flushCache="false" useCache="true">
+        SELECT COUNT(DISTINCT MONTH,DAY) AS UPLOADDAYS,BATCHCODE,BATCHID,PLOT AS ADDRESS FROM GROWTHRECORD WHERE BATCHID IN
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+        GROUP BY BATCHID
+    </select>
 
     <!-- 插入语句 -->
     <insert id="insert" parameterType="Growthrecord" flushCache="true">

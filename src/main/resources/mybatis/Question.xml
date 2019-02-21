@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="Question">
+
+    <!-- 缓存条数 -->
+    <cache size="2000" />
+
+    <!-- 条件语句 -->
+    <sql id="WhereSQL">
+        <where>
+            <if test="guid != null and guid != ''">
+                AND T.GUID = #{guid}
+            </if>
+            <if test="wxuserid != null and wxuserid != ''">
+                AND T.WXUSERID = #{wxuserid}
+            </if>
+            <if test="content != null and content != ''">
+                AND T.CONTENT = #{content}
+            </if>
+            <if test="createdate != null and createdate != ''">
+                AND T.CREATEDATE = #{createdate}
+            </if>
+            <if test="longitude != null and longitude != ''">
+                AND T.LONGITUDE = #{longitude}
+            </if>
+            <if test="latitude != null and latitude != ''">
+                AND T.LATITUDE = #{latitude}
+            </if>
+            <if test="province != null and province != ''">
+                AND T.PROVINCE = #{province}
+            </if>
+            <if test="city != null and city != ''">
+                AND T.CITY = #{city}
+            </if>
+            <if test="imagesurl != null and imagesurl != ''">
+                AND T.IMAGESURL = #{imagesurl}
+            </if>
+            <if test="simageurl != null and simageurl != ''">
+                AND T.SIMAGEURL = #{simageurl}
+            </if>
+            <if test="sort != null and sort != ''">
+                AND T.SORT = #{sort}
+            </if>
+        </where>
+    </sql>
+
+    <!-- 查找语句 -->
+    <select id="find" resultMap="recordMap" parameterType="Question" flushCache="false" useCache="true">
+        SELECT
+        T.GUID AS guid,
+        T.WXUSERID AS wxuserid,
+        T.CONTENT AS content,
+        T.CREATEDATE AS createdate,
+        T.LONGITUDE AS longitude,
+        T.LATITUDE AS latitude,
+        T.PROVINCE AS province,
+        T.CITY AS city,
+        T.IMAGESURL AS imagesurl,
+        T.SIMAGEURL AS simageurl,
+        T.SORT AS sort,
+        W.NICKNAME as nickName,
+        W.AVATARURL as avatarUrl,
+        W.PROVINCE as w_province,
+        W.CITY as w_city
+        FROM question T LEFT JOIN WX_USER W ON  T.WXUSERID=W.GUID
+        <include refid="WhereSQL" />
+        ORDER BY SORT
+    </select>
+
+    <!-- 获取总记录数语句 -->
+    <select id="findCount" resultType="java.lang.Integer" parameterType="Question" flushCache="false" useCache="true">
+        SELECT COUNT(*)  FROM question T
+        <include refid="WhereSQL" />
+    </select>
+
+    <!-- 插入语句 -->
+    <insert id="insert" parameterType="Question" flushCache="true">
+        INSERT INTO question
+        (
+        GUID,
+        WXUSERID,
+        CONTENT,
+        CREATEDATE,
+        LONGITUDE,
+        LATITUDE,
+        PROVINCE,
+        CITY,
+        IMAGESURL,
+        SIMAGEURL,
+        SORT
+        )
+        VALUES
+        (
+        #{guid,jdbcType=VARCHAR},
+        #{wxuserid,jdbcType=VARCHAR},
+        #{content,jdbcType=VARCHAR},
+        #{createdate,jdbcType=DATE},
+        #{longitude,jdbcType=VARCHAR},
+        #{latitude,jdbcType=VARCHAR},
+        #{province,jdbcType=VARCHAR},
+        #{city,jdbcType=VARCHAR},
+        #{imagesurl,jdbcType=VARCHAR},
+        #{simageurl,jdbcType=VARCHAR},
+        #{sort,jdbcType=VARCHAR}
+        )
+    </insert>
+
+    <!-- 更新语句 -->
+    <update id="update"  parameterType="Question" flushCache="true">
+        update question
+        <set>
+            <if test="guid != null">GUID=#{guid},</if>
+            <if test="wxuserid != null">WXUSERID=#{wxuserid},</if>
+            <if test="content != null">CONTENT=#{content},</if>
+            <if test="createdate != null">CREATEDATE=#{createdate},</if>
+            <if test="longitude != null">LONGITUDE=#{longitude},</if>
+            <if test="latitude != null">LATITUDE=#{latitude},</if>
+            <if test="province != null">PROVINCE=#{province},</if>
+            <if test="city != null">CITY=#{city},</if>
+            <if test="imagesurl != null">IMAGESURL=#{imagesurl},</if>
+            <if test="simageurl != null">SIMAGEURL=#{simageurl},</if>
+            <if test="sort != null">SORT=#{sort},</if>
+        </set>
+        WHERE GUID = #{guid}
+    </update>
+
+    <!-- 单选删除语句 -->
+    <delete id="delete" parameterType="Question" flushCache="true">
+        DELETE FROM question WHERE GUID = #{guid}
+    </delete>
+
+    <!-- 多选删除 -->
+    <delete id="mulDel" parameterType="java.lang.String" flushCache="true">
+        DELETE FROM question WHERE GUID IN
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <resultMap id="recordMap" type="Question">
+        <id property="guid" column="guid" />
+        <result property="wxuserid" column="wxuserid"/>
+        <result property="content" column="content"/>
+        <result property="createdate" column="createdate"/>
+        <result property="longitude" column="longitude"/>
+        <result property="latitude" column="latitude"/>
+        <result property="province" column="province"/>
+        <result property="city" column="city"/>
+        <result property="imagesurl" column="imagesurl"/>
+        <result property="simageurl" column="simageurl"/>
+        <result property="sort" column="sort"/>
+        <association  property="user" javaType="WxUser">
+            <result property="nickname" column="nickName" />
+            <result property="avatarurl" column="avatarUrl" />
+            <result property="province" column="w_province" />
+            <result property="city" column="w_city" />
+        </association >
+    </resultMap>
+</mapper>

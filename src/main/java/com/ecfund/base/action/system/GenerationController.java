@@ -57,6 +57,7 @@ public class GenerationController {
 			map.put("info", "生成成功,请复制代码!");
 			map.put("code", code);
 		} catch (Exception ex) {
+			ex.printStackTrace();
 			map.put("code", code);
 			map.put("info", "生成代码错误，错误信息如下：\n" + ex.getMessage());
 		}

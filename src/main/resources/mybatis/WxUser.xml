@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="WxUser">
+
+    <!-- 缓存条数 -->
+    <cache size="2000" />
+
+    <!-- 条件语句 -->
+    <sql id="WhereSQL">
+        <where>
+            <if test="guid != null and guid != ''">
+                AND T.GUID = #{guid}
+            </if>
+            <if test="openid != null and openid != ''">
+                AND T.OPENID = #{openid}
+            </if>
+            <if test="nickname != null and nickname != ''">
+                AND T.NICKNAME = #{nickname}
+            </if>
+            <if test="gender != null and gender != ''">
+                AND T.GENDER = #{gender}
+            </if>
+            <if test="city != null and city != ''">
+                AND T.CITY = #{city}
+            </if>
+            <if test="province != null and province != ''">
+                AND T.PROVINCE = #{province}
+            </if>
+            <if test="country != null and country != ''">
+                AND T.COUNTRY = #{country}
+            </if>
+            <if test="avatarurl != null and avatarurl != ''">
+                AND T.AVATARURL = #{avatarurl}
+            </if>
+            <if test="unionid != null and unionid != ''">
+                AND T.UNIONID = #{unionid}
+            </if>
+            <if test="appid != null and appid != ''">
+                AND T.APPID = #{appid}
+            </if>
+            <if test="timestamp != null and timestamp != ''">
+                AND T.TIMESTAMP = #{timestamp}
+            </if>
+            <if test="bsuserid != null and bsuserid != ''">
+                AND T.BSUSERID = #{bsuserid}
+            </if>
+            <if test="createdate != null and createdate != ''">
+                AND T.CREATEDATE = #{createdate}
+            </if>
+            <if test="updatedate != null and updatedate != ''">
+                AND T.UPDATEDATE = #{updatedate}
+            </if>
+            <if test="sort != null and sort != ''">
+                AND T.SORT = #{sort}
+            </if>
+        </where>
+    </sql>
+
+    <!-- 查找语句 -->
+    <select id="find" resultType="WxUser" parameterType="WxUser" flushCache="false" useCache="true">
+        SELECT
+        T.GUID AS guid,
+        T.OPENID AS openid,
+        T.NICKNAME AS nickname,
+        T.GENDER AS gender,
+        T.CITY AS city,
+        T.PROVINCE AS province,
+        T.COUNTRY AS country,
+        T.AVATARURL AS avatarurl,
+        T.UNIONID AS unionid,
+        T.APPID AS appid,
+        T.TIMESTAMP AS timestamp,
+        T.BSUSERID AS bsuserid,
+        T.CREATEDATE AS createdate,
+        T.UPDATEDATE AS updatedate,
+        T.SORT AS sort
+        FROM wx_user T
+        <include refid="WhereSQL" />
+        ORDER BY SORT
+    </select>
+
+    <!-- 获取总记录数语句 -->
+    <select id="findCount" resultType="java.lang.Integer" parameterType="WxUser" flushCache="false" useCache="true">
+        SELECT COUNT(*)  FROM wx_user T
+        <include refid="WhereSQL" />
+    </select>
+
+    <!-- 插入语句 -->
+    <insert id="insert" parameterType="WxUser" flushCache="true">
+        INSERT INTO wx_user
+        (
+        GUID,
+        OPENID,
+        NICKNAME,
+        GENDER,
+        CITY,
+        PROVINCE,
+        COUNTRY,
+        AVATARURL,
+        UNIONID,
+        APPID,
+        TIMESTAMP,
+        BSUSERID,
+        CREATEDATE,
+        UPDATEDATE,
+        SORT
+        )
+        VALUES
+        (
+        #{guid,jdbcType=VARCHAR},
+        #{openid,jdbcType=VARCHAR},
+        #{nickname,jdbcType=VARCHAR},
+        #{gender,jdbcType=VARCHAR},
+        #{city,jdbcType=VARCHAR},
+        #{province,jdbcType=VARCHAR},
+        #{country,jdbcType=VARCHAR},
+        #{avatarurl,jdbcType=VARCHAR},
+        #{unionid,jdbcType=VARCHAR},
+        #{appid,jdbcType=VARCHAR},
+        #{timestamp,jdbcType=VARCHAR},
+        #{bsuserid,jdbcType=VARCHAR},
+        #{createdate,jdbcType=DATE},
+        #{updatedate,jdbcType=DATE},
+        #{sort,jdbcType=INTEGER}
+        )
+    </insert>
+
+    <!-- 更新语句 -->
+    <update id="update"  parameterType="WxUser" flushCache="true">
+        update wx_user
+        <set>
+            <if test="guid != null">GUID=#{guid},</if>
+            <if test="openid != null">OPENID=#{openid},</if>
+            <if test="nickname != null">NICKNAME=#{nickname},</if>
+            <if test="gender != null">GENDER=#{gender},</if>
+            <if test="city != null">CITY=#{city},</if>
+            <if test="province != null">PROVINCE=#{province},</if>
+            <if test="country != null">COUNTRY=#{country},</if>
+            <if test="avatarurl != null">AVATARURL=#{avatarurl},</if>
+            <if test="unionid != null">UNIONID=#{unionid},</if>
+            <if test="appid != null">APPID=#{appid},</if>
+            <if test="timestamp != null">TIMESTAMP=#{timestamp},</if>
+            <if test="bsuserid != null">BSUSERID=#{bsuserid},</if>
+            <if test="createdate != null">CREATEDATE=#{createdate},</if>
+            <if test="updatedate != null">UPDATEDATE=#{updatedate},</if>
+            <if test="sort != null">SORT=#{sort},</if>
+        </set>
+        WHERE GUID = #{guid}
+    </update>
+
+    <!-- 单选删除语句 -->
+    <delete id="delete" parameterType="WxUser" flushCache="true">
+        DELETE FROM wx_user WHERE GUID = #{guid}
+    </delete>
+
+    <!-- 多选删除 -->
+    <delete id="mulDel" parameterType="java.lang.String" flushCache="true">
+        DELETE FROM wx_user WHERE GUID IN
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>
