@@ -149,6 +149,7 @@ public class G4Action {
 
 		// 大棚
 		Farm farm = new Farm();
+		farm.setFarmtype(2);
 		farm.setCompanyid(user.getCompany().getGuid());
 		List<Farm> farms = farmService.find(farm);
 		Plots plot = new Plots();

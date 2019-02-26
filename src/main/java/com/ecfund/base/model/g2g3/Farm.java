@@ -63,6 +63,8 @@ public class Farm implements java.io.Serializable{
     private String operatorid;
     
     private String url;
+
+    private Integer farmtype;//农场类型2是客户农场，1，自有农场
     
     private List<Plots> plots;//地块信息
     
@@ -248,5 +250,13 @@ public class Farm implements java.io.Serializable{
 
     public void setLongitude(String longitude) {
         this.longitude = longitude;
+    }
+
+    public Integer getFarmtype() {
+        return farmtype;
+    }
+
+    public void setFarmtype(Integer farmtype) {
+        this.farmtype = farmtype;
     }
 }

@@ -95,5 +95,20 @@ public class QualityAction {
         result.put("content", content);
         return result.toJSONString();
     }
+    @RequestMapping(value = "/pagelist.action",produces = "application/json;charset=utf-8")
+    public @ResponseBody
+    String pagelist(Page page,Qualityrecord qualityrecord,HttpServletRequest request) throws Exception{
+        String skey = request.getHeader(Constants.WX_HEADER_SKEY);
+        Users user = new Users();
+        user.setGuid(skey);
+        user = userService.view(user);
+        qualityrecord.setVisible(1);
+        qualityrecord.setCompanyid(user.getCompany().getGuid());
+        Page pagelist=qualityrecordService.findContainImagesPage(qualityrecord, page.getBegin(), page.getPageSize());
+        JSONObject result = new JSONObject();
+        result.put("success",true);
+        result.put("content", pagelist);
+        return result.toJSONString();
+    }
 
 }

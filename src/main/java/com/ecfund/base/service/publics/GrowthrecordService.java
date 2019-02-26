@@ -223,4 +223,17 @@ public class GrowthrecordService extends BaseService<Growthrecord> {
         result.put("success",true);
         return result;
     }
+
+    public String[] batchInsertG1(Growthrecord growthrecord, String[] jsonArray,String[] jsonArray2)throws Exception {
+        String[] result = new String[jsonArray.length];
+        for (int i = 0; i < jsonArray.length; i++) {
+            String guid = jsonArray[i];
+            Seedfile seedfile = new Seedfile();
+            seedfile.setGuid(guid);
+            growthrecord.setBatchid(guid);
+            growthrecord.setBatchcode(jsonArray2[i]);
+            result[i]= insert(growthrecord);
+        }
+        return result;
+    }
 }

@@ -89,6 +89,7 @@
         T.SORT AS sort,
         U.GUID AS u_guid,
         U.URL AS url,
+        U.URL2 AS url2,
         U.IMAGENAME AS imagename,
         U.RELATEDID AS relatedid,
         U.UPLOADDATE AS uploaddate
@@ -180,6 +181,7 @@
         <collection property="images" ofType="Upimage" javaType="List">
             <id property="guid" column="u_guid" />
             <result property="url" column="url" />
+            <result property="url2" column="url2" />
             <result property="imagename" column="imagename" />
             <result property="relatedid" column="relatedid" />
             <result property="uploaddate" column="uploaddate" />

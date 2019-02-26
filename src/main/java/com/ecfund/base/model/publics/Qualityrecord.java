@@ -25,6 +25,8 @@ public class Qualityrecord implements java.io.Serializable{
 
     private String batchid;
 
+    private String batchcode;
+
     private String content;
 
     private String step;
@@ -132,5 +134,13 @@ public class Qualityrecord implements java.io.Serializable{
 
     public void setImages(List<Upimage> images) {
         this.images = images;
+    }
+
+    public String getBatchcode() {
+        return batchcode;
+    }
+
+    public void setBatchcode(String batchcode) {
+        this.batchcode = batchcode;
     }
 }

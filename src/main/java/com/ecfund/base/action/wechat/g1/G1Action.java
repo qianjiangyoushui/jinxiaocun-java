@@ -400,6 +400,37 @@ public class G1Action {
 		result.put("content",content);
 		return result.toJSONString();
 	}
+	@RequestMapping(value = "/growthrecordBatchsave.action",produces = "application/json;charset=utf-8")
+	public @ResponseBody String growthrecordBatchsave(HttpServletRequest request, Growthrecord growthrecord,String selectValue,String selectName ) throws Exception{
+		String skey = request.getHeader(Constants.WX_HEADER_SKEY);
+		Users user = new Users();
+		user.setGuid(skey);
+		user = userService.view(user);
+		Date createDate = growthrecord.getCreatedate();
+		Calendar calendar = Calendar.getInstance();
+		calendar.setTime(createDate);
+		String month = calendar.get(Calendar.MONTH)+1+"";
+		String day = calendar.get(Calendar.DAY_OF_MONTH)+"";
+		growthrecord.setMonth(month);
+		growthrecord.setMonth(month);
+		growthrecord.setDay(day);
+		growthrecord.setCompanyid(user.getCompany().getGuid());
+		growthrecord.setUserid(user.getGuid());
+		String[] array = selectValue.split(",");
+		String[] array2 = selectName.split(",");
+		String[] guid = growthrecordService.batchInsertG1(growthrecord,array,array2);
+		StringBuffer rr =new StringBuffer();
+		for (String s:guid ) {
+			rr.append(s).append(",");
+		}
+		String rrr = rr.deleteCharAt(rr.length()-1).toString();
+		JSONObject result = new JSONObject();
+		JSONObject content = new JSONObject();
+		content.put("guid",rrr);
+		result.put("success",true);
+		result.put("content", content);
+		return result.toJSONString();
+	}
 	@RequestMapping("/test.action")
 	public String test(){
 		return "index/test";

@@ -69,7 +69,10 @@
 			AND T.OPERATORID = #{operatorid} 
 			</if>
 			<if test="url != null and url != ''"> 
-			AND T.url = #{url} 
+			AND T.URL = #{url}
+			</if>
+			<if test="farmtype != null and farmtype != ''">
+			AND T.FARMTYPE = #{farmtype}
 			</if>
 		</where>
 	</sql>
@@ -99,7 +102,8 @@
 	    	T.LEASEEND AS leaseend, 
 	    	T.CREATEDATE AS createdate, 
 	    	T.OPERATORID AS operatorid ,
-	    	T.url as url  
+	    	T.FARMTYPE AS farmtype ,
+	    	T.url as url
     	FROM farm T
 		<include refid="WhereSQL" />
 		ORDER BY T.CREATEDATE 
@@ -137,7 +141,8 @@
 			LEASEEND, 
 			CREATEDATE, 
 			OPERATORID ,
-			url 
+			FARMTYPE ,
+			url
 		 ) 
 		VALUES
 		(
@@ -163,7 +168,8 @@
 			#{leaseend,jdbcType=INTEGER}, 
 			#{createdate,jdbcType=DATE}, 
 			#{operatorid,jdbcType=VARCHAR} ,
-			#{url,jdbcType=VARCHAR} 
+			#{farmtype,jdbcType=INTEGER} ,
+			#{url,jdbcType=VARCHAR}
 		) 
 	</insert>
 	

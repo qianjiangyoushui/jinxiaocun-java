@@ -1,4 +1,4 @@
-package com.ecfund.base.action.wechat.g4;
+package com.ecfund.base.action.wechat.g3;
 
 import com.alibaba.fastjson.JSONArray;
 import com.ecfund.base.common.Constants;
@@ -21,12 +21,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.PrintWriter;
-import java.math.BigDecimal;
 import java.util.Date;
 
 @Controller
-@RequestMapping("/wechat/farm")
-public class G4FarmAction {
+@RequestMapping("/wechat/G3farm")
+public class G3FarmAction {
 
 	@Autowired
 	private FarmService farmService;
@@ -60,13 +59,12 @@ public class G4FarmAction {
 	}
 
 	@RequestMapping(value = "/list.action",produces = "application/json;charset=utf-8", method = RequestMethod.POST)
-	public @ResponseBody String list(HttpServletRequest request,Page page) throws Exception{
+	public @ResponseBody String list(HttpServletRequest request,Farm farm,Page page) throws Exception{
 		String skey = request.getHeader(Constants.WX_HEADER_SKEY);
 		Users user = new Users();
 		user.setGuid(skey);
 		user = userService.view(user);
-		Farm farm = new Farm();
-		farm.setFarmtype(2);
+		farm.setFarmtype(1);
 		farm.setCompanyid(user.getCompany().getGuid());
 		Page pagelist = farmService.findPageList(farm, page.getBegin(), page.getPageSize());
 		pagelist.setPageNo(page.getPageNo());
@@ -151,6 +149,7 @@ public class G4FarmAction {
 			farm.setCompanyid(user.getCompany().getGuid());
 			farm.setCreatedate(new Date(System.currentTimeMillis()));
 			farm.setOperatorid(user.getGuid());
+			farm.setFarmtype(1);
 
 			JSONArray imageids = JSONArray.parseArray(request.getParameter("imageids"));
 
