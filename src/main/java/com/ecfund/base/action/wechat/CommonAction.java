@@ -296,4 +296,33 @@ public class CommonAction {
 	}
 
 
+	@RequestMapping(value="/updatepwd.action",method=RequestMethod.POST,produces = "application/json;charset=utf-8")
+	public @ResponseBody String savepwd(String oldpwd,String newpwd1,String guid,HttpServletRequest request){
+		JSONObject result = new JSONObject();
+		try {
+			Users users=new Users();
+			users.setGuid(guid);
+			users.setPassword(MD5Utils.encryString(oldpwd));
+			users=userService.view(users);
+			if(users!=null){
+				Users u=new Users();
+				u.setGuid(guid);
+				u.setPassword(MD5Utils.encryString(newpwd1));
+				userService.update(u);
+				result.put("success",true);
+				result.put("content","修改成功");
+			}else{
+				JSONObject erro = new JSONObject();
+				result.put("success",false);
+				result.put("erro","原密码输入有误");
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			JSONObject erro = new JSONObject();
+			result.put("success",false);
+			result.put("erro",e.getMessage());
+		}
+		return result.toJSONString();
+	}
+
 }
