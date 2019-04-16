@@ -453,7 +453,8 @@
 	    	p.DISTROAD AS p_distroad, 
 	    	p.DISTOTHER AS p_distother, 
 	    	p.CREATEDATE AS p_createdate, 
-	    	p.OPERATORID AS p_operatorid 
+	    	p.OPERATORID AS p_operatorid,
+		f.farmname as farmname
 		FROM seedfile T
 		left join seedbed s
 		on T.placeid = s.guid
@@ -462,6 +463,7 @@
 		left join dictionary d2
 		on T.level =d2.keyvalue and d2.belongsid='3'
 		left join plots p on p.guid=T.placeid
+		left join farm f on p.farmid=f.guid
 		<include refid="WhereSQL" />
 		ORDER BY T.CREATEDATE DESC
 	</select>
@@ -630,7 +632,8 @@
 		<association property="plots" javaType="Plots">
 			<id property="guid" column="p_guid" />
 	    	<id property="farmid" column="p_farmid" /> 
-	    	<id property="plotname" column="p_plotname" /> 
+	    	<id property="farmname" column="farmname" />
+	    	<id property="plotname" column="p_plotname" />
 	    	<id property="irrigatetype" column="p_irrigatetype" /> 
 	    	<id property="irrigbrand" column="p_irrigbrand" /> 
 	    	<id property="wellsamount" column="p_wellsamount" />

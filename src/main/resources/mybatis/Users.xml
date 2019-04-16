@@ -23,9 +23,24 @@
 			<if test="registdate != null and registdate != ''">
 				AND T.REGISTDATE = #{registdate}
 			</if>
+			<if test="del != null and del != ''">
+				AND  IFNULL(T.DEL,'0')!=#{del}
+			</if>
 		</where>
 	</sql>
-
+	<select id="findUser" resultType="Users" parameterType="Users"
+			flushCache="false" useCache="true">
+		SELECT
+		T.GUID AS guid,
+		T.USERNAME AS username,
+		T.TELPHONE AS telphone,
+		T.PASSWORD AS password,
+		T.REGISTDATE AS registdate,
+		T.DEL AS del
+		FROM users T
+		<include refid="WhereSQL" />
+		ORDER BY T.REGISTDATE desc
+	</select>
 	<!-- 查找语句 -->
 	<select id="find" resultMap="users" parameterType="Users"
 		flushCache="false" useCache="true">
@@ -35,6 +50,7 @@
 		T.TELPHONE AS telphone,
 		T.PASSWORD AS password,
 		T.REGISTDATE AS registdate,
+		T.DEL AS del,
 		d.guid as d_guid,
 		d.departid as departid,
 		r.belongsname as departname,
@@ -55,7 +71,7 @@
 		on d.companyid = c.guid
 		left join dictionary r
 		on r.keyvalue=d.departid
-		where 1=1
+		where 1=1 AND r.belongsid=1 
 			<if test="guid != null and guid != ''">
 				AND T.GUID = #{guid}
 			</if>
@@ -77,6 +93,9 @@
 			<if test="openid != null and openid != ''">
 				AND c.guid = #{openid}
 			</if>
+            <if test="del != null and del != ''">
+				AND  IFNULL(T.DEL,'0')!=#{del}
+            </if>
 	</select>
 	
 	<resultMap type="Users" id="users">
@@ -85,6 +104,7 @@
 		<result property="telphone" column="telphone" />
 		<result property="password" column="password" />
 		<result property="registdate" column="registdate" />
+		<result property="del" column="del" />
 		<association property="depart" javaType="Department">
 			<id property="guid" column="d_guid"/>
 			<result property="departid" column="departid" />
@@ -134,6 +154,7 @@
 		<result property="password" column="password" />
 		<result property="registdate" column="registdate" />
 		<result property="openid" column="openid" />
+		<result property="del" column="del" />
 		<collection property="rolesList" ofType="Roles" >
 			<id property="guid" column="r_guid"/>
 			<result  property="name" column="r_name"/>
@@ -170,6 +191,7 @@
 			<if test="password != null">PASSWORD=#{password},</if>
 			<if test="registdate != null">REGISTDATE=#{registdate},</if>
 			<if test="openid != null">OPENID=#{openid},</if>
+			<if test="del != null">del=#{del},</if>
 		</set>
 		WHERE GUID = #{guid}
 	</update>

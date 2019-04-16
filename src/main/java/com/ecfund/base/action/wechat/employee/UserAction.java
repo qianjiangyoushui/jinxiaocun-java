@@ -37,6 +37,7 @@ public class UserAction {
         JSONObject content = new JSONObject();
         JSONObject result = new JSONObject();
         try {
+            users.setDel("-1");
             List<Users> list = usersService.find(users);
             content.put("list",list);
             result.put("success",true);
@@ -108,6 +109,26 @@ public class UserAction {
             depart.setCompanyid(user.getCompanyid());
             depart.setDepartid(departid);
             usersService.updateEmployee(user, depart,roles);
+            result.put("success",true);
+            result.put("content", content);
+        }catch (Exception e ){
+            JSONObject erro = new JSONObject();
+            erro.put("msg",e.getMessage());
+            result.put("success",false);
+            result.put("erro",erro);
+        }
+        return result.toJSONString();
+    }
+    @RequestMapping(value = "/del.action",produces = "application/json;charset=utf-8")
+    public String del(HttpServletRequest request,String guid){
+        JSONObject content = new JSONObject();
+        JSONObject result = new JSONObject();
+        try {
+            // 完善数据
+            Users user = new Users();
+            user.setGuid(guid);
+            user.setDel("-1");
+            usersService.update(user);
             result.put("success",true);
             result.put("content", content);
         }catch (Exception e ){

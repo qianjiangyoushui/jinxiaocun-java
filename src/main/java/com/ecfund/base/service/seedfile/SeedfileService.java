@@ -159,6 +159,7 @@ public class SeedfileService extends BaseService<Seedfile> {
 				case 3:seedfile.setStopmuck(d);break;
 				case 4:seedfile.setKilldate(d);break;
 				case 5:seedfile.setRewarddate(d);break;
+				case 6:seedfile.setEnddate(d);break;
 			}
 			update(seedfile);
 		}

@@ -11,6 +11,7 @@ import com.ecfund.base.model.users.Users;
 import com.ecfund.base.model.users.WxUser;
 import com.ecfund.base.model.wechat.Appinfo;
 import com.ecfund.base.util.common.HttpsRequestUtil;
+import com.ecfund.base.util.common.MD5Utils;
 import com.ecfund.base.util.common.StringUtils;
 import com.fasterxml.jackson.databind.jsonFormatVisitors.JsonObjectFormatVisitor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,9 +48,14 @@ public class SessionInfoService {
     public String login(String code, String id, String userName, String passwd) throws Exception {
         Appinfo appInfo = appinfoDAO.findByGuid(id);
         Users user = new Users();
-        user.setPassword(passwd);
-        user.setUsername(userName);
-        user = usersDAO.login(userName, passwd);
+        user.setTelphone(userName);
+        user = usersDAO.view(user);
+        if(user!=null){
+            user.setPassword(MD5Utils.encryString(passwd));
+            if(!(!"-1".equals(user.getDel())&&MD5Utils.encryString(passwd).equals(user.getPassword()))){
+                user = null;
+            }
+        }
         if (user == null) {
             JSONObject jsonObject = new JSONObject();
             jsonObject.put("code", ReturnCodeType.MA_AUTH_ERR);

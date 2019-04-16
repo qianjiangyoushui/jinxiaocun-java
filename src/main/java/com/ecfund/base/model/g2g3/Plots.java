@@ -23,7 +23,8 @@ public class Plots implements java.io.Serializable{
     private String guid;
     
     private String farmid;
-    
+    private String farmname;
+
     private String plotname;
 
     private String plotcode;
@@ -225,5 +226,13 @@ public class Plots implements java.io.Serializable{
 
     public void setArea(BigDecimal area) {
         this.area = area;
+    }
+
+    public String getFarmname() {
+        return farmname;
+    }
+
+    public void setFarmname(String farmname) {
+        this.farmname = farmname;
     }
 }

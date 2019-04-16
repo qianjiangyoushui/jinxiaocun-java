@@ -32,6 +32,7 @@ public class Users implements java.io.Serializable {
 	
 	private String companyid;//检索条件
 	private Integer sex;
+	private String del;
 	private Date createdate;
 	private String nicename;
 	private String openid;
@@ -158,5 +159,13 @@ public class Users implements java.io.Serializable {
 
 	public void setRolesList(List<Roles> rolesList) {
 		this.rolesList = rolesList;
+	}
+
+	public String getDel() {
+		return del;
+	}
+
+	public void setDel(String del) {
+		this.del = del;
 	}
 }
