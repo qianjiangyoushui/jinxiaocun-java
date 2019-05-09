@@ -214,14 +214,6 @@ public class CommonAction {
 		user.setGuid(skey);
 		user = userService.view(user);
 		growthrecord.setCompanyid(user.getCompany().getGuid());
-		user = userService.findRole(user);
-		List<Roles> roleList = user.getRolesList();
-		for (Roles r:roleList ) {
-			if("5".equals(r.getGuid())){
-				growthrecord.setCompanyid(null);
-			}
-		}
-
 		page.setPageSize(10);
 		Page  pageList = growthrecordService.findPagelist(growthrecord,page.getBegin(), page.getPageSize());
 		JSONObject result = new JSONObject();

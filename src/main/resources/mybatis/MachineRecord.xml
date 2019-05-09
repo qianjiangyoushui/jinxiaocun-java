@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="MachineRecord">
+
+    <!-- 缓存条数 -->
+    <cache size="2000" />
+
+    <!-- 条件语句 -->
+    <sql id="WhereSQL">
+        <where>
+            <if test="guid != null and guid != ''">
+                AND T.GUID = #{guid}
+            </if>
+            <if test="guids != null and guids != ''">
+                AND T.GUID IN
+                <foreach item="id" collection="guids" open="(" separator="," close=")">
+                    #{id}
+                </foreach>
+            </if>
+            <if test="repairdate != null and repairdate != ''">
+                AND T.REPAIRDATE = #{repairdate}
+            </if>
+            <if test="content != null and content != ''">
+                AND T.CONTENT = #{content}
+            </if>
+            <if test="companyid != null and companyid != ''">
+                AND T.COMPANYID = #{companyid}
+            </if>
+            <if test="departid != null and departid != ''">
+                AND T.DEPARTID = #{departid}
+            </if>
+            <if test="userid != null and userid != ''">
+                AND T.USERID = #{userid}
+            </if>
+            <if test="farmguid != null and farmguid != ''">
+                AND T.FARMGUID = #{farmguid}
+            </if>
+            <if test="farmname != null and farmname != ''">
+                AND T.FARMNAME = #{farmname}
+            </if>
+            <if test="createdate != null and createdate != ''">
+                AND T.CREATEDATE = #{createdate}
+            </if>
+            <if test="year != null and year != ''">
+                AND T.YEAR = #{year}
+            </if>
+            <if test="month != null and month != ''">
+                AND T.MONTH = #{month}
+            </if>
+            <if test="day != null and day != ''">
+                AND T.DAY = #{day}
+            </if>
+            <if test="sort != null and sort != ''">
+                AND T.SORT = #{sort}
+            </if>
+        </where>
+    </sql>
+
+    <!-- 查找语句 -->
+    <select id="find" resultType="MachineRecord" parameterType="MachineRecord" flushCache="false" useCache="true">
+        SELECT
+        T.GUID AS guid,
+        T.REPAIRDATE AS repairdate,
+        T.CONTENT AS content,
+        T.COMPANYID AS companyid,
+        T.DEPARTID AS departid,
+        T.USERID AS userid,
+        T.FARMGUID AS farmguid,
+        T.FARMNAME AS farmname,
+        T.CREATEDATE AS createdate,
+        T.YEAR AS year,
+        T.MONTH AS month,
+        T.DAY AS day,
+        T.SORT AS sort
+        FROM machine_record T
+        <include refid="WhereSQL" />
+        ORDER BY SORT DESC
+    </select>
+    <!-- 查找语句 -->
+    <select id="findContainImages" resultMap="MachineRecordMap" parameterType="MachineRecord" flushCache="false" useCache="true">
+        SELECT
+        T.GUID AS guid,
+        T.REPAIRDATE AS repairdate,
+        T.CONTENT AS content,
+        T.COMPANYID AS companyid,
+        T.DEPARTID AS departid,
+        T.USERID AS userid,
+        T.FARMGUID AS farmguid,
+        T.FARMNAME AS farmname,
+        T.CREATEDATE AS createdate,
+        T.YEAR AS year,
+        T.MONTH AS month,
+        T.DAY AS day,
+        T.SORT AS sort,
+        U.GUID AS u_guid,
+        U.URL AS url,
+        U.URL2 AS url2,
+        U.IMAGENAME AS imagename,
+        U.RELATEDID AS relatedid,
+        U.UPLOADDATE AS uploaddate,
+        S.GUID AS s_guid,
+        S.USERNAME AS username,
+        S.TELPHONE AS telphone
+        FROM machine_record T
+        LEFT JOIN upimage U ON T.GUID=U.RELATEDID
+        LEFT JOIN USERS S ON T.USERID=S.GUID
+        <include refid="WhereSQL" />
+        ORDER BY SORT DESC
+    </select>
+
+    <!-- 获取总记录数语句 -->
+    <select id="findCount" resultType="java.lang.Integer" parameterType="MachineRecord" flushCache="false" useCache="true">
+        SELECT COUNT(*)  FROM machine_record T
+        <include refid="WhereSQL" />
+    </select>
+
+    <!-- 插入语句 -->
+    <insert id="insert" parameterType="MachineRecord" flushCache="true">
+        INSERT INTO machine_record
+        (
+        GUID,
+        REPAIRDATE,
+        CONTENT,
+        COMPANYID,
+        DEPARTID,
+        USERID,
+        FARMGUID,
+        FARMNAME,
+        CREATEDATE,
+        YEAR,
+        MONTH,
+        DAY,
+        SORT
+        )
+        VALUES
+        (
+        #{guid,jdbcType=VARCHAR},
+        #{repairdate,jdbcType=DATE},
+        #{content,jdbcType=VARCHAR},
+        #{companyid,jdbcType=VARCHAR},
+        #{departid,jdbcType=VARCHAR},
+        #{userid,jdbcType=VARCHAR},
+        #{farmguid,jdbcType=VARCHAR},
+        #{farmname,jdbcType=VARCHAR},
+        #{createdate,jdbcType=DATE},
+        #{year,jdbcType=VARCHAR},
+        #{month,jdbcType=VARCHAR},
+        #{day,jdbcType=VARCHAR},
+        #{sort,jdbcType=DATE}
+        )
+    </insert>
+
+    <!-- 更新语句 -->
+    <update id="update"  parameterType="MachineRecord" flushCache="true">
+        update machine_record
+        <set>
+            <if test="guid != null">GUID=#{guid},</if>
+            <if test="repairdate != null">REPAIRDATE=#{repairdate},</if>
+            <if test="content != null">CONTENT=#{content},</if>
+            <if test="companyid != null">COMPANYID=#{companyid},</if>
+            <if test="departid != null">DEPARTID=#{departid},</if>
+            <if test="userid != null">USERID=#{userid},</if>
+            <if test="farmguid != null">FARMGUID=#{farmguid},</if>
+            <if test="farmname != null">FARMNAME=#{farmname},</if>
+            <if test="createdate != null">CREATEDATE=#{createdate},</if>
+            <if test="year != null">YEAR=#{year},</if>
+            <if test="month != null">MONTH=#{month},</if>
+            <if test="day != null">DAY=#{day},</if>
+            <if test="sort != null">SORT=#{sort},</if>
+        </set>
+        WHERE GUID = #{guid}
+    </update>
+
+    <!-- 单选删除语句 -->
+    <delete id="delete" parameterType="MachineRecord" flushCache="true">
+        DELETE FROM machine_record WHERE GUID = #{guid}
+    </delete>
+
+    <!-- 多选删除 -->
+    <delete id="mulDel" parameterType="java.lang.String" flushCache="true">
+        DELETE FROM machine_record WHERE GUID IN
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    <resultMap id="MachineRecordMap" type="MachineRecord">
+        <id property="guid" column="guid" />
+        <result property="companyid" column="companyid" />
+        <result property="userid" column="userid" />
+        <result property="farmname" column="farmname" />
+        <result property="farmguid" column="farmguid" />
+        <result property="departid" column="departid" />
+        <result property="content" column="content" />
+        <result property="repairdate" column="repairdate" />
+        <result property="month" column="month" />
+        <result property="day" column="day" />
+        <result property="createdate" column="createdate" />
+        <result property="sort" column="sort" />
+        <association  property="user" javaType="Users">
+            <id property="guid" column="s_guid" />
+            <result property="username" column="username" />
+            <result property="telphone" column="telphone" />
+        </association >
+        <collection property="images" ofType="Upimage" javaType="List">
+            <id property="guid" column="u_guid" />
+            <result property="url" column="url" />
+            <result property="url2" column="url2" />
+            <result property="imagename" column="imagename" />
+            <result property="relatedid" column="relatedid" />
+            <result property="uploaddate" column="uploaddate" />
+        </collection>
+    </resultMap>
+</mapper>

@@ -9,6 +9,7 @@ import com.ecfund.base.model.publics.Growthrecord;
 import com.ecfund.base.model.publics.PerformanceCount;
 import com.ecfund.base.model.seedfile.Seedfile;
 import com.ecfund.base.service.BaseService;
+import com.ecfund.base.util.common.DateUtil;
 import com.ecfund.base.util.common.Page;
 import org.apache.commons.collections.list.GrowthList;
 import org.apache.ibatis.session.RowBounds;
@@ -46,6 +47,7 @@ public class GrowthrecordService extends BaseService<Growthrecord> {
             seedfile.setGuid(guid);
             seedfile = seedfileDAO.view("findg2g3",seedfile);
             growthrecord.setBatchid(guid);
+            growthrecord.setType(seedfile.getType());
             growthrecord.setPlot(seedfile.getPlots().getPlotname());
             growthrecord.setBatchcode(jsonArray2[i]);
             result[i]= insert(growthrecord);
@@ -235,5 +237,29 @@ public class GrowthrecordService extends BaseService<Growthrecord> {
             result[i]= insert(growthrecord);
         }
         return result;
+    }
+
+    public String  delRecord(String guid) {
+        JSONObject result = new JSONObject();
+        try {
+            Growthrecord growthrecord = new Growthrecord();
+            growthrecord.setGuid(guid);
+            growthrecord = growthrecordDAO.view(growthrecord);
+            if(DateUtil.computeDays(growthrecord.getCreatedate())>1){
+                //不可以删除
+                result.put("success",false);
+                result.put("erro","数据超过一天不可以删除");
+            }else{
+                //可以删除
+                growthrecordDAO.delete(growthrecord);
+                result.put("success",true);
+                result.put("content","删除成功");
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+            result.put("success",false);
+            result.put("erro",e.getMessage());
+        }
+        return result.toJSONString();
     }
 }

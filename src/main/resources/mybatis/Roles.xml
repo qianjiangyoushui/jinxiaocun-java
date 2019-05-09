@@ -75,8 +75,8 @@
         M.SORT AS m_sort,
         M.ICON AS m_icon
         FROM ROLES T
-        LEFT JOIN ROLE_MENU RU ON  T.GUID = RU.ROLE_GUID
-        LEFT JOIN MENUS M ON RU.MENU_GUID = M.GUID
+         JOIN ROLE_MENU RU ON  T.GUID = RU.ROLE_GUID
+         JOIN MENUS M ON RU.MENU_GUID = M.GUID
         <include refid="WhereSQL" />
         ORDER BY M.SORT ASC
     </select>

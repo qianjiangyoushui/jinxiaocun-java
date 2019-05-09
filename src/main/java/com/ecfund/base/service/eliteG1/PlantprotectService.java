@@ -8,12 +8,15 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
+import com.alibaba.fastjson.JSONObject;
 import com.ecfund.base.dao.g2g3.PlotsDAO;
 import com.ecfund.base.dao.publics.GrowthrecordDAO;
 import com.ecfund.base.dao.seedfile.SeedfileDAO;
+import com.ecfund.base.model.eliteG1.Manure;
 import com.ecfund.base.model.g2g3.Plots;
 import com.ecfund.base.model.publics.Growthrecord;
 import com.ecfund.base.model.seedfile.Seedfile;
+import com.ecfund.base.util.common.DateUtil;
 import org.apache.commons.configuration.Configuration;
 import org.apache.commons.configuration.PropertiesConfiguration;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -144,5 +147,29 @@ public class PlantprotectService extends BaseService<Plantprotect> {
 			result[j] = guid;
 		}
 		return result;
+	}
+
+    public String delRecord(String guid) {
+		JSONObject result = new JSONObject();
+		try {
+			Plantprotect manure = new Plantprotect();
+			manure.setGuid(guid);
+			manure = this.view(manure);
+			if(DateUtil.computeDays(manure.getCreatedate())>1){
+				//不可以删除
+				result.put("success",false);
+				result.put("erro","数据超过一天不可以删除");
+			}else{
+				//可以删除
+				this.delete(manure);
+				result.put("success",true);
+				result.put("content","删除成功");
+			}
+		}catch (Exception e){
+			e.printStackTrace();
+			result.put("success",false);
+			result.put("erro",e.getMessage());
+		}
+		return result.toJSONString();
 	}
 }

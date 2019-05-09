@@ -1,6 +1,7 @@
 package com.ecfund.base.service.eliteG1;
 
 import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.ecfund.base.dao.eliteG1.ManureDAO;
 import com.ecfund.base.dao.g2g3.PlotsDAO;
 import com.ecfund.base.dao.publics.GrowthrecordDAO;
@@ -15,6 +16,7 @@ import com.ecfund.base.model.users.Users;
 import com.ecfund.base.service.BaseService;
 import com.ecfund.base.service.publics.LogsService;
 import com.ecfund.base.service.publics.UpimageService;
+import com.ecfund.base.util.common.DateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -34,8 +36,8 @@ import java.util.Date;
 @Service
 public class ManureService extends BaseService<Manure> {
 
-	//@Autowired
-	//private ManureDAO manureDAO;
+	@Autowired
+	private ManureDAO manureDAO;
 
 	@Autowired
 	public void setBaseDAO(ManureDAO manureDAO) {
@@ -135,4 +137,28 @@ public class ManureService extends BaseService<Manure> {
 		}
 		return result;
     }
+
+    public String delRecord(String guid) {
+		JSONObject result = new JSONObject();
+		try {
+			Manure manure = new Manure();
+			manure.setGuid(guid);
+			manure = manureDAO.view(manure);
+			if(DateUtil.computeDays(manure.getCreatedate())>1){
+				//不可以删除
+				result.put("success",false);
+				result.put("erro","数据超过一天不可以删除");
+			}else{
+				//可以删除
+				manureDAO.delete(manure);
+				result.put("success",true);
+				result.put("content","删除成功");
+			}
+		}catch (Exception e){
+			e.printStackTrace();
+			result.put("success",false);
+			result.put("erro",e.getMessage());
+		}
+		return result.toJSONString();
+	}
 }

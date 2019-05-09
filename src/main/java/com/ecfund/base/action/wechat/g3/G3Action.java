@@ -193,4 +193,24 @@ public class G3Action {
             default:return "G";
         }
     }
+    @RequestMapping(value = "/growthDel.action",produces = "application/json;charset=utf-8")
+    public @ResponseBody
+    String growthDel(HttpServletRequest request, String guid) throws Exception {
+        return growthrecordService.delRecord(guid);
+    }
+    @RequestMapping(value = "/manureDel.action",produces = "application/json;charset=utf-8")
+    public @ResponseBody
+    String manureDel(HttpServletRequest request, String guid) throws Exception {
+        return manureService.delRecord(guid);
+    }
+    @RequestMapping(value = "/protectDel.action",produces = "application/json;charset=utf-8")
+    public @ResponseBody
+    String protectDel(HttpServletRequest request, String guid) throws Exception {
+        return plantprotectService.delRecord(guid);
+    }
+    @RequestMapping(value = "/waterDel.action",produces = "application/json;charset=utf-8")
+    public @ResponseBody
+    String waterDel(HttpServletRequest request, String guid) throws Exception {
+        return irrigationService.delRecord(guid);
+    }
 }

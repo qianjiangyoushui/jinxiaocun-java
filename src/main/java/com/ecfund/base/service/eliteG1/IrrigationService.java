@@ -1,11 +1,13 @@
 package com.ecfund.base.service.eliteG1;
 
 import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.ecfund.base.dao.eliteG1.IrrigationDAO;
 import com.ecfund.base.dao.g2g3.PlotsDAO;
 import com.ecfund.base.dao.publics.GrowthrecordDAO;
 import com.ecfund.base.dao.seedfile.SeedfileDAO;
 import com.ecfund.base.model.eliteG1.Irrigation;
+import com.ecfund.base.model.eliteG1.Plantprotect;
 import com.ecfund.base.model.g2g3.Plots;
 import com.ecfund.base.model.publics.Growthrecord;
 import com.ecfund.base.model.publics.Logs;
@@ -15,6 +17,7 @@ import com.ecfund.base.model.users.Users;
 import com.ecfund.base.service.BaseService;
 import com.ecfund.base.service.publics.LogsService;
 import com.ecfund.base.service.publics.UpimageService;
+import com.ecfund.base.util.common.DateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -135,4 +138,28 @@ public class IrrigationService extends BaseService<Irrigation> {
 		}
 		return result;
     }
+
+    public String delRecord(String guid) {
+		JSONObject result = new JSONObject();
+		try {
+			Irrigation manure = new Irrigation();
+			manure.setGuid(guid);
+			manure = this.view(manure);
+			if(DateUtil.computeDays(manure.getCreatedate())>1){
+				//不可以删除
+				result.put("success",false);
+				result.put("erro","数据超过一天不可以删除");
+			}else{
+				//可以删除
+				this.delete(manure);
+				result.put("success",true);
+				result.put("content","删除成功");
+			}
+		}catch (Exception e){
+			e.printStackTrace();
+			result.put("success",false);
+			result.put("erro",e.getMessage());
+		}
+		return result.toJSONString();
+	}
 }

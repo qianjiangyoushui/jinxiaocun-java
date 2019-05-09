@@ -1550,4 +1550,13 @@ public class DateUtil {
         SimpleDateFormat time = new SimpleDateFormat("yyyyMMdd");
         return time.format(date);
     }
+
+    public static int computeDays(Date date){
+        Calendar now = Calendar.getInstance();
+        int today = now.get(Calendar.DAY_OF_YEAR);
+        Calendar crateDate =Calendar.getInstance();
+        crateDate.setTime(date);
+        int dateDay = crateDate.get(Calendar.DAY_OF_YEAR);
+        return today-dateDay;
+    }
 }  
