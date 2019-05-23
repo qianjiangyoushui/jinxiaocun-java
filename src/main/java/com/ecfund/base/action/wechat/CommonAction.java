@@ -1,21 +1,14 @@
 package com.ecfund.base.action.wechat;
 
-import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.alibaba.fastjson.serializer.ObjectArrayCodec;
 import com.ecfund.base.common.Constants;
 import com.ecfund.base.model.publics.Dictionary;
-import com.ecfund.base.model.publics.Growthrecord;
 import com.ecfund.base.model.publics.Upimage;
-import com.ecfund.base.model.users.Menus;
-import com.ecfund.base.model.users.Roles;
 import com.ecfund.base.model.users.Users;
 import com.ecfund.base.service.publics.DictionaryService;
-import com.ecfund.base.service.publics.GrowthrecordService;
 import com.ecfund.base.service.publics.UpimageService;
 import com.ecfund.base.service.users.UsersService;
 import com.ecfund.base.util.common.ImgCompress;
-import com.ecfund.base.util.common.Page;
 import org.apache.commons.configuration.Configuration;
 import org.apache.commons.configuration.PropertiesConfiguration;
 import org.slf4j.Logger;
@@ -25,12 +18,13 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.*;
-import java.util.*;
+import java.util.Calendar;
+import java.util.List;
+import java.util.Random;
 
 /**
  * 设置
@@ -46,8 +40,7 @@ public class CommonAction {
 
 	@Autowired
 	private UpimageService upimgService;
-	@Autowired
-	private GrowthrecordService growthrecordService;
+
 	@Autowired
 	private DictionaryService dictService;
 	@RequestMapping(value = "/dict.action",produces = "application/json;charset=utf-8")
@@ -183,84 +176,5 @@ public class CommonAction {
 		result.put("content", "");
 		return result.toJSONString();
 	}
-	@RequestMapping(value = "/growthrecordSave.action",produces = "application/json;charset=utf-8")
-	public @ResponseBody String growthrecordSave(HttpServletRequest request, Growthrecord growthrecord,String selectValue,String selectName ) throws Exception{
-		String skey = request.getHeader(Constants.WX_HEADER_SKEY);
-		Users user = new Users();
-		user.setGuid(skey);
-		user = userService.view(user);
-		Date createDate = growthrecord.getCreatedate();
-		Calendar calendar = Calendar.getInstance();
-		calendar.setTime(createDate);
-		String month = calendar.get(Calendar.MONTH)+1+"";
-		String day = calendar.get(Calendar.DAY_OF_MONTH)+"";
-		growthrecord.setMonth(month);
-		growthrecord.setDay(day);
-		growthrecord.setCompanyid(user.getCompany().getGuid());
-		growthrecord.setUserid(user.getGuid());
-		growthrecord.setVisible(1);
-		String guid = growthrecordService.insert(growthrecord);
-		JSONObject result = new JSONObject();
-        JSONObject content = new JSONObject();
-        content.put("guid",guid);
-		result.put("success",true);
-		result.put("content", content);
-		return result.toJSONString();
-	}
-	@RequestMapping(value = "/growthrecordList.action",produces = "application/json;charset=utf-8")
-	public @ResponseBody String growthrecordList(HttpServletRequest request,Growthrecord growthrecord, Page page) throws Exception{
-		String skey = request.getHeader(Constants.WX_HEADER_SKEY);
-		Users user = new Users();
-		user.setGuid(skey);
-		user = userService.view(user);
-		growthrecord.setCompanyid(user.getCompany().getGuid());
-		user = userService.findRole(user);
-		List<Roles> roleList = user.getRolesList();
-		for (Roles r:roleList ) {
-			if("5".equals(r.getGuid())){
-				growthrecord.setCompanyid(null);
-			}
-		}
 
-		page.setPageSize(10);
-		Page  pageList = growthrecordService.findPagelist(growthrecord,page.getBegin(), page.getPageSize());
-		JSONObject result = new JSONObject();
-        JSONObject content = new JSONObject();
-        content.put("page",pageList);
-		result.put("success",true);
-		result.put("content", content);
-		return result.toJSONString();
-	}
-	@RequestMapping(value = "/growthrecordBatchsave.action",produces = "application/json;charset=utf-8")
-	public @ResponseBody String growthrecordBatchsave(HttpServletRequest request, Growthrecord growthrecord,String selectValue,String selectName ) throws Exception{
-		String skey = request.getHeader(Constants.WX_HEADER_SKEY);
-		Users user = new Users();
-		user.setGuid(skey);
-		user = userService.view(user);
-		Date createDate = growthrecord.getCreatedate();
-		Calendar calendar = Calendar.getInstance();
-		calendar.setTime(createDate);
-		String month = calendar.get(Calendar.MONTH)+1+"";
-		String day = calendar.get(Calendar.DAY_OF_MONTH)+"";
-		growthrecord.setMonth(month);
-		growthrecord.setMonth(month);
-		growthrecord.setDay(day);
-		growthrecord.setCompanyid(user.getCompany().getGuid());
-		growthrecord.setUserid(user.getGuid());
-		growthrecord.setVisible(1);
-		String[] array = selectValue.split(",");
-		String[] array2 = selectName.split(",");
-		String[] guid = growthrecordService.batchInsert(growthrecord,array,array2);
-		StringBuffer rr =new StringBuffer();
-		for (String s:guid ) {
-			rr.append(s).append(",");
-		}
-		String rrr = rr.deleteCharAt(rr.length()-1).toString();
-		JSONObject result = new JSONObject();
-        JSONObject content = new JSONObject();
-        content.put("guid",rrr);
-		result.put("success",true);
-		result.put("content", content);
-		return result.toJSONString();
-	}
 }

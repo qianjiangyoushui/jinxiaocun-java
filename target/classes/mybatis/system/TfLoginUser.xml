@@ -1,0 +1,391 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="TfLoginUser">
+
+	<!-- 缓存条数 -->
+	<cache size="5000" />
+
+	<!-- 条件语句 -->
+	<sql id="WhereSQL">
+		<where>
+			<if test="guid != null and guid != ''">
+				AND T.GUID = #{guid}
+			</if>
+			<if test="code != null and code != ''">
+				AND T.CODE = #{code}
+			</if>
+			<if test="likeCode != null and likeCode != ''">
+				<!-- 为了避免出现过滤的时候大小匹配包含的问题，采用逗号的方式处理 -->
+				AND #{likeCode} like ('%,'||T.CODE||',%')
+			</if>
+			<if test="likeCodeRight != null and likeCodeRight != ''">
+				<!-- 为了避免出现过滤的时候大小匹配包含的问题，采用逗号的方式处理 -->
+				AND T.CODE like ('%'||#{likeCodeRight}||'%')
+			</if>
+			<if test="loginName != null and loginName != ''">
+				AND T.LOGIN_NAME = #{loginName}
+			</if>
+			<if test="likeLoginName != null and likeLoginName != ''">
+				<!-- 为了避免出现过滤的时候大小匹配包含的问题，采用逗号的方式处理 -->
+				AND #{likeLoginName} like ('%,'||T.LOGIN_NAME||',%')
+			</if>
+			<if test="likeLoginNameRight != null and likeLoginNameRight != ''">
+				AND T.LOGIN_NAME like ('%'||#{likeLoginNameRight}||'%')
+			</if>
+			<if test="loginPass != null and loginPass != ''">
+				AND T.LOGIN_PASS = #{loginPass}
+			</if>
+			<if test="realName != null and realName != ''">
+				AND T.REAL_NAME = #{realName}
+			</if>
+			<if test="likeRealName != null and likeRealName != ''">
+				AND T.REAL_NAME like('%'|| #{likeRealName} ||'%')
+			</if>
+			<if test="sex != null and sex != ''">
+				AND T.SEX = #{sex}
+			</if>
+			<if test="isLock != null and isLock != ''">
+				AND T.IS_LOCK = #{isLock}
+			</if>
+			<if test="lastLoginDate != null and lastLoginDate != ''">
+				AND T.LAST_LOGIN_DATE = #{lastLoginDate}
+			</if>
+			<if test="lastLoginIp != null and lastLoginIp != ''">
+				AND T.LAST_LOGIN_IP = #{lastLoginIp}
+			</if>
+			<if test="writeDate != null and writeDate != ''">
+				AND T.WRITE_DATE = #{writeDate}
+			</if>
+			<if test="sort != null and sort != ''">
+				AND T.SORT = #{sort}
+			</if>
+			<if test="memo != null and memo != ''">
+				AND T.MEMO = #{memo}
+			</if>
+			<if test="del != null and del != ''">
+				AND T.DEL = #{del}
+			</if>
+			<if test="roleGuid != null and roleGuid != ''">
+				AND tfr.GUID = #{roleGuid}
+			</if>
+			<if test="deptGuid != null and deptGuid != ''">
+				AND tfd.guid = #{deptGuid}
+			</if>
+			<if test="likeDeptGuid != null and likeDeptGuid != ''">
+				AND tfd.fulltree like('%'||#{likeDeptGuid}||'%')
+			</if>
+			<if test="roleName != null and roleName != ''">
+				AND tr.name = #{roleName}
+			</if>
+			<if test="likeRoleName != null and likeRoleName != ''">
+				AND tr.name like('%'||#{likeRoleName}||'%')
+			</if>
+			<if test="meta1 != null and meta1 != ''">
+				AND T.META_1 = #{meta1}
+			</if>
+			<if test="meta2 != null and meta2 != ''">
+				AND T.META_2 = #{meta2}
+			</if>
+			<if test="meta3 != null and meta3 != ''">
+				AND T.META_3 = #{meta3}
+			</if>
+			<if test="meta4 != null and meta4 != ''">
+				AND T.META_4 = #{meta4}
+			</if>
+			<if test="meta5 != null and meta5 != ''">
+				AND T.META_5 = #{meta5}
+			</if>
+			<if test="openid != null and openid != ''">
+				AND T.OPENID = #{openid}
+			</if>
+		</where>
+	</sql>
+
+	<!-- 查找语句 -->
+	<select id="find" resultType="TfLoginUser" parameterType="TfLoginUser"
+		flushCache="false" useCache="true">
+		SELECT
+		T.GUID AS GUID,
+		T.CODE AS CODE,
+		T.LOGIN_NAME AS LOGINNAME,
+		T.LOGIN_PASS AS LOGINPASS,
+		T.REAL_NAME AS REALNAME,
+		T.SEX AS SEX,
+		T.IS_LOCK AS ISLOCK,
+		T.LAST_LOGIN_DATE AS LASTLOGINDATE,
+		T.LAST_LOGIN_IP AS LASTLOGINIP,
+		T.WRITE_DATE AS WRITEDATE,
+		T.UPDATE_DATE AS updateDate,
+		T.SORT AS SORT,
+		T.MEMO AS MEMO,
+		T.DEL AS DEL,
+		T.META_1 AS META1,
+		T.META_2 AS META2,
+		T.META_3 AS META3,
+		T.META_4 AS META4,
+		T.META_5 AS META5,
+		T.OPENID AS openid,
+		group_concat(TF.ROLE_GUID)  AS ROLEGUID,
+		TFD.GUID AS DEPTGUID,
+		group_concat(TR.NAME)   AS ROLENAME,
+		group_concat(TR.CODE)    AS ROLECODE
+		FROM TF_LOGIN_USER T
+		LEFT JOIN TF_ROLE_USER TF ON T.GUID=TF.USER_GUID
+		LEFT JOIN TF_USER_DEPT TUD ON TUD.USER_GUID=T.GUID
+		LEFT JOIN TF_DEPARTMENT TFD ON TFD.GUID=TUD.DEPT_GUID
+		LEFT JOIN TF_ROLES TR ON TR.GUID=TF.ROLE_GUID
+		<include refid="WhereSQL" />
+		GROUP BY T.GUID,T.CODE,T.LOGIN_NAME,T.LOGIN_PASS,
+		T.REAL_NAME,T.SEX,T.IS_LOCK,T.LAST_LOGIN_DATE,T.LAST_LOGIN_IP,
+		T.WRITE_DATE,
+		T.UPDATE_DATE,T.SORT,T.MEMO,T.DEL,T.META_1,T.META_2,T.META_3,T.META_4,T.META_5,TFD.GUID
+		ORDER BY SORT
+	</select>
+
+	<!-- 获取总记录数语句 -->
+	<select id="findCount" resultType="java.lang.Integer"
+		parameterType="TfLoginUser" flushCache="false" useCache="true">
+		SELECT COUNT(*) FROM TF_LOGIN_USER T
+		<include refid="WhereSQL" />
+	</select>
+
+	<!--通过角色Id来查询人员信息 -->
+	<select id="findByRoleGuid" resultType="TfLoginUser"
+		parameterType="TfLoginUser" flushCache="false" useCache="true">
+		SELECT
+		T.GUID AS GUID,
+		T.CODE AS CODE,
+		T.LOGIN_NAME AS LOGINNAME,
+		T.LOGIN_PASS AS LOGINPASS,
+		T.REAL_NAME AS REALNAME,
+		T.SEX AS SEX,
+		T.IS_LOCK AS ISLOCK,
+		T.LAST_LOGIN_DATE AS LASTLOGINDATE,
+		T.LAST_LOGIN_IP AS LASTLOGINIP,
+		T.WRITE_DATE AS WRITEDATE,
+		T.UPDATE_DATE AS updateDate,
+		T.SORT AS SORT,
+		T.MEMO AS MEMO,
+		T.DEL AS DEL,
+		T.META_1 AS META1,
+		T.META_2 AS META2,
+		T.META_3 AS META3,
+		T.META_4 AS META4,
+		T.META_5 AS META5,
+		T.OPENID AS openid,
+		WMSYS.WM_CONCAT(TFR.NAME) AS ROLENAME,
+		WMSYS.WM_CONCAT(TFR.CODE) AS ROLECODE,
+		WMSYS.WM_CONCAT(TRU.ROLE_GUID) AS ROLEGUID
+		FROM TF_LOGIN_USER T
+		LEFT JOIN TF_ROLE_USER TRU ON T.GUID=TRU.USER_GUID
+		LEFT JOIN TF_ROLES TFR ON TFR.GUID=TRU.ROLE_GUID
+		<include refid="WhereSQL" />
+		GROUP BY T.GUID, T.CODE,T.LOGIN_NAME, T.LOGIN_PASS, T.REAL_NAME,
+		T.SEX,T.IS_LOCK, T.LAST_LOGIN_DATE, T.LAST_LOGIN_IP, T.WRITE_DATE,
+		T.UPDATE_DATE, T.SORT,
+		T.MEMO,T.DEL, T.META_1,T.META_2,T.META_3,T.META_4,T.META_5
+		ORDER BY SORT
+	</select>
+
+	<!-- 获取按照角色ID来查询总记录数语句 -->
+	<select id="findByRoleGuidCount" resultType="java.lang.Integer"
+		parameterType="TfLoginUser" flushCache="false" useCache="true">
+		SELECT COUNT(*) FROM (
+		SELECT
+		T.GUID AS GUID,
+		WMSYS.WM_CONCAT(TFR.NAME) AS ROLENAME,
+		WMSYS.WM_CONCAT(TRU.ROLE_GUID) AS ROLEGUID
+		FROM TF_LOGIN_USER T
+		LEFT JOIN TF_ROLE_USER TRU ON T.GUID=TRU.USER_GUID
+		LEFT JOIN TF_ROLES TFR ON TFR.GUID=TRU.ROLE_GUID
+		<include refid="WhereSQL" />
+		GROUP BY T.GUID
+		)
+	</select>
+
+	<!--通过部门Id来查询人员信息 -->
+	<select id="findByDeptGuid" resultType="TfLoginUser"
+		parameterType="TfLoginUser" flushCache="false" useCache="true">
+		SELECT
+		T.GUID AS GUID,
+		T.CODE AS CODE,
+		T.LOGIN_NAME AS LOGINNAME,
+		T.LOGIN_PASS AS LOGINPASS,
+		T.REAL_NAME AS REALNAME,
+		T.SEX AS SEX,
+		T.IS_LOCK AS ISLOCK,
+		T.LAST_LOGIN_DATE AS LASTLOGINDATE,
+		T.LAST_LOGIN_IP AS LASTLOGINIP,
+		T.WRITE_DATE AS WRITEDATE,
+		T.UPDATE_DATE AS updateDate,
+		T.SORT AS SORT,
+		T.MEMO AS MEMO,
+		T.DEL AS DEL,
+		T.META_1 AS META1,
+		T.META_2 AS META2,
+		T.META_3 AS META3,
+		T.META_4 AS META4,
+		T.META_5 AS META5,
+		T.OPENID AS openid,
+		TFD.NAME AS DEPTNAME,
+		TFD.GUID AS DEPTGUID,
+		TFD.FULLNAME AS DEPTFULLNAME,
+		group_concat(TRU.ROLE_GUID) AS ROLEGUID,
+		group_concat(TR.NAME) AS ROLENAME,
+		group_concat(TR.CODE) AS ROLECODE
+		FROM TF_LOGIN_USER T
+		LEFT JOIN TF_ROLE_USER TRU ON TRU.USER_GUID=T.GUID
+		LEFT JOIN TF_ROLES TR ON TR.GUID=TRU.ROLE_GUID
+		INNER JOIN TF_USER_DEPT TUD ON T.GUID=TUD.USER_GUID
+		INNER JOIN TF_DEPARTMENT TFD ON TFD.GUID=TUD.DEPT_GUID
+		<include refid="WhereSQL" />
+		GROUP BY T.GUID, T.CODE,T.LOGIN_NAME, T.LOGIN_PASS, T.REAL_NAME,
+		T.SEX,T.IS_LOCK, T.LAST_LOGIN_DATE, T.LAST_LOGIN_IP, T.WRITE_DATE,
+		T.UPDATE_DATE,T.SORT,
+		T.MEMO,T.DEL,
+		T.META_1,T.META_2,T.META_3,T.META_4,T.META_5,TFD.NAME,TFD.GUID,TFD.FULLNAME
+		ORDER BY SORT
+	</select>
+
+	<!-- 获取按照部门ID来查询总记录数语句 -->
+	<select id="findByDeptGuidCount" resultType="java.lang.Integer"
+		parameterType="TfLoginUser" flushCache="false" useCache="true">
+		SELECT COUNT(*)
+		FROM TF_LOGIN_USER T
+		left join Tf_User_Dept tud on T.GUID=tud.user_guid
+		left join Tf_Department tfd on tfd.guid=tud.dept_guid
+		LEFT JOIN TF_ROLE_USER TRU ON TRU.USER_GUID=T.GUID
+		LEFT JOIN TF_ROLES TR ON TR.GUID=TRU.ROLE_GUID
+		<include refid="WhereSQL" />
+	</select>
+
+	<!--查询部门下没有分配角色的人员 -->
+	<select id="findNotRoleByDeptGuid" resultType="TfLoginUser"
+		parameterType="TfLoginUser" flushCache="false" useCache="true">
+		SELECT
+		T.GUID AS guid,
+		T.CODE AS code,
+		T.LOGIN_NAME AS loginName,
+		T.LOGIN_PASS AS loginPass,
+		T.REAl_NAME AS realName,
+		T.SEX AS sex,
+		T.IS_LOCK AS isLock,
+		T.LAST_LOGIN_DATE AS lastLoginDate,
+		T.LAST_LOGIN_IP AS lastLoginIp,
+		T.WRITE_DATE AS writeDate,
+		T.UPDATE_DATE AS updateDate,
+		T.SORT AS sort,
+		T.MEMO AS memo,
+		T.DEL AS del,
+		T.META_1 as meta1,
+		T.META_2 as meta2,
+		T.META_3 as meta3,
+		T.META_4 as meta4,
+		T.META_5 as meta5,
+		T.OPENID as openid,
+		tfd.name AS deptName,
+		tfd.guid As deptGuid,
+		tru.role_guid As roleGuid
+		FROM TF_LOGIN_USER T
+		left join Tf_Role_User tru on tru.user_guid=T.GUID
+		left join Tf_Roles tr on tr.guid=tru.role_guid
+		left join Tf_User_Dept tud on T.GUID=tud.user_guid
+		left join Tf_Department tfd on tfd.guid=tud.dept_guid
+		<include refid="WhereSQL" />
+		and tru.role_guid is null
+		ORDER BY SORT
+	</select>
+
+	<!-- 插入语句 -->
+	<insert id="insert" parameterType="TfLoginUser" flushCache="true">
+		INSERT INTO TF_LOGIN_USER
+		(
+		GUID,
+		CODE,
+		LOGIN_NAME,
+		LOGIN_PASS,
+		REAL_NAME,
+		SEX,
+		IS_LOCK,
+		LAST_LOGIN_DATE,
+		LAST_LOGIN_IP,
+		WRITE_DATE,
+		SORT,
+		MEMO,
+		DEL,
+		META_1,
+		META_2,
+		META_3,
+		META_4,
+		META_5
+		)
+		VALUES
+		(
+		#{guid},
+		#{code,jdbcType=VARCHAR},
+		#{loginName,jdbcType=VARCHAR},
+		#{loginPass,jdbcType=VARCHAR},
+		#{realName,jdbcType=VARCHAR},
+		#{sex,jdbcType=VARCHAR},
+		#{isLock,jdbcType=VARCHAR},
+		#{lastLoginDate,jdbcType=DATE},
+		#{lastLoginIp,jdbcType=VARCHAR},
+		#{writeDate},
+		#{sort,jdbcType=VARCHAR},
+		#{memo,jdbcType=VARCHAR},
+		#{del,jdbcType=VARCHAR},
+		#{meta1,jdbcType=VARCHAR},
+		#{meta2,jdbcType=VARCHAR},
+		#{meta3,jdbcType=VARCHAR},
+		#{meta4,jdbcType=VARCHAR},
+		#{meta5,jdbcType=VARCHAR}
+		)
+	</insert>
+
+	<!-- 更新语句 -->
+	<update id="update" parameterType="TfLoginUser" flushCache="true">
+		update TF_LOGIN_USER
+		<set>
+			<if test="guid != null">GUID=#{guid},</if>
+			<if test="code != null">CODE=#{code},</if>
+			<if test="loginName != null">LOGIN_NAME=#{loginName},</if>
+			<if test="loginPass != null">LOGIN_PASS=#{loginPass},</if>
+			<if test="realName != null">REAL_NAME=#{realName},</if>
+			<if test="sex != null">SEX=#{sex},</if>
+			<if test="isLock != null">IS_LOCK=#{isLock},</if>
+			<if test="lastLoginDate != null">LAST_LOGIN_DATE=#{lastLoginDate},</if>
+			<if test="lastLoginIp != null">LAST_LOGIN_IP=#{lastLoginIp},</if>
+			<if test="writeDate != null">WRITE_DATE=#{writeDate},</if>
+			<if test="sort != null">SORT=#{sort},</if>
+			<if test="memo != null">MEMO=#{memo},</if>
+			<if test="del != null">DEL=#{del},</if>
+			<if test="meta1 != null">META_1=#{meta1},</if>
+			<if test="meta2 != null">META_2=#{meta2},</if>
+			<if test="meta3 != null">META_3=#{meta3},</if>
+			<if test="meta4 != null">META_4=#{meta4},</if>
+			<if test="meta5 != null">META_5=#{meta5},</if>
+			<if test="openid != null">OPENID=#{openid},</if>
+		</set>
+		WHERE GUID = #{guid}
+	</update>
+
+	<!-- 单选删除语句 -->
+	<delete id="delete" parameterType="TfLoginUser" flushCache="true">
+		UPDATE TF_LOGIN_USER SET DEL = '-1' WHERE GUID = #{guid}
+	</delete>
+	<!-- 删除角色下人员是删除对应人员信息表内的内容 -->
+	<delete id="delUserToRole" parameterType="TfLoginUser"
+		flushCache="true">
+		delete t1,t2 from tf_login_user as t1 inner join tf_role_user as t2 on
+		t2.USER_GUID = t1.GUID
+		where t1.GUID = #{guid}
+	</delete>
+	<!-- 多选删除 -->
+	<delete id="mulDel" parameterType="java.lang.String" flushCache="true">
+		DELETE FROM TF_LOGIN_USER WHERE GUID IN
+		<foreach item="id" collection="array" open="(" separator=","
+			close=")">
+			#{id}
+		</foreach>
+	</delete>
+</mapper>
