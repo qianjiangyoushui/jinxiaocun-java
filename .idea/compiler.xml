@@ -9,5 +9,8 @@
         <module name="zszs" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="zszs (1)" target="1.7" />
+    </bytecodeTargetLevel>
   </component>
 </project>

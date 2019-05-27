@@ -64,7 +64,7 @@
         W.CITY as w_city
         FROM question T LEFT JOIN WX_USER W ON  T.WXUSERID=W.GUID
         <include refid="WhereSQL" />
-        ORDER BY SORT
+        ORDER BY CREATEDATE DESC
     </select>
 
     <!-- 获取总记录数语句 -->
