@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="Preorderdetail">
+
+    <!-- 缓存条数 -->
+    <cache size="2000" />
+
+    <!-- 条件语句 -->
+    <sql id="WhereSQL">
+        <where>
+            <if test="guid != null and guid != ''">
+                AND T.GUID = #{guid}
+            </if>
+            <if test="applyid != null and applyid != ''">
+                AND T.APPLYID = #{applyid}
+            </if>
+            <if test="productid != null and productid != ''">
+                AND T.PRODUCTID = #{productid}
+            </if>
+            <if test="productname != null and productname != ''">
+                AND T.PRODUCTNAME = #{productname}
+            </if>
+            <if test="imgurl != null and imgurl != ''">
+                AND T.IMGURL = #{imgurl}
+            </if>
+            <if test="normal != null and normal != ''">
+                AND T.NORMAL = #{normal}
+            </if>
+            <if test="unit != null and unit != ''">
+                AND T.UNIT = #{unit}
+            </if>
+            <if test="amount != null and amount != ''">
+                AND T.AMOUNT = #{amount}
+            </if>
+            <if test="price != null and price != ''">
+                AND T.PRICE = #{price}
+            </if>
+            <if test="summoney != null and summoney != ''">
+                AND T.SUMMONEY = #{summoney}
+            </if>
+            <if test="createdate != null and createdate != ''">
+                AND T.CREATEDATE = #{createdate}
+            </if>
+            <if test="status != null and status != ''">
+                AND T.STATUS = #{status}
+            </if>
+            <if test="sort != null and sort != ''">
+                AND T.SORT = #{sort}
+            </if>
+        </where>
+    </sql>
+
+    <!-- 查找语句 -->
+    <select id="find" resultType="Preorderdetail" parameterType="Preorderdetail" flushCache="false" useCache="true">
+        SELECT
+        T.GUID AS guid,
+        T.APPLYID AS applyid,
+        T.PRODUCTID AS productid,
+        T.PRODUCTNAME AS productname,
+        T.IMGURL AS imgurl,
+        T.NORMAL AS normal,
+        T.UNIT AS unit,
+        T.AMOUNT AS amount,
+        T.PRICE AS price,
+        T.SUMMONEY AS summoney,
+        T.CREATEDATE AS createdate,
+        T.STATUS AS status,
+        T.SORT AS sort
+        FROM preorderdetail T
+        <include refid="WhereSQL" />
+        ORDER BY SORT
+    </select>
+
+    <!-- 获取总记录数语句 -->
+    <select id="findCount" resultType="java.lang.Integer" parameterType="Preorderdetail" flushCache="false" useCache="true">
+        SELECT COUNT(*)  FROM preorderdetail T
+        <include refid="WhereSQL" />
+    </select>
+
+    <!-- 插入语句 -->
+    <insert id="insert" parameterType="Preorderdetail" flushCache="true">
+        INSERT INTO preorderdetail
+        (
+        GUID,
+        APPLYID,
+        PRODUCTID,
+        PRODUCTNAME,
+        IMGURL,
+        NORMAL,
+        UNIT,
+        AMOUNT,
+        PRICE,
+        SUMMONEY,
+        CREATEDATE,
+        STATUS,
+        SORT
+        )
+        VALUES
+        (
+        #{guid,jdbcType=VARCHAR},
+        #{applyid,jdbcType=VARCHAR},
+        #{productid,jdbcType=VARCHAR},
+        #{productname,jdbcType=VARCHAR},
+        #{imgurl,jdbcType=VARCHAR},
+        #{normal,jdbcType=VARCHAR},
+        #{unit,jdbcType=VARCHAR},
+        #{amount,jdbcType=DECIMAL},
+        #{price,jdbcType=DECIMAL},
+        #{summoney,jdbcType=DECIMAL},
+        #{createdate,jdbcType=DATE},
+        #{status,jdbcType=INTEGER},
+        #{sort,jdbcType=INTEGER}
+        )
+    </insert>
+
+    <!-- 更新语句 -->
+    <update id="update"  parameterType="Preorderdetail" flushCache="true">
+        update preorderdetail
+        <set>
+            <if test="guid != null">GUID=#{guid},</if>
+            <if test="applyid != null">APPLYID=#{applyid},</if>
+            <if test="productid != null">PRODUCTID=#{productid},</if>
+            <if test="productname != null">PRODUCTNAME=#{productname},</if>
+            <if test="imgurl != null">IMGURL=#{imgurl},</if>
+            <if test="normal != null">NORMAL=#{normal},</if>
+            <if test="unit != null">UNIT=#{unit},</if>
+            <if test="amount != null">AMOUNT=#{amount},</if>
+            <if test="price != null">PRICE=#{price},</if>
+            <if test="summoney != null">SUMMONEY=#{summoney},</if>
+            <if test="createdate != null">CREATEDATE=#{createdate},</if>
+            <if test="status != null">STATUS=#{status},</if>
+            <if test="sort != null">SORT=#{sort},</if>
+        </set>
+        WHERE GUID = #{guid}
+    </update>
+
+    <!-- 单选删除语句 -->
+    <delete id="delete" parameterType="Preorderdetail" flushCache="true">
+        DELETE FROM preorderdetail WHERE GUID = #{guid}
+    </delete>
+
+    <!-- 多选删除 -->
+    <delete id="mulDel" parameterType="java.lang.String" flushCache="true">
+        DELETE FROM preorderdetail WHERE GUID IN
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

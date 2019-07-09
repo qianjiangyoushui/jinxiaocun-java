@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="Dingmenu">
+
+    <!-- 缓存条数 -->
+    <cache size="2000" />
+
+    <!-- 条件语句 -->
+    <sql id="WhereSQL">
+        <where>
+            <if test="guid != null and guid != ''">
+                AND T.GUID = #{guid}
+            </if>
+            <if test="title != null and title != ''">
+                AND T.TITLE = #{title}
+            </if>
+            <if test="entitle != null and entitle != ''">
+                AND T.ENTITLE = #{entitle}
+            </if>
+            <if test="icon != null and icon != ''">
+                AND T.ICON = #{icon}
+            </if>
+            <if test="page != null and page != ''">
+                AND T.PAGE = #{page}
+            </if>
+            <if test="parameter != null and parameter != ''">
+                AND T.PARAMETER = #{parameter}
+            </if>
+            <if test="sort != null and sort != ''">
+                AND T.SORT = #{sort}
+            </if>
+            <if test="disable != null and disable != ''">
+                AND T.DISABLE = #{disable}
+            </if>
+            <if test="tabindex != null and tabindex != ''">
+                AND T.TABINDEX = #{tabindex}
+            </if>
+            <if test="createdate != null and createdate != ''">
+                AND T.CREATEDATE = #{createdate}
+            </if>
+        </where>
+    </sql>
+    <sql id="WhereRmSQL">
+        <where>
+            <if test="guid != null and guid != ''">
+                AND RM.GUID = #{guid}
+            </if>
+            <if test="roleid != null and roleid != ''">
+                AND RM.ROLEID = #{roleid}
+            </if>
+            <if test="menuid != null and menuid != ''">
+                AND RM.MENUID = #{menuid}
+            </if>
+            <if test="remark != null and remark != ''">
+                AND RM.REMARK = #{remark}
+            </if>
+            <if test="tabindex != null and tabindex != ''">
+                AND T.TABINDEX = #{tabindex}
+            </if>
+            <if test="createdate != null and createdate != ''">
+                AND RM.CREATEDATE = #{createdate}
+            </if>
+            <if test="guids != null and guids != ''">
+                AND RM.ROLEID IN
+                <foreach item="id" collection="guids" open="(" separator="," close=")">
+                    #{id}
+                </foreach>
+            </if>
+        </where>
+    </sql>
+
+    <!-- 查找语句 -->
+    <select id="find" resultType="Dingmenu" parameterType="Dingmenu" flushCache="false" useCache="true">
+        SELECT
+        T.GUID AS guid,
+        T.TITLE AS title,
+        T.ENTITLE AS entitle,
+        T.ICON AS icon,
+        T.PAGE AS page,
+        T.PARAMETER AS parameter,
+        T.SORT AS sort,
+        T.DISABLE AS disable,
+        T.TABINDEX AS tabindex,
+        T.CREATEDATE AS createdate
+        FROM dingmenu T
+        <include refid="WhereSQL" />
+        ORDER BY SORT
+    </select>
+    <select id="findMenus" resultType="Dingmenu" parameterType="Dingrm" flushCache="false" useCache="true">
+        SELECT
+        T.GUID AS guid,
+        T.TITLE AS title,
+        T.ENTITLE AS entitle,
+        T.ICON AS icon,
+        T.PAGE AS page,
+        T.PARAMETER AS parameter,
+        T.SORT AS sort,
+        T.DISABLE AS disable,
+        T.TABINDEX AS tabindex,
+        T.CREATEDATE AS createdate
+        FROM dingmenu T
+        JOIN dingrm RM ON  T.GUID = RM.MENUID
+        <include refid="WhereRmSQL" />
+        ORDER BY T.SORT ASC
+    </select>
+    <!-- 获取总记录数语句 -->
+    <select id="findCount" resultType="java.lang.Integer" parameterType="Dingmenu" flushCache="false" useCache="true">
+        SELECT COUNT(*)  FROM dingmenu T
+        <include refid="WhereSQL" />
+    </select>
+
+    <!-- 插入语句 -->
+    <insert id="insert" parameterType="Dingmenu" flushCache="true">
+        INSERT INTO dingmenu
+        (
+        GUID,
+        TITLE,
+        ENTITLE,
+        ICON,
+        PAGE,
+        PARAMETER,
+        SORT,
+        DISABLE,
+        TABINDEX,
+        CREATEDATE
+        )
+        VALUES
+        (
+        #{guid,jdbcType=VARCHAR},
+        #{title,jdbcType=VARCHAR},
+        #{entitle,jdbcType=VARCHAR},
+        #{icon,jdbcType=VARCHAR},
+        #{page,jdbcType=VARCHAR},
+        #{parameter,jdbcType=VARCHAR},
+        #{sort,jdbcType=INTEGER},
+        #{disable,jdbcType=INTEGER},
+        #{tabindex,jdbcType=INTEGER},
+        #{createdate,jdbcType=DATE}
+        )
+    </insert>
+
+    <!-- 更新语句 -->
+    <update id="update"  parameterType="Dingmenu" flushCache="true">
+        update dingmenu
+        <set>
+            <if test="guid != null">GUID=#{guid},</if>
+            <if test="title != null">TITLE=#{title},</if>
+            <if test="entitle != null">ENTITLE=#{entitle},</if>
+            <if test="icon != null">ICON=#{icon},</if>
+            <if test="page != null">PAGE=#{page},</if>
+            <if test="parameter != null">PARAMETER=#{parameter},</if>
+            <if test="sort != null">SORT=#{sort},</if>
+            <if test="disable != null">DISABLE=#{disable},</if>
+            <if test="tabindex != null">TABINDEX=#{tabindex},</if>
+            <if test="createdate != null">CREATEDATE=#{createdate},</if>
+        </set>
+        WHERE GUID = #{guid}
+    </update>
+
+    <!-- 单选删除语句 -->
+    <delete id="delete" parameterType="Dingmenu" flushCache="true">
+        DELETE FROM dingmenu WHERE GUID = #{guid}
+    </delete>
+
+    <!-- 多选删除 -->
+    <delete id="mulDel" parameterType="java.lang.String" flushCache="true">
+        DELETE FROM dingmenu WHERE GUID IN
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

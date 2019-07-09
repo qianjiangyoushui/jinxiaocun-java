@@ -12,7 +12,7 @@
 	</appender>
 	<!-- 输出到文件 -->
 	<appender name="file" class="org.apache.log4j.DailyRollingFileAppender">
-		<!-- <param name="File" value="D:/logs/log.log"/> -->
+		 <!--<param name="File" value="D:/logs/log.log"/> -->
 		<param name="File" value="/tudouji/web/logs/log.log" />
 		<param name="DatePattern" value="'.'yyyy-MM-dd'.log'" />
 		<layout class="org.apache.log4j.PatternLayout">

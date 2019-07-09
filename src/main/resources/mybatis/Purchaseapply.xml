@@ -1,0 +1,269 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="Purchaseapply">
+
+    <!-- 缓存条数 -->
+    <cache size="2000" />
+
+    <!-- 条件语句 -->
+    <sql id="WhereSQL">
+        <where>
+            <if test="guid != null and guid != ''">
+                AND T.GUID = #{guid}
+            </if>
+            <if test="compnayid != null and compnayid != ''">
+                AND T.COMPNAYID = #{compnayid}
+            </if>
+            <if test="suitid != null and suitid != ''">
+                AND T.SUITID = #{suitid}
+            </if>
+            <if test="applycode != null and applycode != ''">
+                AND T.APPLYCODE = #{applycode}
+            </if>
+            <if test="category != null and category != ''">
+                AND T.CATEGORY = #{category}
+            </if>
+            <if test="categoryname != null and categoryname != ''">
+                AND T.CATEGORYNAME = #{categoryname}
+            </if>
+            <if test="applydate != null and applydate != ''">
+                AND T.APPLYDATE = #{applydate}
+            </if>
+            <if test="reason != null and reason != ''">
+                AND T.REASON = #{reason}
+            </if>
+            <if test="usedepart != null and usedepart != ''">
+                AND T.USEDEPART = #{usedepart}
+            </if>
+            <if test="userid != null and userid != ''">
+                AND T.USERID = #{userid}
+            </if>
+            <if test="username != null and username != ''">
+                AND T.USERNAME = #{username}
+            </if>
+            <if test="createdate != null and createdate != ''">
+                AND T.CREATEDATE = #{createdate}
+            </if>
+            <if test="summount != null and summount != ''">
+                AND T.SUMMOUNT = #{summount}
+            </if>
+            <if test="summoney != null and summoney != ''">
+                AND T.SUMMONEY = #{summoney}
+            </if>
+            <if test="capital != null and capital != ''">
+                AND T.CAPITAL = #{capital}
+            </if>
+            <if test="statusinfo != null and statusinfo != ''">
+                AND T.STATUSINFO = #{statusinfo}
+            </if>
+            <if test="processInstanceId != null and processInstanceId != ''">
+                AND T.PROCESS_INSTANCE_ID = #{processInstanceId}
+            </if>
+            <if test="status != null and status != ''">
+                AND T.STATUS = #{status}
+            </if>
+            <if test="sort != null and sort != ''">
+                AND T.SORT = #{sort}
+            </if>
+        </where>
+    </sql>
+
+    <!-- 查找语句 -->
+    <select id="find" resultType="Purchaseapply" parameterType="Purchaseapply" flushCache="false" useCache="true">
+        SELECT
+        T.GUID AS guid,
+        T.COMPNAYID AS compnayid,
+        T.SUITID AS suitid,
+        T.APPLYCODE AS applycode,
+        T.CATEGORY AS category,
+        T.CATEGORYNAME AS categoryname,
+        T.APPLYDATE AS applydate,
+        T.REASON AS reason,
+        T.USEDEPART AS usedepart,
+        T.USERID AS userid,
+        T.USERNAME AS username,
+        T.CREATEDATE AS createdate,
+        T.SUMMOUNT AS summount,
+        T.PREMONEY AS premoney,
+        T.SUMMONEY AS summoney,
+        T.CAPITAL AS capital,
+        T.STATUSINFO AS statusinfo,
+        T.PROCESS_INSTANCE_ID AS processInstanceId,
+        T.STATUS AS status,
+        T.SORT AS sort
+        FROM purchaseapply T
+        <include refid="WhereSQL" />
+        ORDER BY CREATEDATE DESC
+    </select>
+    <!-- 查找语句 -->
+    <select id="findDetail" resultMap="DetailMap" parameterType="Purchaseapply" flushCache="false" useCache="true">
+        SELECT
+        T.GUID AS guid,
+        T.COMPNAYID AS compnayid,
+        T.SUITID AS suitid,
+        T.APPLYCODE AS applycode,
+        T.CATEGORY AS category,
+        T.CATEGORYNAME AS categoryname,
+        T.APPLYDATE AS applydate,
+        T.REASON AS reason,
+        T.USEDEPART AS usedepart,
+        T.USERID AS userid,
+        T.USERNAME AS username,
+        T.CREATEDATE AS createdate,
+        T.SUMMOUNT AS summount,
+        T.SUMMONEY AS summoney,
+        T.PREMONEY AS premoney,
+        T.CAPITAL AS capital,
+        T.STATUSINFO AS statusinfo,
+        T.PROCESS_INSTANCE_ID AS processInstanceId,
+        T.STATUS AS status,
+        T.SORT AS sort,
+        D.GUID AS d_guid,
+        D.APPYID AS appyid,
+        D.PRODUCTID AS productid,
+        D.PRODUCTNAME AS productname,
+        D.IMGURL AS imgurl,
+        D.NORMAL AS normal,
+        D.UNIT AS unit,
+        D.AMOUNT AS amount,
+        D.PRICE AS price,
+        D.SUMMONEY AS d_summoney,
+        D.CREATEDATE AS d_createdate,
+        D.SORT AS d_sort
+        FROM purchaseapply T LEFT JOIN purchaseapplydetail D ON T.GUID=D.APPYID
+        <include refid="WhereSQL" />
+        ORDER BY SORT
+    </select>
+
+    <!-- 获取总记录数语句 -->
+    <select id="findCount" resultType="java.lang.Integer" parameterType="Purchaseapply" flushCache="false" useCache="true">
+        SELECT COUNT(*)  FROM purchaseapply T
+        <include refid="WhereSQL" />
+    </select>
+
+    <!-- 插入语句 -->
+    <insert id="insert" parameterType="Purchaseapply" flushCache="true">
+        INSERT INTO purchaseapply
+        (
+        GUID,
+        COMPNAYID,
+        SUITID,
+        APPLYCODE,
+        CATEGORY,
+        CATEGORYNAME,
+        APPLYDATE,
+        REASON,
+        USEDEPART,
+        USERID,
+        USERNAME,
+        CREATEDATE,
+        SUMMOUNT,
+        SUMMONEY,
+        PREMONEY,
+        CAPITAL,
+        STATUSINFO,
+        PROCESS_INSTANCE_ID,
+        STATUS,
+        SORT
+        )
+        VALUES
+        (
+        #{guid,jdbcType=VARCHAR},
+        #{compnayid,jdbcType=VARCHAR},
+        #{suitid,jdbcType=VARCHAR},
+        #{applycode,jdbcType=VARCHAR},
+        #{category,jdbcType=VARCHAR},
+        #{categoryname,jdbcType=VARCHAR},
+        #{applydate,jdbcType=DATE},
+        #{reason,jdbcType=VARCHAR},
+        #{usedepart,jdbcType=VARCHAR},
+        #{userid,jdbcType=VARCHAR},
+        #{username,jdbcType=VARCHAR},
+        #{createdate,jdbcType=DATE},
+        #{summount,jdbcType=DECIMAL},
+        #{summoney,jdbcType=DECIMAL},
+        #{premoney,jdbcType=DECIMAL},
+        #{capital,jdbcType=VARCHAR},
+        #{statusinfo,jdbcType=VARCHAR},
+        #{processInstanceId,jdbcType=VARCHAR},
+        #{status,jdbcType=INTEGER},
+        #{sort,jdbcType=INTEGER}
+        )
+    </insert>
+
+    <!-- 更新语句 -->
+    <update id="update"  parameterType="Purchaseapply" flushCache="true">
+        update purchaseapply
+        <set>
+            <if test="guid != null">GUID=#{guid},</if>
+            <if test="compnayid != null">COMPNAYID=#{compnayid},</if>
+            <if test="suitid != null">SUITID=#{suitid},</if>
+            <if test="applycode != null">APPLYCODE=#{applycode},</if>
+            <if test="category != null">CATEGORY=#{category},</if>
+            <if test="categoryname != null">CATEGORYNAME=#{categoryname},</if>
+            <if test="applydate != null">APPLYDATE=#{applydate},</if>
+            <if test="reason != null">REASON=#{reason},</if>
+            <if test="usedepart != null">USEDEPART=#{usedepart},</if>
+            <if test="userid != null">USERID=#{userid},</if>
+            <if test="username != null">USERNAME=#{username},</if>
+            <if test="createdate != null">CREATEDATE=#{createdate},</if>
+            <if test="summount != null">SUMMOUNT=#{summount},</if>
+            <if test="summoney != null">SUMMONEY=#{summoney},</if>
+            <if test="capital != null">CAPITAL=#{capital},</if>
+            <if test="statusinfo != null">STATUSINFO=#{statusinfo},</if>
+            <if test="processInstanceId != null">PROCESS_INSTANCE_ID=#{processInstanceId},</if>
+            <if test="status != null">STATUS=#{status},</if>
+            <if test="sort != null">SORT=#{sort},</if>
+        </set>
+        WHERE GUID = #{guid}
+    </update>
+
+    <!-- 单选删除语句 -->
+    <delete id="delete" parameterType="Purchaseapply" flushCache="true">
+        DELETE FROM purchaseapply WHERE GUID = #{guid}
+    </delete>
+
+    <!-- 多选删除 -->
+    <delete id="mulDel" parameterType="java.lang.String" flushCache="true">
+        DELETE FROM purchaseapply WHERE GUID IN
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    <resultMap type="Purchaseapply" id="DetailMap">
+        <id property="guid" column="guid" />
+        <result property="compnayid" column="compnayid" />
+        <result property="suitid" column="suitid" />
+        <result property="applycode" column="applycode" />
+        <result property="category" column="category" />
+        <result property="categoryname" column="categoryname" />
+        <result property="applydate" column="applydate" />
+        <result property="reason" column="reason" />
+        <result property="usedepart" column="usedepart" />
+        <result property="userid" column="userid" />
+        <result property="username" column="username" />
+        <result property="createdate" column="createdate" />
+        <result property="summount" column="summount" />
+        <result property="summoney" column="summoney" />
+        <result property="premoney" column="premoney" />
+        <result property="capital" column="capital" />
+        <result property="statusinfo" column="statusinfo" />
+        <result property="processInstanceId" column="processInstanceId" />
+        <result property="status" column="status" />
+        <result property="sort" column="sort" />
+        <collection property="detailList" ofType="Purchaseapplydetail">
+            <id property="guid" column="D_GUID" />
+            <result property="appyid" column="APPYID" />
+            <result property="productid" column="PRODUCTID" />
+            <result property="productname" column="PRODUCTNAME" />
+            <result property="imgurl" column="IMGURL" />
+            <result property="normal" column="NORMAL" />
+            <result property="unit" column="UNIT" />
+            <result property="amount" column="AMOUNT" />
+            <result property="price" column="PRICE"/>
+            <result property="summoney" column="D_SUMMONEY" />
+            <result property="createdate" column="D_CREATEDATE" />
+            <result property="sort" column="D_SORT" />
+        </collection>
+    </resultMap>
+</mapper>

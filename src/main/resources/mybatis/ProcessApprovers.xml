@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ProcessApprovers">
+
+    <!-- 缓存条数 -->
+    <cache size="2000" />
+
+    <!-- 条件语句 -->
+    <sql id="WhereSQL">
+        <where>
+            <if test="guid != null and guid != ''">
+                AND T.GUID = #{guid}
+            </if>
+            <if test="processinstanceid != null and processinstanceid != ''">
+                AND T.PROCESSINSTANCEID = #{processinstanceid}
+            </if>
+            <if test="applyid != null and applyid != ''">
+                AND T.APPLYID = #{applyid}
+            </if>
+            <if test="processcode != null and processcode != ''">
+                AND T.PROCESSCODE = #{processcode}
+            </if>
+            <if test="createtime != null and createtime != ''">
+                AND T.CREATETIME = #{createtime}
+            </if>
+            <if test="finishtime != null and finishtime != ''">
+                AND T.FINISHTIME = #{finishtime}
+            </if>
+            <if test="title != null and title != ''">
+                AND T.TITLE = #{title}
+            </if>
+            <if test="type != null and type != ''">
+                AND T.TYPE = #{type}
+            </if>
+            <if test="staffid != null and staffid != ''">
+                AND T.STAFFID = #{staffid}
+            </if>
+            <if test="staffname != null and staffname != ''">
+                AND T.STAFFNAME = #{staffname}
+            </if>
+            <if test="result != null and result != ''">
+                AND T.RESULT = #{result}
+            </if>
+            <if test="remark != null and remark != ''">
+                AND T.REMARK = #{remark}
+            </if>
+            <if test="eventtype != null and eventtype != ''">
+                AND T.EVENTTYPE = #{eventtype}
+            </if>
+            <if test="url != null and url != ''">
+                AND T.URL = #{url}
+            </if>
+            <if test="sort != null and sort != ''">
+                AND T.SORT = #{sort}
+            </if>
+            <if test="updatedate != null and updatedate != ''">
+                AND T.UPDATEDATE = #{updatedate}
+            </if>
+        </where>
+    </sql>
+
+    <!-- 查找语句 -->
+    <select id="find" resultType="ProcessApprovers" parameterType="ProcessApprovers" flushCache="false" useCache="true">
+        SELECT
+        T.GUID AS guid,
+        T.PROCESSINSTANCEID AS processinstanceid,
+        T.APPLYID AS applyid,
+        T.PROCESSCODE AS processcode,
+        T.CREATETIME AS createtime,
+        T.FINISHTIME AS finishtime,
+        T.TITLE AS title,
+        T.TYPE AS type,
+        T.STAFFID AS staffid,
+        T.STAFFNAME AS staffname,
+        T.RESULT AS result,
+        T.REMARK AS remark,
+        T.EVENTTYPE AS eventtype,
+        T.URL AS url,
+        T.SORT AS sort,
+        T.UPDATEDATE AS updatedate
+        FROM process_approvers T
+        <include refid="WhereSQL" />
+        ORDER BY UPDATEDATE DESC
+    </select>
+
+    <!-- 获取总记录数语句 -->
+    <select id="findCount" resultType="java.lang.Integer" parameterType="ProcessApprovers" flushCache="false" useCache="true">
+        SELECT COUNT(*)  FROM process_approvers T
+        <include refid="WhereSQL" />
+    </select>
+
+    <!-- 插入语句 -->
+    <insert id="insert" parameterType="ProcessApprovers" flushCache="true">
+        INSERT INTO process_approvers
+        (
+        GUID,
+        PROCESSINSTANCEID,
+        APPLYID,
+        PROCESSCODE,
+        CREATETIME,
+        FINISHTIME,
+        TITLE,
+        TYPE,
+        STAFFID,
+        STAFFNAME,
+        RESULT,
+        REMARK,
+        EVENTTYPE,
+        URL,
+        SORT,
+        UPDATEDATE
+        )
+        VALUES
+        (
+        #{guid,jdbcType=VARCHAR},
+        #{processinstanceid,jdbcType=VARCHAR},
+        #{applyid,jdbcType=VARCHAR},
+        #{processcode,jdbcType=VARCHAR},
+        #{createtime,jdbcType=TIMESTAMP},
+        #{finishtime,jdbcType=TIMESTAMP},
+        #{title,jdbcType=VARCHAR},
+        #{type,jdbcType=VARCHAR},
+        #{staffid,jdbcType=VARCHAR},
+        #{staffname,jdbcType=VARCHAR},
+        #{result,jdbcType=VARCHAR},
+        #{remark,jdbcType=VARCHAR},
+        #{eventtype,jdbcType=VARCHAR},
+        #{url,jdbcType=VARCHAR},
+        #{sort,jdbcType=INTEGER},
+        #{updatedate,jdbcType=TIMESTAMP}
+        )
+    </insert>
+
+    <!-- 更新语句 -->
+    <update id="update"  parameterType="ProcessApprovers" flushCache="true">
+        update process_approvers
+        <set>
+            <if test="guid != null">GUID=#{guid},</if>
+            <if test="processinstanceid != null">PROCESSINSTANCEID=#{processinstanceid},</if>
+            <if test="applyid != null">APPLYID=#{applyid},</if>
+            <if test="processcode != null">PROCESSCODE=#{processcode},</if>
+            <if test="createtime != null">CREATETIME=#{createtime},</if>
+            <if test="finishtime != null">FINISHTIME=#{finishtime},</if>
+            <if test="title != null">TITLE=#{title},</if>
+            <if test="type != null">TYPE=#{type},</if>
+            <if test="staffid != null">STAFFID=#{staffid},</if>
+            <if test="staffname != null">STAFFNAME=#{staffname},</if>
+            <if test="result != null">RESULT=#{result},</if>
+            <if test="remark != null">REMARK=#{remark},</if>
+            <if test="eventtype != null">EVENTTYPE=#{eventtype},</if>
+            <if test="url != null">URL=#{url},</if>
+            <if test="sort != null">SORT=#{sort},</if>
+            <if test="updatedate != null">UPDATEDATE=#{updatedate},</if>
+        </set>
+        WHERE GUID = #{guid}
+    </update>
+
+    <!-- 单选删除语句 -->
+    <delete id="delete" parameterType="ProcessApprovers" flushCache="true">
+        DELETE FROM process_approvers WHERE GUID = #{guid}
+    </delete>
+
+    <!-- 多选删除 -->
+    <delete id="mulDel" parameterType="java.lang.String" flushCache="true">
+        DELETE FROM process_approvers WHERE GUID IN
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

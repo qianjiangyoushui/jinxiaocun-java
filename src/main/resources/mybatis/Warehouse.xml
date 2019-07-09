@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="Warehouse">
+
+    <!-- 缓存条数 -->
+    <cache size="2000" />
+
+    <!-- 条件语句 -->
+    <sql id="WhereSQL">
+        <where>
+            <if test="guid != null and guid != ''">
+                AND T.GUID = #{guid}
+            </if>
+            <if test="companyid != null and companyid != ''">
+                AND T.COMPANYID = #{companyid}
+            </if>
+            <if test="name != null and name != ''">
+                AND T.NAME = #{name}
+            </if>
+            <if test="address != null and address != ''">
+                AND T.ADDRESS = #{address}
+            </if>
+            <if test="createdate != null and createdate != ''">
+                AND T.CREATEDATE = #{createdate}
+            </if>
+            <if test="disable != null and disable != ''">
+                AND T.DISABLE = #{disable}
+            </if>
+            <if test="sort != null and sort != ''">
+                AND T.SORT = #{sort}
+            </if>
+        </where>
+    </sql>
+
+    <!-- 查找语句 -->
+    <select id="find" resultType="Warehouse" parameterType="Warehouse" flushCache="false" useCache="true">
+        SELECT
+        T.GUID AS guid,
+        T.COMPANYID AS companyid,
+        T.NAME AS name,
+        T.ADDRESS AS address,
+        T.CREATEDATE AS createdate,
+        T.DISABLE AS disable,
+        T.SORT AS sort
+        FROM warehouse T
+        <include refid="WhereSQL" />
+        ORDER BY SORT
+    </select>
+    <select id="findDetail" resultMap="WarehouseDetail" parameterType="Warehouse" flushCache="false" useCache="true">
+        SELECT
+        T.GUID AS guid,
+        T.COMPANYID AS companyid,
+        T.NAME AS name,
+        T.ADDRESS AS address,
+        T.CREATEDATE AS createdate,
+        T.DISABLE AS disable,
+        T.SORT AS sort,
+        P.GUID AS p_guid,
+        P.HOUSEGUID AS houseguid,
+        P.HOUSENAME AS housename,
+        P.NAME AS p_name,
+        P.CODE AS p_code,
+        P.ADDRESS AS p_address,
+        P.DISABLE AS p_disable,
+        P.VOLUME AS volume,
+        P.CREATEDATE AS p_createdate,
+        P.SORT AS p_sort
+        FROM warehouse T LEFT JOIN Houseposition P ON T.guid=P.houseguid and P.disable=1
+        <include refid="WhereSQL" />
+        ORDER BY SORT
+    </select>
+
+    <!-- 获取总记录数语句 -->
+    <select id="findCount" resultType="java.lang.Integer" parameterType="Warehouse" flushCache="false" useCache="true">
+        SELECT COUNT(*)  FROM warehouse T
+        <include refid="WhereSQL" />
+    </select>
+
+    <!-- 插入语句 -->
+    <insert id="insert" parameterType="Warehouse" flushCache="true">
+        INSERT INTO warehouse
+        (
+        GUID,
+        COMPANYID,
+        NAME,
+        ADDRESS,
+        CREATEDATE,
+        DISABLE,
+        SORT
+        )
+        VALUES
+        (
+        #{guid,jdbcType=VARCHAR},
+        #{companyid,jdbcType=VARCHAR},
+        #{name,jdbcType=VARCHAR},
+        #{address,jdbcType=VARCHAR},
+        #{createdate,jdbcType=DATE},
+        #{disable,jdbcType=INTEGER},
+        #{sort,jdbcType=INTEGER}
+        )
+    </insert>
+
+    <!-- 更新语句 -->
+    <update id="update"  parameterType="Warehouse" flushCache="true">
+        update warehouse
+        <set>
+            <if test="guid != null">GUID=#{guid},</if>
+            <if test="companyid != null">COMPANYID=#{companyid},</if>
+            <if test="name != null">NAME=#{name},</if>
+            <if test="address != null">ADDRESS=#{address},</if>
+            <if test="createdate != null">CREATEDATE=#{createdate},</if>
+            <if test="disable != null">DISABLE=#{disable},</if>
+            <if test="sort != null">SORT=#{sort},</if>
+        </set>
+        WHERE GUID = #{guid}
+    </update>
+
+    <!-- 单选删除语句 -->
+    <delete id="delete" parameterType="Warehouse" flushCache="true">
+        DELETE FROM warehouse WHERE GUID = #{guid}
+    </delete>
+
+    <!-- 多选删除 -->
+    <delete id="mulDel" parameterType="java.lang.String" flushCache="true">
+        DELETE FROM warehouse WHERE GUID IN
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    <resultMap id="WarehouseDetail" type="Warehouse">
+        <id property="guid" column="guid"/>
+        <result property="companyid" column="companyid"/>
+        <result property="name" column="name"/>
+        <result property="address" column="address"/>
+        <result property="createdate" column="createdate"/>
+        <result property="disable" column="disable"/>
+        <result property="sort" column="sort"/>
+        <collection property="positionList" ofType="Houseposition">
+             <result property="guid" column="p_guid"/>
+             <result property="houseguid" column="houseguid"/>
+             <result property="housename" column="housename"/>
+             <result property="name" column="p_name"/>
+             <result property="code" column="p_code"/>
+             <result property="address" column="p_address"/>
+             <result property="disable" column="p_disable"/>
+             <result property="volume" column="volume"/>
+             <result property="createdate" column="p_createdate"/>
+             <result property="sort" column="p_sort"/>
+        </collection>
+    </resultMap>
+</mapper>

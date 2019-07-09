@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="Supplier">
+
+    <!-- 缓存条数 -->
+    <cache size="2000" />
+
+    <!-- 条件语句 -->
+    <sql id="WhereSQL">
+        <where>
+            <if test="guid != null and guid != ''">
+                AND T.GUID = #{guid}
+            </if>
+            <if test="companyid != null and companyid != ''">
+                AND T.COMPANYID = #{companyid}
+            </if>
+            <if test="departid != null and departid != ''">
+                AND T.DEPARTID = #{departid}
+            </if>
+            <if test="type != null and type != ''">
+                AND T.TYPE = #{type}
+            </if>
+            <if test="name != null and name != ''">
+                AND T.NAME = #{name}
+            </if>
+            <if test="stype != null and stype != ''">
+                AND T.STYPE = #{stype}
+            </if>
+            <if test="zjCode != null and zjCode != ''">
+                AND T.ZJ_CODE = #{zjCode}
+            </if>
+            <if test="address != null and address != ''">
+                AND T.ADDRESS = #{address}
+            </if>
+            <if test="phone != null and phone != ''">
+                AND T.PHONE = #{phone}
+            </if>
+            <if test="bankaccount != null and bankaccount != ''">
+                AND T.BANKACCOUNT = #{bankaccount}
+            </if>
+            <if test="bankname != null and bankname != ''">
+                AND T.BANKNAME = #{bankname}
+            </if>
+            <if test="dutycode != null and dutycode != ''">
+                AND T.DUTYCODE = #{dutycode}
+            </if>
+            <if test="remark != null and remark != ''">
+                AND T.REMARK = #{remark}
+            </if>
+            <if test="disable != null and disable != ''">
+                AND T.DISABLE = #{disable}
+            </if>
+            <if test="sort != null and sort != ''">
+                AND T.SORT = #{sort}
+            </if>
+        </where>
+    </sql>
+
+    <!-- 查找语句 -->
+    <select id="find" resultType="Supplier" parameterType="Supplier" flushCache="false" useCache="true">
+        SELECT
+        T.GUID AS guid,
+        T.COMPANYID AS companyid,
+        T.DEPARTID AS departid,
+        T.TYPE AS type,
+        T.NAME AS name,
+        T.STYPE AS stype,
+        T.STYPENAME AS stypename,
+        T.ZJ_CODE AS zjCode,
+        T.ADDRESS AS address,
+        T.PHONE AS phone,
+        T.BANKACCOUNT AS bankaccount,
+        T.BANKNAME AS bankname,
+        T.DUTYCODE AS dutycode,
+        T.REMARK AS remark,
+        T.DISABLE AS disable,
+        T.SORT AS sort
+        FROM supplier T
+        <include refid="WhereSQL" />
+        ORDER BY SORT
+    </select>
+
+    <!-- 获取总记录数语句 -->
+    <select id="findCount" resultType="java.lang.Integer" parameterType="Supplier" flushCache="false" useCache="true">
+        SELECT COUNT(*)  FROM supplier T
+        <include refid="WhereSQL" />
+    </select>
+
+    <!-- 插入语句 -->
+    <insert id="insert" parameterType="Supplier" flushCache="true">
+        INSERT INTO supplier
+        (
+        GUID,
+        COMPANYID,
+        DEPARTID,
+        TYPE,
+        NAME,
+        STYPE,
+        STYPENAME,
+        ZJ_CODE,
+        ADDRESS,
+        PHONE,
+        BANKACCOUNT,
+        BANKNAME,
+        DUTYCODE,
+        REMARK,
+        DISABLE,
+        SORT
+        )
+        VALUES
+        (
+        #{guid,jdbcType=VARCHAR},
+        #{companyid,jdbcType=VARCHAR},
+        #{departid,jdbcType=VARCHAR},
+        #{type,jdbcType=VARCHAR},
+        #{name,jdbcType=VARCHAR},
+        #{stype,jdbcType=VARCHAR},
+        #{stypename,jdbcType=VARCHAR},
+        #{zjCode,jdbcType=VARCHAR},
+        #{address,jdbcType=VARCHAR},
+        #{phone,jdbcType=VARCHAR},
+        #{bankaccount,jdbcType=VARCHAR},
+        #{bankname,jdbcType=VARCHAR},
+        #{dutycode,jdbcType=VARCHAR},
+        #{remark,jdbcType=VARCHAR},
+        #{disable,jdbcType=INTEGER},
+        #{sort,jdbcType=VARCHAR}
+        )
+    </insert>
+
+    <!-- 更新语句 -->
+    <update id="update"  parameterType="Supplier" flushCache="true">
+        update supplier
+        <set>
+            <if test="guid != null">GUID=#{guid},</if>
+            <if test="companyid != null">COMPANYID=#{companyid},</if>
+            <if test="departid != null">DEPARTID=#{departid},</if>
+            <if test="type != null">TYPE=#{type},</if>
+            <if test="name != null">NAME=#{name},</if>
+            <if test="stype != null">STYPE=#{stype},</if>
+            <if test="stypename != null">STYPENAME=#{stypename},</if>
+            <if test="zjCode != null">ZJ_CODE=#{zjCode},</if>
+            <if test="address != null">ADDRESS=#{address},</if>
+            <if test="phone != null">PHONE=#{phone},</if>
+            <if test="bankaccount != null">BANKACCOUNT=#{bankaccount},</if>
+            <if test="bankname != null">BANKNAME=#{bankname},</if>
+            <if test="dutycode != null">DUTYCODE=#{dutycode},</if>
+            <if test="remark != null">REMARK=#{remark},</if>
+            <if test="disable != null">DISABLE=#{disable},</if>
+            <if test="sort != null">SORT=#{sort},</if>
+        </set>
+        WHERE GUID = #{guid}
+    </update>
+
+    <!-- 单选删除语句 -->
+    <delete id="delete" parameterType="Supplier" flushCache="true">
+        DELETE FROM supplier WHERE GUID = #{guid}
+    </delete>
+
+    <!-- 多选删除 -->
+    <delete id="mulDel" parameterType="java.lang.String" flushCache="true">
+        DELETE FROM supplier WHERE GUID IN
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>
