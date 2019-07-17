@@ -1,0 +1,265 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="Receiveproduct">
+
+    <!-- 缓存条数 -->
+    <cache size="2000" />
+
+    <!-- 条件语句 -->
+    <sql id="WhereSQL">
+        <where>
+            <if test="guid != null and guid != ''">
+                AND T.GUID = #{guid}
+            </if>
+            <if test="companyid != null and companyid != ''">
+                AND T.COMPANYID = #{companyid}
+            </if>
+            <if test="suitid != null and suitid != ''">
+                AND T.SUITID = #{suitid}
+            </if>
+            <if test="code != null and code != ''">
+                AND T.CODE = #{code}
+            </if>
+            <if test="supplyid != null and supplyid != ''">
+                AND T.SUPPLYID = #{supplyid}
+            </if>
+            <if test="supplyname != null and supplyname != ''">
+                AND T.SUPPLYNAME = #{supplyname}
+            </if>
+            <if test="senddate != null and senddate != ''">
+                AND T.SENDDATE = #{senddate}
+            </if>
+            <if test="createdate != null and createdate != ''">
+                AND T.CREATEDATE = #{createdate}
+            </if>
+            <if test="address != null and address != ''">
+                AND T.ADDRESS = #{address}
+            </if>
+            <if test="sendname != null and sendname != ''">
+                AND T.SENDNAME = #{sendname}
+            </if>
+            <if test="phone != null and phone != ''">
+                AND T.PHONE = #{phone}
+            </if>
+            <if test="remark != null and remark != ''">
+                AND T.REMARK = #{remark}
+            </if>
+            <if test="purchaseid != null and purchaseid != ''">
+                AND T.PURCHASEID = #{purchaseid}
+            </if>
+            <if test="purchasecode != null and purchasecode != ''">
+                AND T.PURCHASECODE = #{purchasecode}
+            </if>
+            <if test="amount != null and amount != ''">
+                AND T.AMOUNT = #{amount}
+            </if>
+            <if test="summoney != null and summoney != ''">
+                AND T.SUMMONEY = #{summoney}
+            </if>
+            <if test="status != null and status != ''">
+                AND T.STATUS = #{status}
+            </if>
+            <if test="sort != null and sort != ''">
+                AND T.SORT = #{sort}
+            </if>
+        </where>
+    </sql>
+
+    <!-- 查找语句 -->
+    <select id="find" resultType="Receiveproduct" parameterType="Receiveproduct" flushCache="false" useCache="true">
+        SELECT
+        T.GUID AS guid,
+        T.COMPANYID AS companyid,
+        T.SUITID AS suitid,
+        T.BUSIUSERID AS BUSIUSERID,
+        T.BUSIUSERNAME AS BUSIUSERNAME,
+        T.CODE AS code,
+        T.SUPPLYID AS supplyid,
+        T.SUPPLYNAME AS supplyname,
+        T.SENDDATE AS senddate,
+        T.CREATEDATE AS createdate,
+        T.ADDRESS AS address,
+        T.SENDNAME AS sendname,
+        T.PHONE AS phone,
+        T.REMARK AS remark,
+        T.PURCHASEID AS purchaseid,
+        T.PURCHASECODE AS purchasecode,
+        T.AMOUNT AS amount,
+        T.SUMMONEY AS summoney,
+        T.STATUS AS status,
+        T.SORT AS sort
+        FROM receiveproduct T
+        <include refid="WhereSQL" />
+        ORDER BY SORT
+    </select>
+   <!-- 查找语句 -->
+    <select id="findDetail" resultMap="Receiveproduct" parameterType="Receiveproduct" flushCache="false" useCache="true">
+        SELECT
+        T.GUID AS guid,
+        T.COMPANYID AS companyid,
+        T.SUITID AS suitid,
+        T.BUSIUSERID AS BUSIUSERID,
+        T.BUSIUSERNAME AS BUSIUSERNAME,
+        T.CODE AS code,
+        T.SUPPLYID AS supplyid,
+        T.SUPPLYNAME AS supplyname,
+        T.SENDDATE AS senddate,
+        T.CREATEDATE AS createdate,
+        T.ADDRESS AS address,
+        T.SENDNAME AS sendname,
+        T.PHONE AS phone,
+        T.REMARK AS remark,
+        T.PURCHASEID AS purchaseid,
+        T.PURCHASECODE AS purchasecode,
+        T.AMOUNT AS amount,
+        T.SUMMONEY AS summoney,
+        T.STATUS AS status,
+        T.SORT AS sort,
+        D.GUID AS d_guid,
+        D.APPYID AS appyid,
+        D.PRODUCTID AS productid,
+        D.PRODUCTNAME AS productname,
+        D.IMGURL AS imgurl,
+        D.NORMAL AS normal,
+        D.UNIT AS unit,
+        D.AMOUNT AS d_amount,
+        D.PRICE AS price,
+        D.SUMMONEY AS d_summoney,
+        D.CREATEDATE AS d_createdate,
+        D.SORT AS d_sort
+        FROM receiveproduct T LEFT JOIN receiveproductdetail D ON T.guid=D.appyid
+        <include refid="WhereSQL" />
+        ORDER BY SORT
+    </select>
+
+    <!-- 获取总记录数语句 -->
+    <select id="findCount" resultType="java.lang.Integer" parameterType="Receiveproduct" flushCache="false" useCache="true">
+        SELECT COUNT(*)  FROM receiveproduct T
+        <include refid="WhereSQL" />
+    </select>
+
+    <!-- 插入语句 -->
+    <insert id="insert" parameterType="Receiveproduct" flushCache="true">
+        INSERT INTO receiveproduct
+        (
+        GUID,
+        COMPANYID,
+        SUITID,
+        BUSIUSERID,
+        BUSIUSERNAME,
+        CODE,
+        SUPPLYID,
+        SUPPLYNAME,
+        SENDDATE,
+        CREATEDATE,
+        ADDRESS,
+        SENDNAME,
+        PHONE,
+        REMARK,
+        PURCHASEID,
+        PURCHASECODE,
+        AMOUNT,
+        SUMMONEY,
+        STATUS,
+        SORT
+        )
+        VALUES
+        (
+        #{guid,jdbcType=VARCHAR},
+        #{companyid,jdbcType=VARCHAR},
+        #{suitid,jdbcType=VARCHAR},
+        #{busiuserid,jdbcType=VARCHAR},
+        #{busiusername,jdbcType=VARCHAR},
+        #{code,jdbcType=VARCHAR},
+        #{supplyid,jdbcType=VARCHAR},
+        #{supplyname,jdbcType=VARCHAR},
+        #{senddate,jdbcType=DATE},
+        #{createdate,jdbcType=DATE},
+        #{address,jdbcType=VARCHAR},
+        #{sendname,jdbcType=VARCHAR},
+        #{phone,jdbcType=VARCHAR},
+        #{remark,jdbcType=VARCHAR},
+        #{purchaseid,jdbcType=VARCHAR},
+        #{purchasecode,jdbcType=VARCHAR},
+        #{amount,jdbcType=DECIMAL},
+        #{summoney,jdbcType=DECIMAL},
+        #{status,jdbcType=INTEGER},
+        #{sort,jdbcType=INTEGER}
+        )
+    </insert>
+
+    <!-- 更新语句 -->
+    <update id="update"  parameterType="Receiveproduct" flushCache="true">
+        update receiveproduct
+        <set>
+            <if test="guid != null">GUID=#{guid},</if>
+            <if test="companyid != null">COMPANYID=#{companyid},</if>
+            <if test="suitid != null">SUITID=#{suitid},</if>
+            <if test="code != null">CODE=#{code},</if>
+            <if test="supplyid != null">SUPPLYID=#{supplyid},</if>
+            <if test="supplyname != null">SUPPLYNAME=#{supplyname},</if>
+            <if test="senddate != null">SENDDATE=#{senddate},</if>
+            <if test="createdate != null">CREATEDATE=#{createdate},</if>
+            <if test="address != null">ADDRESS=#{address},</if>
+            <if test="sendname != null">SENDNAME=#{sendname},</if>
+            <if test="phone != null">PHONE=#{phone},</if>
+            <if test="remark != null">REMARK=#{remark},</if>
+            <if test="purchaseid != null">PURCHASEID=#{purchaseid},</if>
+            <if test="purchasecode != null">PURCHASECODE=#{purchasecode},</if>
+            <if test="amount != null">AMOUNT=#{amount},</if>
+            <if test="summoney != null">SUMMONEY=#{summoney},</if>
+            <if test="status != null">STATUS=#{status},</if>
+            <if test="sort != null">SORT=#{sort},</if>
+        </set>
+        WHERE GUID = #{guid}
+    </update>
+
+    <!-- 单选删除语句 -->
+    <delete id="delete" parameterType="Receiveproduct" flushCache="true">
+        DELETE FROM receiveproduct WHERE GUID = #{guid}
+    </delete>
+
+    <!-- 多选删除 -->
+    <delete id="mulDel" parameterType="java.lang.String" flushCache="true">
+        DELETE FROM receiveproduct WHERE GUID IN
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    <resultMap id="Receiveproduct" type="Receiveproduct">
+       <id column="guid" property="guid" />
+       <result column="companyid" property="companyid" />
+       <result column="suitid" property="suitid" />
+       <result column="busiuserid" property="busiuserid" />
+       <result column="busiusername" property="busiusername" />
+       <result column="code" property="code" />
+       <result column="supplyid" property="supplyid" />
+       <result column="supplyname" property="supplyname" />
+       <result column="senddate" property="senddate" />
+       <result column="createdate" property="createdate" />
+       <result column="address" property="address" />
+       <result column="sendname" property="sendname" />
+       <result column="phone" property="phone" />
+       <result column="remark" property="remark" />
+       <result column="purchaseid" property="purchaseid" />
+       <result column="purchasecode" property="purchasecode" />
+       <result column="amount" property="amount" />
+       <result column="summoney" property="summoney" />
+       <result column="status" property="status" />
+       <result column="sort" property="sort" />
+        <collection property="detailList" ofType="Receiveproductdetail">
+            <id property="guid" column="d_guid" />
+            <result property="appyid" column="appyid" />
+            <result property="productid" column="productid" />
+            <result property="productname" column="productname" />
+            <result property="imgurl" column="imgurl" />
+            <result property="normal" column="normal" />
+            <result property="unit" column="unit" />
+            <result property="amount" column="d_amount" />
+            <result property="price" column="price"/>
+            <result property="summoney" column="d_summoney" />
+            <result property="createdate" column="d_createdate" />
+            <result property="sort" column="d_sort" />
+        </collection>
+    </resultMap>
+</mapper>

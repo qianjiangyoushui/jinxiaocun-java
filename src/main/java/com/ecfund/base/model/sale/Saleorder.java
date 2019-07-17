@@ -26,6 +26,10 @@ public class Saleorder implements java.io.Serializable{
 
     private String suitid;
 
+    private String applyid;
+
+    private String applycode;
+
     private String code;
 
     private String customerid;
@@ -55,6 +59,9 @@ public class Saleorder implements java.io.Serializable{
     private String username;
     @JSONField(format = "yyyy-MM-dd")
     private Date createdate;
+
+    @JSONField(format = "yyyy-MM-dd")
+    private Date senddate;
 
     private BigDecimal summount;
 
@@ -263,5 +270,29 @@ public class Saleorder implements java.io.Serializable{
 
     public void setDetailList(List<Saleorderdetail> detailList) {
         this.detailList = detailList;
+    }
+
+    public String getApplyid() {
+        return applyid;
+    }
+
+    public void setApplyid(String applyid) {
+        this.applyid = applyid;
+    }
+
+    public String getApplycode() {
+        return applycode;
+    }
+
+    public void setApplycode(String applycode) {
+        this.applycode = applycode;
+    }
+
+    public Date getSenddate() {
+        return senddate;
+    }
+
+    public void setSenddate(Date senddate) {
+        this.senddate = senddate;
     }
 }

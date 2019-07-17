@@ -19,11 +19,11 @@ import org.springframework.stereotype.Service;
 public class ProcessinstanceService {
     private static final Logger bizLogger = LoggerFactory.getLogger(ProcessinstanceService.class);
 
-    public ServiceResult<String> startProcessInstance(ProcessInstanceInputVO processInstance){
+    public ServiceResult<String> startProcessInstance(ProcessInstanceInputVO processInstance,String processCode){
         try {
             DefaultDingTalkClient client = new DefaultDingTalkClient(URLConstant.URL_PROCESSINSTANCE_START);
             OapiProcessinstanceCreateRequest request = new OapiProcessinstanceCreateRequest();
-            request.setProcessCode(Constant.PROCESS_CODE);
+            request.setProcessCode(processCode);
 
             request.setFormComponentValues(processInstance.generateForms());
 

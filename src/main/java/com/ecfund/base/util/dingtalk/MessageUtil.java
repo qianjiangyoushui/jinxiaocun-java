@@ -11,6 +11,10 @@ import com.ecfund.base.config.URLConstant;
 import com.taobao.api.ApiException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.amqp.core.Message;
+import org.springframework.amqp.utils.SerializationUtils;
+
+import java.nio.charset.Charset;
 
 public class MessageUtil {
     private static final Logger bizLogger = LoggerFactory.getLogger(MessageUtil.class);
@@ -40,6 +44,27 @@ public class MessageUtil {
         } catch (ApiException e) {
             bizLogger.error("send message failed", e);
             throw new RuntimeException();
+        }
+    }
+
+    public static String getBodyContentAsString(Message message) {
+        if (message.getBody() == null) {
+            return null;
+        } else {
+            try {
+                String contentType = message.getMessageProperties() != null ? message.getMessageProperties().getContentType() : null;
+                if ("application/x-java-serialized-object".equals(contentType)) {
+                    return SerializationUtils.deserialize(message.getBody()).toString();
+                }
+
+                if ("text/plain".equals(contentType) || "application/json".equals(contentType) || "text/x-json".equals(contentType) || "application/xml".equals(contentType)) {
+                    return new String(message.getBody(), Charset.defaultCharset().name());
+                }
+            } catch (Exception var2) {
+                ;var2.printStackTrace();
+            }
+
+            return message.getBody().toString();
         }
     }
 }

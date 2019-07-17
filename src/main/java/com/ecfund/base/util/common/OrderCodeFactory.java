@@ -19,6 +19,12 @@ public class OrderCodeFactory {
     private static final String STOCK_OUT_CODE = "CK";
     private static final String PRE_ORDER_CODE = "XD";
     private static final String SALE_ORDER_CODE = "XK";
+    private static final String STOCK_SEND_CODE = "FH";
+    private static final String STOCK_RECEIVE_CODE = "SH";
+    private static final String FUNDS_PREPAY_CODE = "YFK";
+    private static final String FUNDS_PAY_CODE = "FK";
+    private static final String FUNDS_PRERECEIVE_CODE = "YSK";
+    private static final String FUNDS_RECEIVE_CODE = "SK";
 
     /**
      * 订单类别头
@@ -156,6 +162,24 @@ public class OrderCodeFactory {
     }
     public static String getSaleOderCode(Long userId) {
         return SALE_ORDER_CODE + getCode(userId);
+    }
+    public static String getReceiveProductCode(Long userId) {
+        return STOCK_RECEIVE_CODE + getCode(userId);
+    }
+    public static String getSendProductCode(Long userId) {
+        return STOCK_SEND_CODE + getCode(userId);
+    }
+    public static String getPrePayCode(Long userId) {
+        return FUNDS_PREPAY_CODE + getCode(userId);
+    }
+    public static String getPayCode(Long userId) {
+        return FUNDS_PAY_CODE + getCode(userId);
+    }
+    public static String getPreReceiveCode(Long userId) {
+        return FUNDS_PRERECEIVE_CODE + getCode(userId);
+    }
+    public static String getReceiveCode(Long userId) {
+        return FUNDS_RECEIVE_CODE + getCode(userId);
     }
 
     /**

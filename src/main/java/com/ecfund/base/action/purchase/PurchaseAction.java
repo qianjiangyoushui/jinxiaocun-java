@@ -7,6 +7,8 @@ import com.ecfund.base.common.Exceptions.RollBackException;
 import com.ecfund.base.model.process.ProcessApprovers;
 import com.ecfund.base.model.purchase.Purchaseapply;
 import com.ecfund.base.model.purchase.Purchasebiling;
+import com.ecfund.base.rabbitMQ.producer.MessageProducer;
+import com.ecfund.base.rabbitMQ.producer.PurchaseApplyProducer;
 import com.ecfund.base.service.process.ProcessApproversService;
 import com.ecfund.base.service.purchase.PurchaseapplyService;
 import com.ecfund.base.service.purchase.PurchasebilingService;
@@ -32,6 +34,7 @@ public class PurchaseAction {
     private PurchasebilingService purchasebilingService;
     @Autowired
     private ProcessApproversService processApproversService;
+
 
     @RequestMapping(value = "/applyAdd.action", produces = "application/json;charset=utf-8")
     public @ResponseBody
@@ -64,6 +67,9 @@ public class PurchaseAction {
             content.put("approversList",approversList);
             result.put("success",true);
             result.put("content",content);
+//            String s = "{\"processInstanceId\":\"2758b9a8-ddea-4529-a695-f7fb2bea54f7\",\"finishTime\":1563334447000,\"corpId\":\"ding32211ec91474443635c2f4657eb6378f\",\"EventType\":\"bpms_instance_change\",\"businessId\":\"201907171133000270843\",\"title\":\"贾晓东提交的订货审批\",\"type\":\"finish\",\"url\":\"https://aflow.dingtalk.com/dingtalk/mobile/homepage.htm?corpid=ding32211ec91474443635c2f4657eb6378f&dd_share=false&showmenu=true&dd_progress=false&back=native&procInstId=2758b9a8-ddea-4529-a695-f7fb2bea54f7&taskId=&swfrom=isv&dinghash=approval&dd_from=corp#approval\",\"result\":\"agree\",\"createTime\":1563334407000,\"processCode\":\"PROC-B90BF9E6-9D6E-42F1-9D65-EA44A6FCC71E\",\"bizCategoryId\":\"\",\"staffId\":\"024333162935579879\"}";
+//            JSONObject object = JSONObject.parseObject(s);
+//            messageProducer.sendMessage(object);
 
         }catch (Exception e){
             e.printStackTrace();
@@ -89,12 +95,12 @@ public class PurchaseAction {
             content.put("purchaseApply",purchasebiling);
             result.put("success",true);
             result.put("content",content);
-
         }catch (Exception e){
             e.printStackTrace();
             result.put("success",false);
             result.put("erro",e.getMessage());
         }
+
         return result.toJSONString();
     }
 

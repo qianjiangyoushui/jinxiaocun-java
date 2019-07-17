@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="Paybill">
+
+    <!-- 缓存条数 -->
+    <cache size="2000" />
+
+    <!-- 条件语句 -->
+    <sql id="WhereSQL">
+        <where>
+            <if test="guid != null and guid != ''">
+                AND T.GUID = #{guid}
+            </if>
+            <if test="companyid != null and companyid != ''">
+                AND T.COMPANYID = #{companyid}
+            </if>
+            <if test="suitid != null and suitid != ''">
+                AND T.SUITID = #{suitid}
+            </if>
+            <if test="code != null and code != ''">
+                AND T.CODE = #{code}
+            </if>
+            <if test="type != null and type != ''">
+                AND T.TYPE = #{type}
+            </if>
+            <if test="supplyid != null and supplyid != ''">
+                AND T.SUPPLYID = #{supplyid}
+            </if>
+            <if test="supplyname != null and supplyname != ''">
+                AND T.SUPPLYNAME = #{supplyname}
+            </if>
+            <if test="paytype != null and paytype != ''">
+                AND T.PAYTYPE = #{paytype}
+            </if>
+            <if test="paytypename != null and paytypename != ''">
+                AND T.PAYTYPENAME = #{paytypename}
+            </if>
+            <if test="account != null and account != ''">
+                AND T.ACCOUNT = #{account}
+            </if>
+            <if test="paymoney != null and paymoney != ''">
+                AND T.PAYMONEY = #{paymoney}
+            </if>
+            <if test="money != null and money != ''">
+                AND T.MONEY = #{money}
+            </if>
+            <if test="rebate != null and rebate != ''">
+                AND T.REBATE = #{rebate}
+            </if>
+            <if test="rebatemoney != null and rebatemoney != ''">
+                AND T.REBATEMONEY = #{rebatemoney}
+            </if>
+            <if test="businessid != null and businessid != ''">
+                AND T.BUSINESSID = #{businessid}
+            </if>
+            <if test="businesscode != null and businesscode != ''">
+                AND T.BUSINESSCODE = #{businesscode}
+            </if>
+            <if test="remark != null and remark != ''">
+                AND T.REMARK = #{remark}
+            </if>
+            <if test="status != null and status != ''">
+                AND T.STATUS = #{status}
+            </if>
+            <if test="createdate != null and createdate != ''">
+                AND T.CREATEDATE = #{createdate}
+            </if>
+            <if test="updatedate != null and updatedate != ''">
+                AND T.UPDATEDATE = #{updatedate}
+            </if>
+            <if test="sort != null and sort != ''">
+                AND T.SORT = #{sort}
+            </if>
+        </where>
+    </sql>
+
+    <!-- 查找语句 -->
+    <select id="find" resultType="Paybill" parameterType="Paybill" flushCache="false" useCache="true">
+        SELECT
+        T.GUID AS guid,
+        T.COMPANYID AS companyid,
+        T.SUITID AS suitid,
+        T.BUSIUSERID AS busiuserid,
+        T.BUSIUSERNAME AS busiusername,
+        T.CODE AS code,
+        T.TYPE AS type,
+        T.SUPPLYID AS supplyid,
+        T.SUPPLYNAME AS supplyname,
+        T.PAYTYPE AS paytype,
+        T.PAYTYPENAME AS paytypename,
+        T.ACCOUNT AS account,
+        T.PAYMONEY AS paymoney,
+        T.MONEY AS money,
+        T.REBATE AS rebate,
+        T.REBATEMONEY AS rebatemoney,
+        T.BUSINESSID AS businessid,
+        T.BUSINESSCODE AS businesscode,
+        T.REMARK AS remark,
+        T.STATUS AS status,
+        T.CREATEDATE AS createdate,
+        T.UPDATEDATE AS updatedate,
+        T.SORT AS sort
+        FROM paybill T
+        <include refid="WhereSQL" />
+        ORDER BY SORT
+    </select>
+
+    <!-- 获取总记录数语句 -->
+    <select id="findCount" resultType="java.lang.Integer" parameterType="Paybill" flushCache="false" useCache="true">
+        SELECT COUNT(*)  FROM paybill T
+        <include refid="WhereSQL" />
+    </select>
+
+    <!-- 插入语句 -->
+    <insert id="insert" parameterType="Paybill" flushCache="true">
+        INSERT INTO paybill
+        (
+        GUID,
+        COMPANYID,
+        SUITID,
+        BUSIUSERID,
+        BUSIUSERNAME,
+        CODE,
+        TYPE,
+        SUPPLYID,
+        SUPPLYNAME,
+        PAYTYPE,
+        PAYTYPENAME,
+        ACCOUNT,
+        PAYMONEY,
+        MONEY,
+        REBATE,
+        REBATEMONEY,
+        BUSINESSID,
+        BUSINESSCODE,
+        REMARK,
+        STATUS,
+        CREATEDATE,
+        UPDATEDATE,
+        SORT
+        )
+        VALUES
+        (
+        #{guid,jdbcType=VARCHAR},
+        #{companyid,jdbcType=VARCHAR},
+        #{suitid,jdbcType=VARCHAR},
+        #{busiuserid,jdbcType=VARCHAR},
+        #{busiusername,jdbcType=VARCHAR},
+        #{code,jdbcType=VARCHAR},
+        #{type,jdbcType=VARCHAR},
+        #{supplyid,jdbcType=VARCHAR},
+        #{supplyname,jdbcType=VARCHAR},
+        #{paytype,jdbcType=VARCHAR},
+        #{paytypename,jdbcType=VARCHAR},
+        #{account,jdbcType=VARCHAR},
+        #{paymoney,jdbcType=DECIMAL},
+        #{money,jdbcType=DECIMAL},
+        #{rebate,jdbcType=DECIMAL},
+        #{rebatemoney,jdbcType=DECIMAL},
+        #{businessid,jdbcType=VARCHAR},
+        #{businesscode,jdbcType=VARCHAR},
+        #{remark,jdbcType=VARCHAR},
+        #{status,jdbcType=INTEGER},
+        #{createdate,jdbcType=DATE},
+        #{updatedate,jdbcType=DATE},
+        #{sort,jdbcType=VARCHAR}
+        )
+    </insert>
+
+    <!-- 更新语句 -->
+    <update id="update"  parameterType="Paybill" flushCache="true">
+        update paybill
+        <set>
+            <if test="guid != null">GUID=#{guid},</if>
+            <if test="companyid != null">COMPANYID=#{companyid},</if>
+            <if test="suitid != null">SUITID=#{suitid},</if>
+            <if test="code != null">CODE=#{code},</if>
+            <if test="type != null">TYPE=#{type},</if>
+            <if test="supplyid != null">SUPPLYID=#{supplyid},</if>
+            <if test="supplyname != null">SUPPLYNAME=#{supplyname},</if>
+            <if test="paytype != null">PAYTYPE=#{paytype},</if>
+            <if test="paytypename != null">PAYTYPENAME=#{paytypename},</if>
+            <if test="account != null">ACCOUNT=#{account},</if>
+            <if test="paymoney != null">PAYMONEY=#{paymoney},</if>
+            <if test="money != null">MONEY=#{money},</if>
+            <if test="rebate != null">REBATE=#{rebate},</if>
+            <if test="rebatemoney != null">REBATEMONEY=#{rebatemoney},</if>
+            <if test="businessid != null">BUSINESSID=#{businessid},</if>
+            <if test="businesscode != null">BUSINESSCODE=#{businesscode},</if>
+            <if test="remark != null">REMARK=#{remark},</if>
+            <if test="status != null">STATUS=#{status},</if>
+            <if test="createdate != null">CREATEDATE=#{createdate},</if>
+            <if test="updatedate != null">UPDATEDATE=#{updatedate},</if>
+            <if test="sort != null">SORT=#{sort},</if>
+        </set>
+        WHERE GUID = #{guid}
+    </update>
+
+    <!-- 单选删除语句 -->
+    <delete id="delete" parameterType="Paybill" flushCache="true">
+        DELETE FROM paybill WHERE GUID = #{guid}
+    </delete>
+
+    <!-- 多选删除 -->
+    <delete id="mulDel" parameterType="java.lang.String" flushCache="true">
+        DELETE FROM paybill WHERE GUID IN
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

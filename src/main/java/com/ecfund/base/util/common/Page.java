@@ -1,8 +1,9 @@
 package com.ecfund.base.util.common;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class Page {
+public class Page implements Serializable {
 	private int begin;// 起始位置
 	private int pageNo = 1;// 当前页
 	private int pageSize =100;// 每行显示条数 

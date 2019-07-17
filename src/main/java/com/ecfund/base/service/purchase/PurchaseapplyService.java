@@ -1,10 +1,8 @@
 package com.ecfund.base.service.purchase;
 
-import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.dingtalk.api.response.OapiUserGetResponse;
-import com.ecfund.base.common.Exceptions.NoRollBackException;
 import com.ecfund.base.common.Exceptions.RollBackException;
 import com.ecfund.base.config.Constant;
 import com.ecfund.base.dao.publics.AccountsuitDAO;
@@ -13,7 +11,6 @@ import com.ecfund.base.dao.purchase.PurchaseapplydetailDAO;
 import com.ecfund.base.model.process.DetailForm;
 import com.ecfund.base.model.process.ProcessInstanceInputVO;
 import com.ecfund.base.model.process.TextForm;
-import com.ecfund.base.model.publics.DingUser;
 import com.ecfund.base.model.purchase.Purchaseapply;
 import com.ecfund.base.model.purchase.Purchaseapplydetail;
 import com.ecfund.base.service.BaseService;
@@ -25,7 +22,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -110,7 +106,7 @@ public class PurchaseapplyService extends BaseService<Purchaseapply> {
         ProcessInstanceInputVO processInstance= new ProcessInstanceInputVO();
         processInstance.setOriginatorUserId(user.getUserid());
         processInstance.setDeptId(user.getDepartment().get(0));
-        TextForm textForm1 = new TextForm("采购类型","农资采购");
+        TextForm textForm1 = new TextForm("采购类型",purchaseapply.getCategoryname()+"采购");
         TextForm textForm2 = new TextForm("申请事由",purchaseapply.getReason());
         TextForm textForm3 = new TextForm("预计采购日期",sdf.format(purchaseapply.getApplydate()));
         TextForm textForm4 = new TextForm("总采购金额",purchaseapply.getSummoney().toString());
@@ -145,7 +141,7 @@ public class PurchaseapplyService extends BaseService<Purchaseapply> {
         }
         detailForm.setDetailForms(list);
         processInstance.setDetailForms(Arrays.asList(detailForm));
-        return processinstanceService.startProcessInstance(processInstance);
+        return processinstanceService.startProcessInstance(processInstance,Constant.PROCESS_CODE);
     }
 
     public void updateStatus(String processInstanceId, int status) {
@@ -159,6 +155,17 @@ public class PurchaseapplyService extends BaseService<Purchaseapply> {
             this.update(p);
         } catch (Exception e) {
             e.printStackTrace();
+        }
+    }
+
+    public Purchaseapply viewByProcessId(String processId){
+        Purchaseapply purchasebiling = new Purchaseapply();
+        purchasebiling.setProcessInstanceId(processId);
+        try {
+            return  this.view(purchasebiling);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
         }
     }
 }

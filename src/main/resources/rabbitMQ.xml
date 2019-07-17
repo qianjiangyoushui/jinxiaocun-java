@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:rabbit="http://www.springframework.org/schema/rabbit" xmlns="http://www.springframework.org/schema/beans"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+     http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+     http://www.springframework.org/schema/rabbit
+     http://www.springframework.org/schema/rabbit/spring-rabbit-1.2.xsd">
+    <!--配置connection-factory，指定连接rabbit server参数 -->
+    <rabbit:connection-factory id="connectionFactory" virtual-host="/"
+                               username="oldlu" password="123456" host="47.92.116.235" port="5672"
+    />
+    <!--通过指定下面的admin信息，当前producer中的exchange和queue会在rabbitmq服务器上自动生成 -->
+    <rabbit:admin id="connectAdmin" connection-factory="connectionFactory"/>
+    <!--定义rabbit template用于数据的接收和发送 ,这个是阿里云回调的时候用的-->
+    <rabbit:template id="amqpTemplate" connection-factory="connectionFactory"
+                     exchange="AliCallBackExchange"/>
+    <!--定义queue -->
+    <rabbit:queue name="queueJinxc" durable="true"
+                  auto-delete="false" exclusive="false" declared-by="connectAdmin"/>
+    <!-- 定义direct exchange，绑定queueTest -->
+    <rabbit:direct-exchange name="AliCallBackExchange"
+    durable="true" auto-delete="false" declared-by="connectAdmin">
+        <rabbit:bindings>
+            <rabbit:binding queue="queueJinxc" key="queueJinxc"></rabbit:binding>
+        </rabbit:bindings>
+    </rabbit:direct-exchange>
+    <!-- 消息接收者 -->
+    <bean id="jinxcCallBack" class="com.ecfund.base.rabbitMQ.consumer.JinxcConsumer"></bean>
+
+
+
+<!--采购申请通过后，发起预付款-->
+    <!--定义rabbit template用于数据的接收和发送 -->
+    <rabbit:template id="amqpTemplatePrePurchaseApply" connection-factory="connectionFactory"
+                     exchange="prePurchaseApplyExchange"/>
+    <!-- 定义direct exchange，绑定queueTest -->
+    <rabbit:fanout-exchange name="prePurchaseApplyExchange"
+                            durable="true" auto-delete="false" declared-by="connectAdmin">
+        <rabbit:bindings>
+            <rabbit:binding queue="prepaymoneyQueue" ></rabbit:binding>
+        </rabbit:bindings>
+    </rabbit:fanout-exchange>
+    <!--定义queue -->
+    <rabbit:queue name="prepaymoneyQueue" durable="true"
+                  auto-delete="false" exclusive="false" declared-by="connectAdmin"/>
+    <bean id="prepay" class="com.ecfund.base.rabbitMQ.consumer.PrePayConsumer"></bean>
+
+
+
+
+    <!--采购开单通过后，发起付款单，以及收货单-->
+    <!--定义rabbit template用于数据的接收和发送 -->
+    <rabbit:template id="amqpTemplatePurchaseApply" connection-factory="connectionFactory"
+                     exchange="purchaseApplyExchange"/>
+    <!-- 定义direct exchange，绑定queueTest -->
+    <rabbit:fanout-exchange name="purchaseApplyExchange"
+                            durable="true" auto-delete="false" declared-by="connectAdmin">
+        <rabbit:bindings>
+            <rabbit:binding queue="paymoneyQueue" ></rabbit:binding>
+            <rabbit:binding queue="receiveProductQueue" ></rabbit:binding>
+        </rabbit:bindings>
+    </rabbit:fanout-exchange>
+    <!--定义queue -->
+    <rabbit:queue name="paymoneyQueue" durable="true"
+                  auto-delete="false" exclusive="false" declared-by="connectAdmin"/>
+    <!--定义queue -->
+    <rabbit:queue name="receiveProductQueue" durable="true"
+                  auto-delete="false" exclusive="false" declared-by="connectAdmin"/>
+    <bean id="receiveProduct" class="com.ecfund.base.rabbitMQ.consumer.ReceiveProductConsumer"></bean>
+    <bean id="pay" class="com.ecfund.base.rabbitMQ.consumer.PayConsumer"></bean>
+
+
+<!--订货单通过后，发起预收款-->
+    <!--定义rabbit template用于数据的接收和发送 -->
+    <rabbit:template id="amqpTemplatePreSale" connection-factory="connectionFactory"
+                     exchange="preSaleExchange"/>
+    <!-- 定义direct exchange，绑定queueTest -->
+    <rabbit:fanout-exchange name="preSaleExchange"
+                            durable="true" auto-delete="false" declared-by="connectAdmin">
+        <rabbit:bindings>
+            <rabbit:binding queue="presaleQueue" ></rabbit:binding>
+        </rabbit:bindings>
+    </rabbit:fanout-exchange>
+    <!--定义queue -->
+    <rabbit:queue name="presaleQueue" durable="true"
+                  auto-delete="false" exclusive="false" declared-by="connectAdmin"/>
+    <bean id="presale" class="com.ecfund.base.rabbitMQ.consumer.PreReceiveConsumer"></bean>
+
+
+
+
+    <!--销售开单通过后，发起收款单，以及发货单-->
+    <!--定义rabbit template用于数据的接收和发送 -->
+    <rabbit:template id="amqpTemplateSale" connection-factory="connectionFactory"
+                     exchange="saleExchange"/>
+    <!-- 定义direct exchange，绑定queueTest -->
+    <rabbit:fanout-exchange name="saleExchange"
+                            durable="true" auto-delete="false" declared-by="connectAdmin">
+        <rabbit:bindings>
+            <rabbit:binding queue="receiveQueue" ></rabbit:binding>
+            <rabbit:binding queue="sendProductQueue" ></rabbit:binding>
+        </rabbit:bindings>
+    </rabbit:fanout-exchange>
+    <!--定义queue -->
+    <rabbit:queue name="receiveQueue" durable="true"
+                  auto-delete="false" exclusive="false" declared-by="connectAdmin"/>
+    <!--定义queue -->
+    <rabbit:queue name="sendProductQueue" durable="true"
+                  auto-delete="false" exclusive="false" declared-by="connectAdmin"/>
+    <bean id="sendProduct" class="com.ecfund.base.rabbitMQ.consumer.SendProductConsumer"></bean>
+    <bean id="receive" class="com.ecfund.base.rabbitMQ.consumer.ReceiveConsumer"></bean>
+    <rabbit:listener-container
+            connection-factory="connectionFactory">
+        <!--预付款-->
+        <rabbit:listener queues="prepaymoneyQueue" ref="prepay"/>
+        <!--付款-->
+        <rabbit:listener queues="paymoneyQueue" ref="pay"/>
+        <!--收货-->
+        <rabbit:listener queues="receiveProductQueue" ref="receiveProduct"/>
+        <!--发货-->
+        <rabbit:listener queues="sendProductQueue" ref="sendProduct"/>
+        <!--收款-->
+        <rabbit:listener queues="receiveQueue" ref="receive"/>
+        <!--预收款-->
+        <rabbit:listener queues="presaleQueue" ref="presale"/>
+        <!--钉钉回调-->
+        <rabbit:listener queues="queueJinxc" ref="jinxcCallBack"/>
+    </rabbit:listener-container>
+    <!-- queue litener 观察 监听模式 当有消息到达时会通知监听在对应的队列上的监听对象 -->
+
+</beans>

@@ -15,6 +15,9 @@ import com.ecfund.base.action.purchase.CommonAction;
 import com.ecfund.base.config.Constant;
 import com.ecfund.base.config.URLConstant;
 import com.ecfund.base.model.process.ProcessApprovers;
+import com.ecfund.base.rabbitMQ.producer.MessageProducer;
+import com.ecfund.base.rabbitMQ.producer.PrePurchaseApplyProducer;
+import com.ecfund.base.rabbitMQ.producer.PurchaseApplyProducer;
 import com.ecfund.base.service.process.ProcessApproversService;
 import com.ecfund.base.service.purchase.PurchaseapplyService;
 import com.ecfund.base.util.dingtalk.AccessTokenUtil;
@@ -45,6 +48,12 @@ public class IndexController {
     private ProcessApproversService processApproversService;
     @Autowired
     private PurchaseapplyService purchaseapplyService;
+    @Autowired
+    private PrePurchaseApplyProducer prePurchaseApplyProducer;
+    @Autowired
+    private PurchaseApplyProducer purchaseApplyProducer;
+    @Autowired
+    private MessageProducer messageProducer;
     /**
      * 创建套件后，验证回调URL创建有效事件（第一次保存回调URL之前）
      */
@@ -155,70 +164,7 @@ public class IndexController {
             String encryptMsg = json.getString("encrypt");
             String plainText = dingTalkEncryptor.getDecryptMsg(signature, timestamp, nonce, encryptMsg);
             JSONObject obj = JSON.parseObject(plainText);
-
-            //根据回调数据类型做不同的业务处理
-            String eventType = obj.getString("EventType");
-            if (BPMS_TASK_CHANGE.equals(eventType)) {
-                bizLogger.info("收到审批任务进度更新: " + plainText);
-                //todo: 实现审批的业务逻辑，如发消息
-                ProcessApprovers processApprovers = new ProcessApprovers();
-                String processInstanceId = obj.getString("processInstanceId");
-                String processCode = obj.getString("processCode");
-                processApprovers.setProcesscode(processCode);
-                processApprovers.setProcessinstanceid(processInstanceId);
-                processApprovers.setTitle(obj.getString("title"));
-                processApprovers.setType(obj.getString("type"));
-                String userid = obj.getString("staffId");
-                OapiUserGetResponse user  = getUser(AccessTokenUtil.getToken(), userid);
-                processApprovers.setStaffid(userid);
-                processApprovers.setStaffname(user.getName());
-                processApprovers.setResult(obj.getString("result"));
-                Calendar calendar = Calendar.getInstance();
-                calendar.setTimeInMillis(obj.getLong("createTime"));
-                processApprovers.setCreatetime(calendar.getTime());
-                Calendar calendar2 = Calendar.getInstance();
-                calendar2.setTimeInMillis(obj.getLong("finishTime"));
-                processApprovers.setFinishtime(calendar2.getTime());
-                processApprovers.setUpdatedate(Calendar.getInstance().getTime());
-                processApprovers.setRemark(obj.getString("remark"));
-                processApprovers.setEventtype(eventType);
-                processApproversService.insert(processApprovers);
-            } else if (BPMS_INSTANCE_CHANGE.equals(eventType)) {
-                bizLogger.info("收到审批实例状态更新: " + plainText);
-                //todo: 实现审批的业务逻辑，如发消息
-                ProcessApprovers processApprovers = new ProcessApprovers();
-                String processInstanceId = obj.getString("processInstanceId");
-                String processCode = obj.getString("processCode");
-                processApprovers.setProcesscode(processCode);
-                processApprovers.setProcessinstanceid(processInstanceId);
-                processApprovers.setTitle(obj.getString("title"));
-                processApprovers.setType(obj.getString("type"));
-                String userid = obj.getString("staffId");
-                OapiUserGetResponse user  = getUser(AccessTokenUtil.getToken(), userid);
-                processApprovers.setStaffid(userid);
-                processApprovers.setStaffname(user.getName());
-                processApprovers.setResult(obj.getString("result"));
-                Calendar calendar = Calendar.getInstance();
-                calendar.setTimeInMillis(obj.getLong("createTime"));
-                processApprovers.setCreatetime(calendar.getTime());
-                Calendar calendar2 = Calendar.getInstance();
-                calendar2.setTimeInMillis(obj.getLong("finishTime"));
-                processApprovers.setFinishtime(calendar2.getTime());
-                processApprovers.setUpdatedate(Calendar.getInstance().getTime());
-                processApprovers.setUrl(obj.getString("url"));
-                processApprovers.setEventtype(eventType);
-                processApprovers.setEventtype(eventType);
-                processApproversService.insert(processApprovers);
-                if(Constant.PROCESS_CODE.equals(obj.getString("processCode"))&&"finish".equals(obj.getString("type"))){
-                    if("refuse".equals(obj.getString("result"))){
-                        purchaseapplyService.updateStatus(obj.getString("processInstanceId"),3);
-                    }else if("agree".equals(obj.getString("result"))){
-                        purchaseapplyService.updateStatus(obj.getString("processInstanceId"),2);
-                    }
-                }
-            } else {
-                // 其他类型事件处理
-            }
+            messageProducer.sendMessage(obj);
 
             // 返回success的加密信息表示回调处理成功
             return dingTalkEncryptor.getEncryptedMap(CALLBACK_RESPONSE_SUCCESS, System.currentTimeMillis(), Utils.getRandomStr(8));

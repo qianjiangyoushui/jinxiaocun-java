@@ -36,6 +36,18 @@ public class Constant {
      * 审批模板唯一标识，可以在审批管理后台找到
      */
     public static final String PROCESS_CODE = "PROC-C6515836-40F8-45B6-ACA2-70FBA2F34AEC";
+    /**
+     * 采购开单流程
+     */
+    public static final String PROCESS_CODE_PURCHASE = "PROC-A7CCBE8F-1F2E-4F47-AE53-6FFB8164F8EA";
+    /**
+     * 订货单流程
+     */
+    public static final String PROCESS_CODE_PRESALE = "PROC-B90BF9E6-9D6E-42F1-9D65-EA44A6FCC71E";
+    /**
+     * 销售开单流程
+     */
+    public static final String PROCESS_CODE_SALE= "PROC-E7658982-73C3-4591-AD6D-A9807F56B13A";
 
     /**
      * 回调host

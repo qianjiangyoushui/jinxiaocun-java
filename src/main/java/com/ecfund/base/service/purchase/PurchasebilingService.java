@@ -14,8 +14,6 @@ import com.ecfund.base.model.process.DetailForm;
 import com.ecfund.base.model.process.ProcessInstanceInputVO;
 import com.ecfund.base.model.process.TextForm;
 import com.ecfund.base.model.purchase.Bilingdetail;
-import com.ecfund.base.model.purchase.Purchaseapply;
-import com.ecfund.base.model.purchase.Purchaseapplydetail;
 import com.ecfund.base.model.purchase.Purchasebiling;
 import com.ecfund.base.service.BaseService;
 import com.ecfund.base.service.process.ProcessinstanceService;
@@ -77,20 +75,20 @@ public class PurchasebilingService extends BaseService<Purchasebiling> {
                 list.add(detail);
             }
             purchasebiling.setDetailList(list);
-            //ServiceResult sr = startProcess(purchaseapply,user);
+            ServiceResult sr = startProcess(purchasebiling,user);
             /**
              * 流程启动失败回滚
              */
-//            if(!sr.isSuccess()){
-//                result.put("success",false);
-//                result.put("erro", sr.getMessage());
-//                throw new RollBackException();
-//            }else{
-//                String processInstanceId = sr.getResult().toString();
-//                purchaseapply.setProcessInstanceId(processInstanceId);
-//                purchaseapply.setGuid(guid);
-//                this.update(purchaseapply);
-//            }
+            if(!sr.isSuccess()){
+                result.put("success",false);
+                result.put("erro", sr.getMessage());
+                throw new RollBackException();
+            }else{
+                String processInstanceId = sr.getResult().toString();
+                purchasebiling.setProcessInstanceId(processInstanceId);
+                purchasebiling.setGuid(guid);
+                this.update(purchasebiling);
+            }
             content.put("guid",guid);
             result.put("success",true);
             result.put("content", content);
@@ -105,33 +103,41 @@ public class PurchasebilingService extends BaseService<Purchasebiling> {
 
     /**
      * 构建流程数据，启动流程
-     * @param purchaseapply
+     * @param purchasebiling
      * @param user
      * @return
      * @throws Exception
      */
-    private ServiceResult startProcess(Purchaseapply purchaseapply, OapiUserGetResponse user)throws Exception{
+    private ServiceResult startProcess(Purchasebiling purchasebiling, OapiUserGetResponse user)throws Exception{
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         ProcessInstanceInputVO processInstance= new ProcessInstanceInputVO();
         processInstance.setOriginatorUserId(user.getUserid());
         processInstance.setDeptId(user.getDepartment().get(0));
-        TextForm textForm1 = new TextForm("采购类型","农资采购");
-        TextForm textForm2 = new TextForm("申请事由",purchaseapply.getReason());
-        TextForm textForm3 = new TextForm("预计采购日期",sdf.format(purchaseapply.getApplydate()));
-        TextForm textForm4 = new TextForm("总采购金额",purchaseapply.getSummoney().toString());
-        TextForm textForm5 = new TextForm("明细数量",purchaseapply.getDetailList().size()+"种明细");
+        TextForm textForm1 = new TextForm("开单日期",sdf.format(purchasebiling.getApplydate()));
+        TextForm textForm2 = new TextForm("单据类型",purchasebiling.getCategoryname());
+        TextForm textForm3 = new TextForm("供应商",purchasebiling.getSupplyname());
+        TextForm textForm4 = new TextForm("发票类型",purchasebiling.getBilltypename());
+        TextForm textForm5 = new TextForm("收货总金额",purchasebiling.getSummoney().toString());
+        TextForm textForm6 = new TextForm("本次付款金额",purchasebiling.getPaymoney().toString());
+        TextForm textForm7 = new TextForm("开户行",purchasebiling.getBankname());
+        TextForm textForm8 = new TextForm("结算账号",purchasebiling.getBankaccount());
+        TextForm textForm9 = new TextForm("关联采购申请单",purchasebiling.getPurchaseapplycode());
         List<TextForm> textList = new ArrayList<TextForm>();
         textList.add(textForm1);
         textList.add(textForm2);
         textList.add(textForm3);
         textList.add(textForm4);
         textList.add(textForm5);
+        textList.add(textForm6);
+        textList.add(textForm7);
+        textList.add(textForm8);
+        textList.add(textForm9);
         processInstance.setTextForms(textList);
         List<DetailForm> list = new ArrayList<DetailForm>();
         int index=0;
         DetailForm detailForm = new DetailForm();
-        detailForm.setName("采购申请明细");
-        for(Purchaseapplydetail detail :purchaseapply.getDetailList()) {
+        detailForm.setName("采购开单明细");
+        for(Bilingdetail detail :purchasebiling.getDetailList()) {
             index = index+1;
             TextForm dtextForm1 = new TextForm("名称", detail.getProductname());
             TextForm dtextForm2 = new TextForm("规格", detail.getNormal());
@@ -150,7 +156,31 @@ public class PurchasebilingService extends BaseService<Purchasebiling> {
         }
         detailForm.setDetailForms(list);
         processInstance.setDetailForms(Arrays.asList(detailForm));
-        return processinstanceService.startProcessInstance(processInstance);
+        return processinstanceService.startProcessInstance(processInstance,Constant.PROCESS_CODE_PURCHASE);
     }
 
+    public void updateStatus(String processInstanceId, int status) {
+        try {
+            Purchasebiling purchaseapply = new Purchasebiling();
+            purchaseapply.setProcessInstanceId(processInstanceId);
+            purchaseapply = this.view(purchaseapply);
+            Purchasebiling  p = new Purchasebiling();
+            p.setStatus(status);
+            p.setGuid(purchaseapply.getGuid());
+            this.update(p);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public Purchasebiling viewByProcessId(String processId){
+        Purchasebiling purchasebiling = new Purchasebiling();
+        purchasebiling.setProcessInstanceId(processId);
+        try {
+            return  this.view("findDetail",purchasebiling);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
 }

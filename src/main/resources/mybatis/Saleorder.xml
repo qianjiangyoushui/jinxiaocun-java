@@ -95,6 +95,8 @@
         T.GUID AS guid,
         T.COMPNAYID AS compnayid,
         T.SUITID AS suitid,
+        T.APPLYID AS applyid,
+        T.APPLYCODE AS applycode,
         T.CODE AS code,
         T.CUSTOMERID AS customerid,
         T.CUSTOMERNAME AS customername,
@@ -129,6 +131,8 @@
         T.GUID AS guid,
         T.COMPNAYID AS compnayid,
         T.SUITID AS suitid,
+        T.APPLYID AS applyid,
+        T.APPLYCODE AS applycode,
         T.CODE AS code,
         T.CUSTOMERID AS customerid,
         T.CUSTOMERNAME AS customername,
@@ -166,7 +170,7 @@
         D.CREATEDATE AS d_createdate,
         D.SORT AS d_sort,
         D.STATUS AS d_status
-        FROM saleorder T LEFT JOIN preorderdetail D ON T.GUID=D.APPLYID
+        FROM saleorder T LEFT JOIN saleorderdetail D ON T.GUID=D.APPLYID
         <include refid="WhereSQL" />
         ORDER BY SORT
     </select>
@@ -184,6 +188,8 @@
         GUID,
         COMPNAYID,
         SUITID,
+        APPLYID,
+        APPLYCODE,
         CODE,
         CUSTOMERID,
         CUSTOMERNAME,
@@ -214,6 +220,8 @@
         #{guid,jdbcType=VARCHAR},
         #{compnayid,jdbcType=VARCHAR},
         #{suitid,jdbcType=VARCHAR},
+        #{applyid,jdbcType=VARCHAR},
+        #{applycode,jdbcType=VARCHAR},
         #{code,jdbcType=VARCHAR},
         #{customerid,jdbcType=VARCHAR},
         #{customername,jdbcType=VARCHAR},
@@ -293,6 +301,8 @@
         <result property="guid" column="guid" />
         <result property="compnayid" column="compnayid" />
         <result property="suitid" column="suitid" />
+        <result property="applyid" column="applyid" />
+        <result property="applycode" column="applycode" />
         <result property="code" column="code" />
         <result property="customerid" column="customerid" />
         <result property="customername" column="customername" />
@@ -314,7 +324,7 @@
         <result property="paymoney" column="paymoney" />
         <result property="capital" column="capital" />
         <result property="statusinfo" column="statusinfo" />
-        <result property="process_instance_id" column="processInstanceId" />
+        <result property="processInstanceId" column="process_instance_id" />
         <result property="status" column="status" />
         <result property="sort" column="sort" />
         <collection property="detailList" ofType="Saleorderdetail">

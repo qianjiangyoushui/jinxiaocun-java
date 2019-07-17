@@ -4,20 +4,15 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.dingtalk.api.response.OapiUserGetResponse;
 import com.ecfund.base.common.Exceptions.RollBackException;
+import com.ecfund.base.config.Constant;
 import com.ecfund.base.model.process.ProcessApprovers;
 import com.ecfund.base.model.publics.Dictionary;
 import com.ecfund.base.model.purchase.Purchaseapply;
 import com.ecfund.base.model.purchase.Supplier;
-import com.ecfund.base.model.storage.Houseposition;
-import com.ecfund.base.model.storage.Instockorder;
-import com.ecfund.base.model.storage.Outstockorder;
-import com.ecfund.base.model.storage.Warehouse;
+import com.ecfund.base.model.storage.*;
 import com.ecfund.base.service.publics.DictionaryService;
 import com.ecfund.base.service.purchase.SupplierService;
-import com.ecfund.base.service.storage.HousepositionService;
-import com.ecfund.base.service.storage.InstockorderService;
-import com.ecfund.base.service.storage.OutstockorderService;
-import com.ecfund.base.service.storage.WarehouseService;
+import com.ecfund.base.service.storage.*;
 import com.ecfund.base.util.common.OrderCodeFactory;
 import com.ecfund.base.util.common.Page;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,6 +40,10 @@ public class StockAction {
     private DictionaryService dictionaryService;
     @Autowired
     private OutstockorderService outstockorderService;
+    @Autowired
+    private SendproductService sendproductService;
+    @Autowired
+    private ReceiveproductService receiveproductService;
     @RequestMapping(value = "/add.action",produces = "application/json;charset=utf-8")
     public @ResponseBody
     String add(HttpServletRequest request, Warehouse  warehouse) throws Exception{
@@ -261,6 +260,116 @@ public class StockAction {
             result.put("success",true);
             result.put("content",content);
 
+        }catch (Exception e){
+            e.printStackTrace();
+            result.put("success",false);
+            result.put("erro",e.getMessage());
+        }
+        return result.toJSONString();
+    }
+
+    @RequestMapping(value = "/sendList.action", produces = "application/json;charset=utf-8")
+    public @ResponseBody
+    String sendList(HttpServletRequest request, Sendproduct sendproduct, Page page){
+        JSONObject result = new JSONObject();
+        JSONObject content = new JSONObject();
+        OapiUserGetResponse user = (OapiUserGetResponse) request.getSession().getAttribute("user");
+        try{
+            sendproduct.setCompanyid(Constant.APP_KEY);
+            page = sendproductService.find(sendproduct, page.getBegin(), page.getPageSize());
+            result.put("success",true);
+            content.put("page",page);
+            result.put("content",content);
+        }catch (Exception e){
+            e.printStackTrace();
+            result.put("success",false);
+            result.put("erro",e.getMessage());
+        }
+        return result.toJSONString();
+    }
+    @RequestMapping(value = "/sendInfo.action", produces = "application/json;charset=utf-8")
+    public @ResponseBody
+    String sendInfo(HttpServletRequest request, Sendproduct sendproduct){
+        JSONObject result = new JSONObject();
+        JSONObject content = new JSONObject();
+        OapiUserGetResponse user = (OapiUserGetResponse) request.getSession().getAttribute("user");
+        try{
+
+            sendproduct = sendproductService.view("findDetail",sendproduct);
+            result.put("success",true);
+            content.put("sendproduct",sendproduct);
+            result.put("content",content);
+        }catch (Exception e){
+            e.printStackTrace();
+            result.put("success",false);
+            result.put("erro",e.getMessage());
+        }
+        return result.toJSONString();
+    }
+    @RequestMapping(value = "/sendUpdate.action", produces = "application/json;charset=utf-8")
+    public @ResponseBody
+    String sendUpdate(HttpServletRequest request, Sendproduct sendproduct){
+        JSONObject result = new JSONObject();
+        JSONObject content = new JSONObject();
+        OapiUserGetResponse user = (OapiUserGetResponse) request.getSession().getAttribute("user");
+        try{
+            sendproductService.update(sendproduct);
+            result.put("success",true);
+            result.put("content",content);
+        }catch (Exception e){
+            e.printStackTrace();
+            result.put("success",false);
+            result.put("erro",e.getMessage());
+        }
+        return result.toJSONString();
+    }
+    @RequestMapping(value = "/receiveList.action", produces = "application/json;charset=utf-8")
+    public @ResponseBody
+    String receiveList(HttpServletRequest request, Receiveproduct receiveproduct, Page page){
+        JSONObject result = new JSONObject();
+        JSONObject content = new JSONObject();
+        OapiUserGetResponse user = (OapiUserGetResponse) request.getSession().getAttribute("user");
+        try{
+            receiveproduct.setCompanyid(Constant.APP_KEY);
+            page = receiveproductService.find(receiveproduct, page.getBegin(), page.getPageSize());
+            result.put("success",true);
+            content.put("page",page);
+            result.put("content",content);
+        }catch (Exception e){
+            e.printStackTrace();
+            result.put("success",false);
+            result.put("erro",e.getMessage());
+        }
+        return result.toJSONString();
+    }
+    @RequestMapping(value = "/receiveInfo.action", produces = "application/json;charset=utf-8")
+    public @ResponseBody
+    String receiveInfo(HttpServletRequest request, Receiveproduct receiveproduct){
+        JSONObject result = new JSONObject();
+        JSONObject content = new JSONObject();
+        OapiUserGetResponse user = (OapiUserGetResponse) request.getSession().getAttribute("user");
+        try{
+            receiveproduct = receiveproductService.view("findDetail",receiveproduct);
+            result.put("success",true);
+            content.put("receiveproduct",receiveproduct);
+            result.put("content",content);
+        }catch (Exception e){
+            e.printStackTrace();
+            result.put("success",false);
+            result.put("erro",e.getMessage());
+        }
+        return result.toJSONString();
+    }
+    @RequestMapping(value = "/receiveUpdate.action", produces = "application/json;charset=utf-8")
+    public @ResponseBody
+    String receiveUpdate(HttpServletRequest request, Receiveproduct receiveproduct){
+        JSONObject result = new JSONObject();
+        JSONObject content = new JSONObject();
+        OapiUserGetResponse user = (OapiUserGetResponse) request.getSession().getAttribute("user");
+        try{
+            receiveproductService.update(receiveproduct);
+            result.put("success",true);
+            result.put("content",content);
         }catch (Exception e){
             e.printStackTrace();
             result.put("success",false);

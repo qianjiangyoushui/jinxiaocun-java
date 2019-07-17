@@ -132,10 +132,27 @@ public class CommonAction {
         return result.toJSONString();
     }
 
+    @RequestMapping(value = "/supplierEdit.action",produces = "application/json;charset=utf-8")
+    public @ResponseBody
+    String supplierEdit(HttpServletRequest request, Supplier supplier) {
+        JSONObject content = new JSONObject();
+        JSONObject result = new JSONObject();
+        try{
+            supplierService.update(supplier);
+            result.put("success",true);
+            result.put("content", content);
+        }catch (Exception e){
+            result.put("success",false);
+            result.put("erro", e.getMessage());
+        }
+        return result.toJSONString();
+    }
+
 
     @RequestMapping(value = "/purchasepre.action", produces = "application/json;charset=utf-8")
     public @ResponseBody
     String purchasepre(HttpServletRequest request) throws RollBackException {
+        OapiUserGetResponse user = (OapiUserGetResponse) request.getSession().getAttribute("user");
         JSONObject result = new JSONObject();
         JSONObject content = new JSONObject();
         try{
@@ -148,7 +165,8 @@ public class CommonAction {
             Supplier s = new Supplier();
             List<Supplier> suppliers = supplierService.find(s);
             Purchaseapply purchaseapply = new Purchaseapply();
-            purchaseapply.setStatus(1);
+            purchaseapply.setStatus(2);
+            purchaseapply.setUserid(user.getUnionid());
             List<Purchaseapply> applyArray = purchaseapplyService.find(purchaseapply);
             content.put("applyArray",applyArray);
             content.put("categoryArray",categoryArray);

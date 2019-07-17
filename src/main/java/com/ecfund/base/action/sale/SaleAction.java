@@ -8,6 +8,7 @@ import com.ecfund.base.model.publics.Dictionary;
 import com.ecfund.base.model.sale.Customer;
 import com.ecfund.base.model.sale.Preorder;
 import com.ecfund.base.model.sale.Saleorder;
+import com.ecfund.base.rabbitMQ.producer.MessageProducer;
 import com.ecfund.base.service.publics.DictionaryService;
 import com.ecfund.base.service.sale.CustomerService;
 import com.ecfund.base.service.sale.PreorderService;
@@ -22,6 +23,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
 import java.util.List;
 
 @Controller("SaleAction")
@@ -37,10 +39,10 @@ public class SaleAction {
     private PreorderService preorderService;
     @Autowired
     private SaleorderService saleorderService;
-
     @RequestMapping(value = "/saleorderAddPre.action",produces = "application/json;charset=utf-8")
     public @ResponseBody
     String saleorderAddPre(HttpServletRequest request) throws Exception{
+        OapiUserGetResponse user = (OapiUserGetResponse) request.getSession().getAttribute("user");
         String code = OrderCodeFactory.getSaleOderCode(null);
         Customer supplier = new Customer();
         supplier.setDisable(1);
@@ -52,14 +54,21 @@ public class SaleAction {
         d2.setBelongsid("2");
         List<Dictionary> ticketArray = dictionaryService.find(d2);
         JSONObject content = new JSONObject();
+
+        Preorder preorder = new Preorder();
+        preorder.setStatus(2);
+        preorder.setUserid(user.getUnionid());
+        List<Preorder> preorderList = preorderService.find(preorder);
         content.put("customerList",customerList);
         content.put("typeArray",typeArray);
         content.put("ticketArray",ticketArray);
         content.put("code",code);
+        content.put("applyArray",preorderList);
         JSONObject result = new JSONObject();
         result.put("success",true);
         result.put("content", content);
         mainLogger.info(result.toJSONString());
+
         return result.toJSONString();
     }
 
@@ -141,7 +150,7 @@ public class SaleAction {
 
     @RequestMapping(value = "/preorderAdd.action", produces = "application/json;charset=utf-8")
     public @ResponseBody
-    String preorderAdd(HttpServletRequest request, Preorder preorder, String productString){
+    String preorderAdd(HttpServletRequest request, Preorder preorder, String productString)throws Exception{
         OapiUserGetResponse user = (OapiUserGetResponse) request.getSession().getAttribute("user");
         JSONArray detailList = JSONObject.parseArray(productString);
         try {

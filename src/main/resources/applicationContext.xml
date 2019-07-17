@@ -21,7 +21,7 @@
 	<context:annotation-config />
 	<!-- 扫描制定的包，注解 -->
 		<context:component-scan
-		base-package="com.ecfund.base.dao,com.ecfund.base.service" />
+		base-package="com.ecfund.base.dao,com.ecfund.base.service,com.ecfund.base.rabbitMQ" />
 	<!-- 读取Properties文件 -->
 	<bean id="propertyPlaceholderConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">   
 	    <property name="locations">   
@@ -43,7 +43,7 @@
 	<import resource="applicationContext-cache.xml"/>
 	<!--邮件任务  -->
 	<import resource="applicationContext-mailsend.xml"/>
-<!-- 	<import resource="applicationContext-quartz.xml"/> -->
+ 	<import resource="rabbitMQ.xml"/>
 <!-- 	<import resource="applicationContext-aop.xml"/> -->
 	<bean id ="taskExecutor"  class ="org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor" >  
     <!-- 线程池维护线程的最少数量 -->  
