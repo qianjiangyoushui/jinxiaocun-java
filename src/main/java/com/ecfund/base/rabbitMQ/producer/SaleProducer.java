@@ -12,7 +12,7 @@ import java.io.IOException;
 public class SaleProducer {
     private Logger logger = LoggerFactory.getLogger(SaleProducer.class);
 
-    @Resource(name="amqpTemplateSale")
+      @Resource(name="amqpTemplateSale")
     private AmqpTemplate amqpTemplate;
 
     public void sendMessage(Object message) throws IOException {

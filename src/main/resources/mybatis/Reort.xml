@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="Report">
+
+    <!-- 缓存条数 -->
+    <cache size="2000" />
+    <!--报表模块-->
+    <select id="purchase-apply-money" resultType="map">
+        SELECT pc.name, SUM(pad.summoney)AS summoney,'100' AS const  FROM purchaseapply pa LEFT JOIN purchaseapplydetail pad ON pa.guid=pad.appyid  and pa.`status`=2 JOIN products p ON pad.productid=p.guid JOIN accountsuit a ON pa.suitid=a.guid AND a.current=2 JOIN product_category pc ON p.category=pc.guid WHERE  1=1 GROUP BY p.category
+    </select>
+    <select id="purchase-biling-money" resultType="map">
+        SELECT pc.name, SUM(pad.summoney) AS summoney,'100' AS const
+        FROM purchasebiling pa
+        LEFT JOIN bilingdetail pad ON pa.guid=pad.appyid AND pa.`status`=2
+        JOIN products p ON pad.productid=p.guid
+        JOIN accountsuit a ON pa.suitid=a.guid AND a.current=2
+        JOIN product_category pc ON p.category=pc.guid
+        WHERE 1=1
+        GROUP BY p.category
+    </select>
+    <select id="stock-in-money" resultType="map">
+        SELECT pc.name, SUM(pad.summoney) AS summoney,'100' AS const
+        FROM instockorder pa
+        LEFT JOIN inoderdetail pad ON pa.guid=pad.appyid
+        JOIN products p ON pad.productid=p.guid
+        JOIN accountsuit a ON pa.suitid=a.guid AND a.current=2
+        JOIN product_category pc ON p.category=pc.guid
+        WHERE 1=1
+        GROUP BY p.category
+    </select>
+    <select id="stock-out-money" resultType="map">
+        SELECT pc.name, SUM(pad.summoney) AS summoney,'100' AS const
+        FROM outstockorder pa
+        LEFT JOIN outorderdetail pad ON pa.guid=pad.appyid
+        JOIN products p ON pad.productid=p.guid
+        JOIN accountsuit a ON pa.suitid=a.guid AND a.current=2
+        JOIN product_category pc ON p.category=pc.guid
+        WHERE 1=1
+        GROUP BY p.category
+    </select>
+    <select id="stock-in-amount" resultType="map">
+        SELECT * from rk_ck_count
+    </select>
+    <select id="stock-out-amount" resultType="map">
+        SELECT * from rk_ck_count
+    </select>
+    <select id="stock-amount" resultType="map">
+        SELECT rk.productname AS name,(IFNULL(rk.sumamount,0) - IFNULL(ck.sumamount,0)) AS summoney,rk.unit as unit,rk.const as const
+        FROM rk_kc_count rk
+        LEFT JOIN ck_kc_count ck ON rk.productname=ck.productname
+    </select>
+    <select id="stock-money" resultType="map">
+        SELECT rk.productname AS name,(IFNULL(rk.sumamount,0) - IFNULL(ck.sumamount,0)) AS sumamount,((IFNULL(rk.sumamount,0) - IFNULL(ck.sumamount,0))*rk.price) AS summoney, rk.unit as unit,rk.const as const
+        FROM rk_kc_count rk
+        LEFT JOIN ck_kc_count ck ON rk.productname=ck.productname
+    </select>
+</mapper>

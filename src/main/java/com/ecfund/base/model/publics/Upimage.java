@@ -20,6 +20,9 @@ public class Upimage implements java.io.Serializable{
     private String url;
     private String url2;
 
+    private String host;
+    private String imageUrl;
+
     private String imagename;
     
     private String imagetype;

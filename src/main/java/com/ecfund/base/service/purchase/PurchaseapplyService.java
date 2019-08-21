@@ -157,6 +157,24 @@ public class PurchaseapplyService extends BaseService<Purchaseapply> {
             e.printStackTrace();
         }
     }
+    @Transactional(rollbackFor = Exception.class)
+    public void deleteAll(String processInstanceId) throws Exception {
+        try {
+            Purchaseapply purchaseapply = new Purchaseapply();
+            purchaseapply.setProcessInstanceId(processInstanceId);
+            purchaseapply = this.view(purchaseapply);
+            Purchaseapplydetail purchaseapplydetail = new Purchaseapplydetail();
+            purchaseapplydetail.setAppyid(purchaseapply.getGuid());
+            List<Purchaseapplydetail> list = purchaseapplydetailDAO.find(purchaseapplydetail);
+            for (Purchaseapplydetail purchaseapplydetail1:list ) {
+                purchaseapplydetailDAO.delete(purchaseapplydetail1);
+            }
+            this.delete(purchaseapply);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw e;
+        }
+    }
 
     public Purchaseapply viewByProcessId(String processId){
         Purchaseapply purchasebiling = new Purchaseapply();
@@ -167,5 +185,13 @@ public class PurchaseapplyService extends BaseService<Purchaseapply> {
             e.printStackTrace();
             return null;
         }
+    }
+
+    /**
+     * 按类别查询申请金额
+     * @return
+     */
+    public List countMoneyByCategory(){
+        return purchaseapplyDAO.countMoneyByCategory();
     }
 }

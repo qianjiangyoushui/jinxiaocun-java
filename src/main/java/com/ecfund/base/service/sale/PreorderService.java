@@ -171,6 +171,26 @@ public class PreorderService extends BaseService<Preorder> {
             e.printStackTrace();
         }
     }
+
+    @Transactional(rollbackFor = Exception.class)
+    public void deleteAll(String processInstanceId) throws Exception {
+        try {
+            Preorder purchaseapply = new Preorder();
+            purchaseapply.setProcessInstanceId(processInstanceId);
+            purchaseapply = this.view(purchaseapply);
+            Preorderdetail purchaseapplydetail = new Preorderdetail();
+            purchaseapplydetail.setApplyid(purchaseapply.getGuid());
+            List<Preorderdetail> list = preorderdetailDAO.find(purchaseapplydetail);
+            for (Preorderdetail purchaseapplydetail1:list ) {
+                preorderdetailDAO.delete(purchaseapplydetail1);
+            }
+            this.delete(purchaseapply);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw e;
+        }
+    }
+
     public Preorder viewByProcessId(String processId){
         Preorder purchasebiling = new Preorder();
         purchasebiling.setProcessInstanceId(processId);

@@ -164,6 +164,26 @@ public class SaleorderService extends BaseService<Saleorder> {
             e.printStackTrace();
         }
     }
+
+    @Transactional(rollbackFor = Exception.class)
+    public void deleteAll(String processInstanceId) throws Exception {
+        try {
+            Saleorder purchaseapply = new Saleorder();
+            purchaseapply.setProcessInstanceId(processInstanceId);
+            purchaseapply = this.view(purchaseapply);
+            Saleorderdetail purchaseapplydetail = new Saleorderdetail();
+            purchaseapplydetail.setApplyid(purchaseapply.getGuid());
+            List<Saleorderdetail> list = saleorderdetailDAO.find(purchaseapplydetail);
+            for (Saleorderdetail purchaseapplydetail1:list ) {
+                saleorderdetailDAO.delete(purchaseapplydetail1);
+            }
+            this.delete(purchaseapply);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw e;
+        }
+    }
+
     public Saleorder viewByProcessId(String processId){
         Saleorder purchasebiling = new Saleorder();
         purchasebiling.setProcessInstanceId(processId);

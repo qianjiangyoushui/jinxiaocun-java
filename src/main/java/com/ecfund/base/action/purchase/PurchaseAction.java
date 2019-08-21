@@ -7,8 +7,6 @@ import com.ecfund.base.common.Exceptions.RollBackException;
 import com.ecfund.base.model.process.ProcessApprovers;
 import com.ecfund.base.model.purchase.Purchaseapply;
 import com.ecfund.base.model.purchase.Purchasebiling;
-import com.ecfund.base.rabbitMQ.producer.MessageProducer;
-import com.ecfund.base.rabbitMQ.producer.PurchaseApplyProducer;
 import com.ecfund.base.service.process.ProcessApproversService;
 import com.ecfund.base.service.purchase.PurchaseapplyService;
 import com.ecfund.base.service.purchase.PurchasebilingService;
@@ -21,7 +19,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
+import java.math.BigDecimal;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Controller("PurchaseAction")
 @RequestMapping("/purchase")
@@ -130,10 +131,37 @@ public class PurchaseAction {
         JSONObject content = new JSONObject();
         OapiUserGetResponse user = (OapiUserGetResponse) request.getSession().getAttribute("user");
         try{
-            purchasebiling.setUserid(user.getUnionid());
+           purchasebiling.setUserid(user.getUnionid());
             page = purchasebilingService.find(purchasebiling, page.getBegin(), page.getPageSize());
             result.put("success",true);
             content.put("page",page);
+            result.put("content",content);
+        }catch (Exception e){
+            e.printStackTrace();
+            result.put("success",false);
+            result.put("erro",e.getMessage());
+        }
+        return result.toJSONString();
+    }
+    @RequestMapping(value = "/countMoneyByCategory.action", produces = "application/json;charset=utf-8")
+    public @ResponseBody
+    String countMoneyByCategory() throws RollBackException {
+        JSONObject result = new JSONObject();
+        JSONObject content = new JSONObject();
+        try{
+            List list = purchaseapplyService.countMoneyByCategory();
+            BigDecimal summoney=BigDecimal.ZERO;
+            for (Object o :list) {
+                Map map = (Map) o;
+                BigDecimal money = (BigDecimal) map.get("summoney");
+                summoney = summoney.add(money);
+            }
+            Map map = new HashMap();
+            map.put("summoney",summoney);
+            map.put("name","总金额");
+            list.add(map);
+            result.put("success",true);
+            content.put("list",list);
             result.put("content",content);
         }catch (Exception e){
             e.printStackTrace();

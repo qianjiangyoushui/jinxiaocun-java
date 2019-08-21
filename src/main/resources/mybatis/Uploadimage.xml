@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!--
+  ~ Copyright (c) 2019. Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+  ~ Morbi non lorem porttitor neque feugiat blandit. Ut vitae ipsum eget quam lacinia accumsan.
+  ~ Etiam sed turpis ac ipsum condimentum fringilla. Maecenas magna.
+  ~ Proin dapibus sapien vel ante. Aliquam erat volutpat. Pellentesque sagittis ligula eget metus.
+  ~ Vestibulum commodo. Ut rhoncus gravida arcu.
+  ~ jiaxd-create
+  -->
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="Uploadimage">
+
+    <!-- 缓存条数 -->
+    <cache size="2000" />
+
+    <!-- 条件语句 -->
+    <sql id="WhereSQL">
+        <where>
+            <if test="guid != null and guid != ''">
+                AND T.GUID = #{guid}
+            </if>
+            <if test="companyid != null and companyid != ''">
+                AND T.COMPANYID = #{companyid}
+            </if>
+            <if test="suiteid != null and suiteid != ''">
+                AND T.SUITEID = #{suiteid}
+            </if>
+            <if test="host != null and host != ''">
+                AND T.HOST = #{host}
+            </if>
+            <if test="imageurl != null and imageurl != ''">
+                AND T.IMAGEURL = #{imageurl}
+            </if>
+            <if test="imageurl2 != null and imageurl2 != ''">
+                AND T.IMAGEURL2 = #{imageurl2}
+            </if>
+            <if test="imagetype != null and imagetype != ''">
+                AND T.IMAGETYPE = #{imagetype}
+            </if>
+            <if test="imagename != null and imagename != ''">
+                AND T.IMAGENAME = #{imagename}
+            </if>
+            <if test="relationid != null and relationid != ''">
+                AND T.RELATIONID = #{relationid}
+            </if>
+            <if test="bstype != null and bstype != ''">
+                AND T.BSTYPE = #{bstype}
+            </if>
+            <if test="createdate != null and createdate != ''">
+                AND T.CREATEDATE = #{createdate}
+            </if>
+            <if test="updatedate != null and updatedate != ''">
+                AND T.UPDATEDATE = #{updatedate}
+            </if>
+            <if test="takedate != null and takedate != ''">
+                AND T.TAKEDATE = #{takedate}
+            </if>
+            <if test="userid != null and userid != ''">
+                AND T.USERID = #{userid}
+            </if>
+            <if test="username != null and username != ''">
+                AND T.USERNAME = #{username}
+            </if>
+            <if test="sort != null and sort != ''">
+                AND T.SORT = #{sort}
+            </if>
+        </where>
+    </sql>
+
+    <!-- 查找语句 -->
+    <select id="find" resultType="Uploadimage" parameterType="Uploadimage" flushCache="false" useCache="true">
+        SELECT
+        T.GUID AS guid,
+        T.COMPANYID AS companyid,
+        T.SUITEID AS suiteid,
+        T.HOST AS host,
+        T.IMAGEURL AS imageurl,
+        T.IMAGEURL2 AS imageurl2,
+        T.IMAGETYPE AS imagetype,
+        T.IMAGENAME AS imagename,
+        T.RELATIONID AS relationid,
+        T.BSTYPE AS bstype,
+        T.CREATEDATE AS createdate,
+        T.UPDATEDATE AS updatedate,
+        T.TAKEDATE AS takedate,
+        T.USERID AS userid,
+        T.USERNAME AS username,
+        T.SORT AS sort
+        FROM uploadImage T
+        <include refid="WhereSQL" />
+        ORDER BY SORT
+    </select>
+
+    <!-- 获取总记录数语句 -->
+    <select id="findCount" resultType="java.lang.Integer" parameterType="Uploadimage" flushCache="false" useCache="true">
+        SELECT COUNT(*)  FROM uploadImage T
+        <include refid="WhereSQL" />
+    </select>
+
+    <!-- 插入语句 -->
+    <insert id="insert" parameterType="Uploadimage" flushCache="true">
+        INSERT INTO uploadImage
+        (
+        GUID,
+        COMPANYID,
+        SUITEID,
+        HOST,
+        IMAGEURL,
+        IMAGEURL2,
+        IMAGETYPE,
+        IMAGENAME,
+        RELATIONID,
+        BSTYPE,
+        CREATEDATE,
+        UPDATEDATE,
+        TAKEDATE,
+        USERID,
+        USERNAME,
+        SORT
+        )
+        VALUES
+        (
+        #{guid,jdbcType=VARCHAR},
+        #{companyid,jdbcType=VARCHAR},
+        #{suiteid,jdbcType=VARCHAR},
+        #{host,jdbcType=VARCHAR},
+        #{imageurl,jdbcType=VARCHAR},
+        #{imageurl2,jdbcType=VARCHAR},
+        #{imagetype,jdbcType=VARCHAR},
+        #{imagename,jdbcType=VARCHAR},
+        #{relationid,jdbcType=VARCHAR},
+        #{bstype,jdbcType=VARCHAR},
+        #{createdate,jdbcType=DATE},
+        #{updatedate,jdbcType=DATE},
+        #{takedate,jdbcType=DATE},
+        #{userid,jdbcType=VARCHAR},
+        #{username,jdbcType=VARCHAR},
+        #{sort,jdbcType=INTEGER}
+        )
+    </insert>
+
+    <!-- 更新语句 -->
+    <update id="update"  parameterType="Uploadimage" flushCache="true">
+        update uploadImage
+        <set>
+            <if test="guid != null">GUID=#{guid},</if>
+            <if test="companyid != null">COMPANYID=#{companyid},</if>
+            <if test="suiteid != null">SUITEID=#{suiteid},</if>
+            <if test="host != null">HOST=#{host},</if>
+            <if test="imageurl != null">IMAGEURL=#{imageurl},</if>
+            <if test="imageurl2 != null">IMAGEURL2=#{imageurl2},</if>
+            <if test="imagetype != null">IMAGETYPE=#{imagetype},</if>
+            <if test="imagename != null">IMAGENAME=#{imagename},</if>
+            <if test="relationid != null">RELATIONID=#{relationid},</if>
+            <if test="bstype != null">BSTYPE=#{bstype},</if>
+            <if test="createdate != null">CREATEDATE=#{createdate},</if>
+            <if test="updatedate != null">UPDATEDATE=#{updatedate},</if>
+            <if test="takedate != null">TAKEDATE=#{takedate},</if>
+            <if test="userid != null">USERID=#{userid},</if>
+            <if test="username != null">USERNAME=#{username},</if>
+            <if test="sort != null">SORT=#{sort},</if>
+        </set>
+        WHERE GUID = #{guid}
+    </update>
+
+    <!-- 单选删除语句 -->
+    <delete id="delete" parameterType="Uploadimage" flushCache="true">
+        DELETE FROM uploadImage WHERE GUID = #{guid}
+    </delete>
+
+    <!-- 多选删除 -->
+    <delete id="mulDel" parameterType="java.lang.String" flushCache="true">
+        DELETE FROM uploadImage WHERE GUID IN
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

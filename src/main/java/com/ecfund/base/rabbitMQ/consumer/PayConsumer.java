@@ -51,7 +51,7 @@ public class PayConsumer implements MessageListener {
         paybill.setSuitid(purchasebiling.getSuitid());
         paybill.setMoney(purchasebiling.getSummoney());
         paybill.setPaymoney(purchasebiling.getPaymoney());
-        paybill.setBusinessid(purchasebiling.getUserid());
+        paybill.setBusiuserid(purchasebiling.getUserid());
         paybill.setBusiusername(purchasebiling.getUsername());
         paybill.setPaytype("");
         paybill.setPaytypename("");

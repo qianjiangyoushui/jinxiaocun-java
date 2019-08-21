@@ -14,6 +14,8 @@ import com.ecfund.base.model.process.DetailForm;
 import com.ecfund.base.model.process.ProcessInstanceInputVO;
 import com.ecfund.base.model.process.TextForm;
 import com.ecfund.base.model.purchase.Bilingdetail;
+import com.ecfund.base.model.purchase.Purchaseapply;
+import com.ecfund.base.model.purchase.Purchaseapplydetail;
 import com.ecfund.base.model.purchase.Purchasebiling;
 import com.ecfund.base.service.BaseService;
 import com.ecfund.base.service.process.ProcessinstanceService;
@@ -170,6 +172,24 @@ public class PurchasebilingService extends BaseService<Purchasebiling> {
             this.update(p);
         } catch (Exception e) {
             e.printStackTrace();
+        }
+    }
+    @Transactional(rollbackFor = Exception.class)
+    public void deleteAll(String processInstanceId) throws Exception {
+        try {
+            Purchasebiling purchaseapply = new Purchasebiling();
+            purchaseapply.setProcessInstanceId(processInstanceId);
+            purchaseapply = this.view(purchaseapply);
+            Bilingdetail purchaseapplydetail = new Bilingdetail();
+            purchaseapplydetail.setAppyid(purchaseapply.getGuid());
+            List<Bilingdetail> list = bilingdetailDAO.find(purchaseapplydetail);
+            for (Bilingdetail purchaseapplydetail1:list ) {
+                bilingdetailDAO.delete(purchaseapplydetail1);
+            }
+            this.delete(purchaseapply);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw e;
         }
     }
 

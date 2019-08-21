@@ -28,6 +28,7 @@
 	        <list>   
 	             <value>classpath:jdbc.properties</value>
 	              <value>classpath:systemConfig.properties</value>
+	              <value>classpath:redis.properties</value>
 	        </list>
 	    </property>
 	</bean>
@@ -44,6 +45,7 @@
 	<!--邮件任务  -->
 	<import resource="applicationContext-mailsend.xml"/>
  	<import resource="rabbitMQ.xml"/>
+	<!--<import resource="spring-redis.xml"/>-->
 <!-- 	<import resource="applicationContext-aop.xml"/> -->
 	<bean id ="taskExecutor"  class ="org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor" >  
     <!-- 线程池维护线程的最少数量 -->  

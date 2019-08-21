@@ -52,7 +52,7 @@ public class PreReceiveConsumer implements MessageListener {
         receivebill.setCustomername(preorder.getCustomername());
         receivebill.setPaymoney(preorder.getPremoney());
         receivebill.setSuitid(preorder.getSuitid());
-        receivebill.setBusinessid(preorder.getUserid());
+        receivebill.setBusiuserid(preorder.getUserid());
         receivebill.setBusiusername(preorder.getUsername());
         receivebill.setType("1");
         receivebill.setStatus(1);

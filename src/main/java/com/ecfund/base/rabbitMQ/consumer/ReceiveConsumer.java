@@ -53,7 +53,7 @@ public class ReceiveConsumer implements MessageListener {
         receivebill.setCustomername(preorder.getCustomername());
         receivebill.setPaymoney(preorder.getPaymoney());
         receivebill.setSuitid(preorder.getSuitid());
-        receivebill.setBusinessid(preorder.getUserid());
+        receivebill.setBusiuserid(preorder.getUserid());
         receivebill.setBusiusername(preorder.getUsername());
         receivebill.setType("2");
         receivebill.setStatus(1);

@@ -21,7 +21,9 @@ public class DingmenuService extends BaseService<Dingmenu> {
         super.setBaseDAO(dingmenuDAO);
     }
 
+
     public List<Dingmenu> findMenuByRole(Dingrm dingrm) {
+        //System.out.println("查了一次菜单");
         return dingmenuDAO.findMenuByRole(dingrm);
     }
 

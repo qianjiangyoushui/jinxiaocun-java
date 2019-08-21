@@ -266,4 +266,9 @@
             <result property="sort" column="D_SORT" />
         </collection>
     </resultMap>
+
+    <!--报表模块-->
+    <select id="countMoneyByCategory" resultType="map">
+        SELECT pc.name, SUM(pad.summoney)AS summoney,'100' AS const  FROM purchaseapply pa LEFT JOIN purchaseapplydetail pad ON pa.guid=pad.appyid  and pa.`status`=2 JOIN products p ON pad.productid=p.guid JOIN accountsuit a ON pa.suitid=a.guid AND a.current=2 JOIN product_category pc ON p.category=pc.guid WHERE  1=1 GROUP BY p.category
+    </select>
 </mapper>

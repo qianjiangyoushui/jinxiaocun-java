@@ -53,7 +53,7 @@ public class JinxcConsumer implements MessageListener {
     @Autowired
     private SaleProducer saleProducer;
     @Override
-    public void onMessage(Message message) {
+    public void onMessage(Message message){
         logger.info("shijj receive message------->:{}", MessageUtil.getBodyContentAsString(message));
         //根据回调数据类型做不同的业务处理
         String messageStr = getBodyContentAsString(message);
@@ -66,7 +66,7 @@ public class JinxcConsumer implements MessageListener {
         } else if (BPMS_INSTANCE_CHANGE.equals(eventType)) {
             //todo: 实现审批的业务逻辑，如发消息
             processApproversService.saveByJSON(obj);
-            if(Constant.PROCESS_CODE.contains(obj.getString("processCode"))&&"finish".equals(obj.getString("type"))){
+            if(Constant.PROCESS_CODE.contains(obj.getString("processCode"))){
                 /**
                  * 采购申请审批通过后的逻辑。
                  */
@@ -82,8 +82,14 @@ public class JinxcConsumer implements MessageListener {
                     }catch (Exception e){
                         e.printStackTrace();
                     }
+                }else if("terminate".equals(obj.getString("type"))){
+                    try {
+                        purchaseapplyService.deleteAll(obj.getString("processInstanceId"));
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                 }
-            }else if(Constant.PROCESS_CODE_PURCHASE.contains(obj.getString("processCode"))&&"finish".equals(obj.getString("type"))){
+            }else if(Constant.PROCESS_CODE_PURCHASE.contains(obj.getString("processCode"))){
                 /**
                  * 采购开单申请通过的逻辑
                  */
@@ -99,8 +105,14 @@ public class JinxcConsumer implements MessageListener {
                     }catch (Exception e){
                         e.printStackTrace();
                     }
+                }else if("terminate".equals(obj.getString("type"))){
+                    try {
+                        purchasebilingService.deleteAll(obj.getString("processInstanceId"));
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                 }
-            }else if(Constant.PROCESS_CODE_PRESALE.contains(obj.getString("processCode"))&&"finish".equals(obj.getString("type"))){
+            }else if(Constant.PROCESS_CODE_PRESALE.contains(obj.getString("processCode"))){
                 /**
                  * 销售订货单申请通过的逻辑
                  */
@@ -116,8 +128,14 @@ public class JinxcConsumer implements MessageListener {
                     }catch (Exception e){
                         e.printStackTrace();
                     }
+                }else if("terminate".equals(obj.getString("type"))){
+                    try {
+                        preorderService.deleteAll(obj.getString("processInstanceId"));
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                 }
-            }else if(Constant.PROCESS_CODE_SALE.contains(obj.getString("processCode"))&&"finish".equals(obj.getString("type"))){
+            }else if(Constant.PROCESS_CODE_SALE.contains(obj.getString("processCode"))){
                 /**
                  * 销售开单申请通过的逻辑
                  */
@@ -131,6 +149,12 @@ public class JinxcConsumer implements MessageListener {
                     try{
                         saleProducer.sendMessage(result);
                     }catch (Exception e){
+                        e.printStackTrace();
+                    }
+                }else if("terminate".equals(obj.getString("type"))){
+                    try {
+                        saleorderService.deleteAll(obj.getString("processInstanceId"));
+                    } catch (Exception e) {
                         e.printStackTrace();
                     }
                 }

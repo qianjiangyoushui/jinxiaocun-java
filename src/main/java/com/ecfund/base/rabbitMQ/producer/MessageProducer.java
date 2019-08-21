@@ -11,7 +11,7 @@ import java.io.IOException;
 public class MessageProducer {
     private Logger logger = LoggerFactory.getLogger(MessageProducer.class);
 
-    @Resource(name="amqpTemplate")
+   @Resource(name="amqpTemplate")
     private AmqpTemplate amqpTemplate;
 
     public void sendMessage(Object message) throws IOException {

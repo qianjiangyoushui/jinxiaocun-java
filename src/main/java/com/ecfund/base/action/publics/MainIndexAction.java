@@ -35,7 +35,7 @@ public class MainIndexAction {
         String[] ids=new String[roles.size()];
         for(int i=0;i<roles.size();i++){
             long id = roles.get(i).getId();
-            System.out.println(id+":"+roles.get(i).getName());
+            //System.out.println(id+":"+roles.get(i).getName());
             ids[i]=String.valueOf(id);
         }
         dingrm.setGuids(ids);
