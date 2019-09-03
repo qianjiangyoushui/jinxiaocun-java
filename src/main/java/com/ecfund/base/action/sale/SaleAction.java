@@ -3,12 +3,15 @@ package com.ecfund.base.action.sale;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.dingtalk.api.response.OapiUserGetResponse;
+import com.ecfund.base.common.Constants;
 import com.ecfund.base.common.Exceptions.RollBackException;
+import com.ecfund.base.config.Constant;
 import com.ecfund.base.model.publics.Dictionary;
 import com.ecfund.base.model.sale.Customer;
 import com.ecfund.base.model.sale.Preorder;
 import com.ecfund.base.model.sale.Saleorder;
 import com.ecfund.base.rabbitMQ.producer.MessageProducer;
+import com.ecfund.base.rabbitMQ.producer.PrintOrderProducer;
 import com.ecfund.base.service.publics.DictionaryService;
 import com.ecfund.base.service.sale.CustomerService;
 import com.ecfund.base.service.sale.PreorderService;
@@ -39,6 +42,8 @@ public class SaleAction {
     private PreorderService preorderService;
     @Autowired
     private SaleorderService saleorderService;
+    @Autowired
+    private PrintOrderProducer printOrderProducer;
     @RequestMapping(value = "/saleorderAddPre.action",produces = "application/json;charset=utf-8")
     public @ResponseBody
     String saleorderAddPre(HttpServletRequest request) throws Exception{
@@ -57,7 +62,7 @@ public class SaleAction {
 
         Preorder preorder = new Preorder();
         preorder.setStatus(2);
-        preorder.setUserid(user.getUnionid());
+        //preorder.setUserid(user.getUnionid());
         List<Preorder> preorderList = preorderService.find(preorder);
         content.put("customerList",customerList);
         content.put("typeArray",typeArray);
@@ -95,7 +100,7 @@ public class SaleAction {
         JSONObject content = new JSONObject();
         OapiUserGetResponse user = (OapiUserGetResponse) request.getSession().getAttribute("user");
         try{
-            saleorder.setUserid(user.getUnionid());
+            //saleorder.setUserid(user.getUnionid());
             page = saleorderService.find(saleorder, page.getBegin(), page.getPageSize());
             result.put("success",true);
             content.put("page",page);
@@ -116,6 +121,31 @@ public class SaleAction {
         JSONObject content =new JSONObject();
         try{
             saleorder=saleorderService.view("findDetail",saleorder);
+            content.put("preorder",saleorder);
+            result.put("success",true);
+            result.put("content",content);
+
+        }catch (Exception e){
+            e.printStackTrace();
+            result.put("success",false);
+            result.put("erro",e.getMessage());
+        }
+        return result.toJSONString();
+    }
+    @RequestMapping(value = "/saleorderPrint.action", produces = "application/json;charset=utf-8")
+    public @ResponseBody
+    String saleorderPrint(HttpServletRequest request,Saleorder saleorder){
+        OapiUserGetResponse user = (OapiUserGetResponse) request.getSession().getAttribute("user");
+        JSONObject result =new JSONObject();
+        JSONObject content =new JSONObject();
+        try{
+            JSONObject message = new JSONObject();
+            message.put("orderType","saleOrder");
+            message.put("guid",saleorder.getGuid());
+            message.put("userId",user.getUserid());
+            message.put("agentId",Constant.AGENTID);
+            printOrderProducer.sendMessage(message);
+            //saleorder=saleorderService.view("findDetail",saleorder);
             content.put("preorder",saleorder);
             result.put("success",true);
             result.put("content",content);
@@ -170,8 +200,9 @@ public class SaleAction {
         JSONObject result = new JSONObject();
         JSONObject content = new JSONObject();
         OapiUserGetResponse user = (OapiUserGetResponse) request.getSession().getAttribute("user");
+
         try{
-            preorder.setUserid(user.getUnionid());
+            //preorder.setUserid(user.getUnionid());
             page = preorderService.find(preorder, page.getBegin(), page.getPageSize());
             result.put("success",true);
             content.put("page",page);

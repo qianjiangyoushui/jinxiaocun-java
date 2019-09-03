@@ -66,7 +66,7 @@ public class PreorderService extends BaseService<Preorder> {
                 Preorderdetail detail = detailList.getObject(i,Preorderdetail.class);
                 detail.setApplyid(guid);
                 detail.setStatus(1);
-                detail.setSummoney(detail.getAmount().multiply(detail.getPrice()));
+                detail.setSummoney(detail.getAmount().multiply(detail.getSaleprice()));
                 detail.setCreatedate(Calendar.getInstance().getTime());
                 preorderdetailDAO.insert(detail);
                 list.add(detail);

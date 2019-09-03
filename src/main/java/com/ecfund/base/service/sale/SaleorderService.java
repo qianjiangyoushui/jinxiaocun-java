@@ -65,7 +65,7 @@ public class SaleorderService extends BaseService<Saleorder> {
                 Saleorderdetail detail = detailList.getObject(i,Saleorderdetail.class);
                 detail.setApplyid(guid);
                 detail.setStatus(1);
-                detail.setSummoney(detail.getAmount().multiply(detail.getPrice()));
+                detail.setSummoney(detail.getAmount().multiply(detail.getSaleprice()));
                 detail.setCreatedate(Calendar.getInstance().getTime());
                 saleorderdetailDAO.insert(detail);
                 list.add(detail);

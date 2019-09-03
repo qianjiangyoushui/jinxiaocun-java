@@ -112,7 +112,7 @@ public class PurchaseAction {
         JSONObject content = new JSONObject();
         OapiUserGetResponse user = (OapiUserGetResponse) request.getSession().getAttribute("user");
         try{
-            purchaseapply.setUserid(user.getUnionid());
+           // purchaseapply.setUserid(user.getUnionid());
             page = purchaseapplyService.find(purchaseapply, page.getBegin(), page.getPageSize());
             result.put("success",true);
             content.put("page",page);
@@ -131,7 +131,7 @@ public class PurchaseAction {
         JSONObject content = new JSONObject();
         OapiUserGetResponse user = (OapiUserGetResponse) request.getSession().getAttribute("user");
         try{
-           purchasebiling.setUserid(user.getUnionid());
+           //purchasebiling.setUserid(user.getUnionid());
             page = purchasebilingService.find(purchasebiling, page.getBegin(), page.getPageSize());
             result.put("success",true);
             content.put("page",page);

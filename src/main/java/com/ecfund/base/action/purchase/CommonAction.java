@@ -166,7 +166,7 @@ public class CommonAction {
             List<Supplier> suppliers = supplierService.find(s);
             Purchaseapply purchaseapply = new Purchaseapply();
             purchaseapply.setStatus(2);
-            purchaseapply.setUserid(user.getUnionid());
+            //purchaseapply.setUserid(user.getUnionid());
             List<Purchaseapply> applyArray = purchaseapplyService.find(purchaseapply);
             content.put("applyArray",applyArray);
             content.put("categoryArray",categoryArray);

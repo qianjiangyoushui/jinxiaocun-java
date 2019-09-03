@@ -52,5 +52,5 @@ public class Constant {
     /**
      * 回调host
      */
-    public static final String CALLBACK_URL_HOST = "https://zhongshu.nmamtf.club";
+    public static final String CALLBACK_URL_HOST = "https://erp.nongyitianxia.com";
 }

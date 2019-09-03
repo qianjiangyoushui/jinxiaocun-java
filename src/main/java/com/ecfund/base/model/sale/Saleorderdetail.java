@@ -33,6 +33,7 @@ public class Saleorderdetail implements java.io.Serializable{
     private BigDecimal amount;
 
     private BigDecimal price;
+    private BigDecimal saleprice;
 
     private BigDecimal summoney;
 
@@ -132,5 +133,13 @@ public class Saleorderdetail implements java.io.Serializable{
 
     public void setStatus(Integer status) {
         this.status = status;
+    }
+
+    public BigDecimal getSaleprice() {
+        return saleprice;
+    }
+
+    public void setSaleprice(BigDecimal saleprice) {
+        this.saleprice = saleprice;
     }
 }

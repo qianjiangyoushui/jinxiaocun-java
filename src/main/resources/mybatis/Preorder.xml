@@ -155,6 +155,7 @@
     D.UNIT AS unit,
     D.AMOUNT AS d_amount,
     D.PRICE AS price,
+    D.SALEPRICE AS saleprice,
     D.SUMMONEY AS d_summoney,
     D.CREATEDATE AS d_createdate,
     D.SORT AS d_sort,
@@ -311,6 +312,7 @@
         <result property="unit" column="UNIT" />
         <result property="amount" column="D_AMOUNT" />
         <result property="price" column="PRICE" />
+        <result property="saleprice" column="SALEPRICE" />
         <result property="summoney" column="D_SUMMONEY" />
         <result property="createdate" column="D_CREATEDATE" />
         <result property="status" column="D_STATUS" />

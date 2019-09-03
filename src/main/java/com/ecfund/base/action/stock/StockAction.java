@@ -162,7 +162,7 @@ public class StockAction {
         JSONObject content = new JSONObject();
         OapiUserGetResponse user = (OapiUserGetResponse) request.getSession().getAttribute("user");
         try{
-            outstockorder.setUserid(user.getUnionid());
+            //outstockorder.setUserid(user.getUnionid());
             page = outstockorderService.find(outstockorder, page.getBegin(), page.getPageSize());
             result.put("success",true);
             content.put("page",page);
@@ -236,7 +236,7 @@ public class StockAction {
         JSONObject content = new JSONObject();
         OapiUserGetResponse user = (OapiUserGetResponse) request.getSession().getAttribute("user");
         try{
-            instockorder.setUserid(user.getUnionid());
+            //instockorder.setUserid(user.getUnionid());
             page = instockorderService.find(instockorder, page.getBegin(), page.getPageSize());
             result.put("success",true);
             content.put("page",page);
