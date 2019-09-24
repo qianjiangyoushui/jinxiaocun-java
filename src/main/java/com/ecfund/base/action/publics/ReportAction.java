@@ -86,20 +86,9 @@ public class ReportAction {
         JSONObject result = new JSONObject();
         JSONObject content = new JSONObject();
         try{
-            List list = reportService.stockInMoney();
             List list2 = reportService.stockInAmount();
-            BigDecimal summoney=BigDecimal.ZERO;
-            for (Object o :list) {
-                Map map = (Map) o;
-                BigDecimal money = (BigDecimal) map.get("summoney");
-                summoney = summoney.add(money);
-            }
-            Map map = new HashMap();
-            map.put("summoney",summoney);
-            map.put("name","总金额");
-            list.add(map);
             result.put("success",true);
-            content.put("list",list);
+            content.put("list",list2);
             result.put("content",content);
         }catch (Exception e){
             e.printStackTrace();
@@ -114,17 +103,7 @@ public class ReportAction {
         JSONObject result = new JSONObject();
         JSONObject content = new JSONObject();
         try{
-            List list = reportService.stockOutMoney();
-            BigDecimal summoney=BigDecimal.ZERO;
-            for (Object o :list) {
-                Map map = (Map) o;
-                BigDecimal money = (BigDecimal) map.get("summoney");
-                summoney = summoney.add(money);
-            }
-            Map map = new HashMap();
-            map.put("summoney",summoney);
-            map.put("name","总金额");
-            list.add(map);
+            List list = reportService.stockOutAmount();
             result.put("success",true);
             content.put("list",list);
             result.put("content",content);
@@ -141,11 +120,9 @@ public class ReportAction {
         JSONObject result = new JSONObject();
         JSONObject content = new JSONObject();
         try{
-            List list = reportService.stockMoney();
-            List list2 = reportService.stockAmount();
+            List list = reportService.stockAmount();
             result.put("success",true);
             content.put("list",list);
-            content.put("list2",list2);
             result.put("content",content);
         }catch (Exception e){
             e.printStackTrace();

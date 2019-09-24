@@ -39,18 +39,18 @@
         GROUP BY p.category
     </select>
     <select id="stock-in-amount" resultType="map">
-        SELECT * from rk_ck_count
+        SELECT * from rk_kc_count
     </select>
     <select id="stock-out-amount" resultType="map">
-        SELECT * from rk_ck_count
+        SELECT * from ck_kc_count
     </select>
     <select id="stock-amount" resultType="map">
-        SELECT rk.productname AS name,(IFNULL(rk.sumamount,0) - IFNULL(ck.sumamount,0)) AS summoney,rk.unit as unit,rk.const as const
+        SELECT rk.productname AS productname,(IFNULL(rk.sumamount,0) - IFNULL(ck.sumamount,0)) AS sumamount,rk.unit as unit,rk.const as const
         FROM rk_kc_count rk
         LEFT JOIN ck_kc_count ck ON rk.productname=ck.productname
     </select>
     <select id="stock-money" resultType="map">
-        SELECT rk.productname AS name,(IFNULL(rk.sumamount,0) - IFNULL(ck.sumamount,0)) AS sumamount,((IFNULL(rk.sumamount,0) - IFNULL(ck.sumamount,0))*rk.price) AS summoney, rk.unit as unit,rk.const as const
+        SELECT rk.productname AS productname,(IFNULL(rk.sumamount,0) - IFNULL(ck.sumamount,0)) AS sumamount,((IFNULL(rk.sumamount,0) - IFNULL(ck.sumamount,0))*rk.price) AS summoney, rk.unit as unit,rk.const as const
         FROM rk_kc_count rk
         LEFT JOIN ck_kc_count ck ON rk.productname=ck.productname
     </select>

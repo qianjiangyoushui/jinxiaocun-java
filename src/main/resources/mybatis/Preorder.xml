@@ -20,6 +20,12 @@
         <if test="code != null and code != ''">
             AND T.CODE = #{code}
         </if>
+        <if test="category != null and category != ''">
+            AND T.CATEGORY = #{category}
+        </if>
+        <if test="categoryname != null and categoryname != ''">
+            AND T.CATEGORYNAME = #{categoryname}
+        </if>
         <if test="customerid != null and customerid != ''">
             AND T.CUSTOMERID = #{customerid}
         </if>
@@ -93,6 +99,8 @@
     T.COMPNAYID AS compnayid,
     T.SUITID AS suitid,
     T.CODE AS code,
+    T.CATEGORY AS category,
+    T.CATEGORYNAME AS categoryname,
     T.CUSTOMERID AS customerid,
     T.CUSTOMERNAME AS customername,
     T.SALETYPE AS saletype,
@@ -125,6 +133,8 @@
     T.COMPNAYID AS compnayid,
     T.SUITID AS suitid,
     T.CODE AS code,
+    T.CATEGORY AS category,
+    T.CATEGORYNAME AS categoryname,
     T.CUSTOMERID AS customerid,
     T.CUSTOMERNAME AS customername,
     T.SALETYPE AS saletype,
@@ -178,6 +188,8 @@
     COMPNAYID,
     SUITID,
     CODE,
+    CATEGORY,
+    CATEGORYNAME,
     CUSTOMERID,
     CUSTOMERNAME,
     SALETYPE,
@@ -206,6 +218,8 @@
     #{compnayid,jdbcType=VARCHAR},
     #{suitid,jdbcType=VARCHAR},
     #{code,jdbcType=VARCHAR},
+    #{category,jdbcType=VARCHAR},
+    #{categoryname,jdbcType=VARCHAR},
     #{customerid,jdbcType=VARCHAR},
     #{customername,jdbcType=VARCHAR},
     #{saletype,jdbcType=VARCHAR},
@@ -238,6 +252,8 @@
         <if test="compnayid != null">COMPNAYID=#{compnayid},</if>
         <if test="suitid != null">SUITID=#{suitid},</if>
         <if test="code != null">CODE=#{code},</if>
+        <if test="category != null">CODE=#{category},</if>
+        <if test="categoryname != null">CODE=#{categoryname},</if>
         <if test="customerid != null">CUSTOMERID=#{customerid},</if>
         <if test="customername != null">CUSTOMERNAME=#{customername},</if>
         <if test="saletype != null">SALETYPE=#{saletype},</if>
@@ -281,6 +297,8 @@
     <result column="compnayid" property="compnayid" />
     <result column="suitid" property="suitid" />
     <result column="code" property="code" />
+    <result column="category" property="category" />
+    <result column="categoryname" property="categoryname" />
     <result property="customerid" column="customerid" />
     <result property="customername" column="customername" />
     <result column="saletype" property="saletype" />

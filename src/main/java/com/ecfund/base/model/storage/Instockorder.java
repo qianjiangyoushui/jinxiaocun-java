@@ -36,6 +36,9 @@ public class Instockorder implements java.io.Serializable{
     private String code;
     private Integer intype;
 
+    private String category;
+    private String categoryname;
+
     private String intypename;
     private String supplyname;
 
@@ -244,5 +247,21 @@ public class Instockorder implements java.io.Serializable{
 
     public void setIntypename(String intypename) {
         this.intypename = intypename;
+    }
+
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
+    }
+
+    public String getCategoryname() {
+        return categoryname;
+    }
+
+    public void setCategoryname(String categoryname) {
+        this.categoryname = categoryname;
     }
 }

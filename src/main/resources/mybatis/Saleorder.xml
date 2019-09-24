@@ -20,6 +20,12 @@
             <if test="code != null and code != ''">
                 AND T.CODE = #{code}
             </if>
+            <if test="category != null and category != ''">
+                AND T.CATEGORY = #{category}
+            </if>
+            <if test="categoryname != null and categoryname != ''">
+                AND T.CATEGORYNAME = #{categoryname}
+            </if>
             <if test="customerid != null and customerid != ''">
                 AND T.CUSTOMERID = #{customerid}
             </if>
@@ -98,6 +104,8 @@
         T.APPLYID AS applyid,
         T.APPLYCODE AS applycode,
         T.CODE AS code,
+        T.CATEGORY AS category,
+        T.CATEGORYNAME AS categoryname,
         T.CUSTOMERID AS customerid,
         T.CUSTOMERNAME AS customername,
         T.TICKETTYPE AS tickettype,
@@ -134,6 +142,8 @@
         T.APPLYID AS applyid,
         T.APPLYCODE AS applycode,
         T.CODE AS code,
+        T.CATEGORY AS category,
+        T.CATEGORYNAME AS categoryname,
         T.CUSTOMERID AS customerid,
         T.CUSTOMERNAME AS customername,
         T.TICKETTYPE AS tickettype,
@@ -192,6 +202,8 @@
         APPLYID,
         APPLYCODE,
         CODE,
+        CATEGORY,
+        CATEGORYNAME,
         CUSTOMERID,
         CUSTOMERNAME,
         TICKETTYPE,
@@ -224,6 +236,8 @@
         #{applyid,jdbcType=VARCHAR},
         #{applycode,jdbcType=VARCHAR},
         #{code,jdbcType=VARCHAR},
+        #{category,jdbcType=VARCHAR},
+        #{categoryname,jdbcType=VARCHAR},
         #{customerid,jdbcType=VARCHAR},
         #{customername,jdbcType=VARCHAR},
         #{tickettype,jdbcType=VARCHAR},
@@ -305,6 +319,8 @@
         <result property="applyid" column="applyid" />
         <result property="applycode" column="applycode" />
         <result property="code" column="code" />
+        <result column="category" property="category" />
+        <result column="categoryname" property="categoryname" />
         <result property="customerid" column="customerid" />
         <result property="customername" column="customername" />
         <result property="tickettype" column="tickettype" />

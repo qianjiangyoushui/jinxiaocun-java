@@ -29,6 +29,9 @@ public class Preorder implements java.io.Serializable{
     private String code;
     private String customerid;
 
+    private String category;
+    private String categoryname;
+
     private String customername;
     private String saletype;
 
@@ -255,5 +258,21 @@ public class Preorder implements java.io.Serializable{
 
     public void setDetailList(List<Preorderdetail> detailList) {
         this.detailList = detailList;
+    }
+
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
+    }
+
+    public String getCategoryname() {
+        return categoryname;
+    }
+
+    public void setCategoryname(String categoryname) {
+        this.categoryname = categoryname;
     }
 }
