@@ -26,5 +26,9 @@ public final class Constants {
      * 表示检查登录态失败
      * */
     public static final String ERR_CHECK_LOGIN_FAILED = "ERR_CHECK_LOGIN_FAILED";
+
+   public static final String qiniu_accessKey = "EOqBk-8ItK5IGy8D5jxeK4IA-d9-qV7JGsozVja7";
+   public static final String qiniu_secretKey = "2FSm1QXygzJEmLoYBXAdmVBtpVoOSmMLKnmLl2G9";
+   public static final String qiniu_bucket1 = "jiaxd-20";
 }
 
